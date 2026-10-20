@@ -3,39 +3,80 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#F5F4EF">
   <base target="_top">
   <?!= include('Styles'); ?>
 </head>
-<body>
+<body class="sport-v3">
+  <a class="v3-skip" href="#content">Aller au contenu principal</a>
   <div id="app">
-    <aside class="sidebar" aria-label="Navigation principale">
-      <div class="brand"><div class="brand-icon" aria-hidden="true">✳</div><span>sport<span class="brand-light">OS</span></span></div>
-      <p class="side-overline">MON ESPACE</p>
-      <nav class="nav" id="side-nav">
-        <button data-nav="home" class="nav-link active"><span class="nav-symbol">⌂</span>Accueil</button>
-        <button data-nav="program" class="nav-link"><span class="nav-symbol">▤</span>Mon programme</button>
-        <button data-nav="progress" class="nav-link"><span class="nav-symbol">▥</span>Mes progrès</button>
-        <button data-nav="profile" class="nav-link"><span class="nav-symbol">◉</span>Mon profil</button>
-      </nav>
-      <div class="sidebar-foot"><span class="pulse"></span> Coaching personnel<br><small>Progresse à ton rythme.</small></div>
+    <aside class="v3-sidebar" aria-label="Navigation de SportOS">
+      <div class="v3-sidebar-head">
+        <button type="button" class="v3-logo" data-nav="home" aria-label="SportOS, revenir à l'accueil">
+          <span class="v3-symbol" aria-hidden="true">✳</span>
+          <span class="v3-wordmark">sport<span>OS</span><small>TRAIN YOUR WAY</small></span>
+        </button>
+      </div>
+
+      <div class="v3-sidebar-inner">
+        <p class="v3-sidebar-label">MON ESPACE</p>
+        <nav class="v3-side-nav" aria-label="Pages">
+          <button type="button" data-nav="home" class="v3-nav-link active" aria-current="page">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/><path d="M9 21v-8h6v8"/></svg><span>Accueil</span>
+          </button>
+          <button type="button" data-nav="program" class="v3-nav-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg><span>Programme</span>
+          </button>
+          <button type="button" data-nav="progress" class="v3-nav-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19V5m0 14h17M8 16l4-5 3 2 5-7"/></svg><span>Progression</span>
+          </button>
+          <button type="button" data-nav="profile" class="v3-nav-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c.3-4 3.4-6 8-6s7.7 2 8 6"/></svg><span>Profil</span>
+          </button>
+        </nav>
+        <div class="v3-sidebar-action">
+          <p class="v3-sidebar-label">ACCÈS RAPIDE</p>
+          <button type="button" data-quick-log class="v3-side-cta"><span aria-hidden="true">+</span> Enregistrer une séance</button>
+          <button type="button" data-review-quick class="v3-side-minor"><span aria-hidden="true">↗</span> Bilan hebdomadaire</button>
+        </div>
+      </div>
+
+      <div class="v3-side-bottom">
+        <div class="v3-side-challenge">
+          <p>OBJECTIF EN LIGNE DE MIRE</p>
+          <div class="v3-side-challenge-title">ESPIENS<span>↗</span></div>
+          <span>À vélo · Mai 2027 · 2 jours envisagés</span>
+          <button type="button" data-open-program="Vélo">Voir la préparation <span aria-hidden="true">→</span></button>
+        </div>
+        <p class="v3-private-note"><span aria-hidden="true">●</span> Ton espace privé</p>
+      </div>
     </aside>
 
-    <div class="shell">
-      <header class="topbar">
-        <div class="mobile-brand"><span class="brand-icon mini">✳</span><strong>sportOS</strong></div>
-        <div class="breadcrumb" id="breadcrumb">Vue d'ensemble <span>/ Octobre 2026</span></div>
-        <div class="top-actions"><span class="date-pill" id="today-pill"></span><span class="avatar" title="Espace privé">E</span></div>
+    <div class="v3-shell shell">
+      <header class="v3-topbar" aria-label="Barre d'actions">
+        <div class="v3-top-left">
+          <span class="v3-mobile-symbol" aria-hidden="true">✳</span>
+          <div class="v3-top-context"><span>SPORTOS <span aria-hidden="true">/</span> <span id="v3-crumb">ACCUEIL</span></span><strong id="v3-top-title">Ton espace d'entraînement</strong></div>
+        </div>
+        <div class="v3-top-actions">
+          <span class="v3-date" id="today-pill"></span>
+          <button type="button" class="v3-top-cta" data-quick-log><span aria-hidden="true">+</span><span class="v3-top-cta-text">Séance</span></button>
+          <button type="button" class="v3-top-profile" data-nav="profile" aria-label="Ouvrir mon profil"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="8" r="3.5"/><path d="M4.5 21c.5-4.5 3.6-6 7.5-6s7 1.5 7.5 6"/></svg></button>
+        </div>
       </header>
       <main id="content" tabindex="-1"><div class="loading">Chargement de SportOS…</div></main>
     </div>
-    <nav class="mobile-nav" aria-label="Navigation mobile">
-      <button data-nav="home" class="active"><span>⌂</span>Accueil</button>
-      <button data-nav="program"><span>▤</span>Programme</button>
-      <button data-nav="progress"><span>▥</span>Progrès</button>
-      <button data-nav="profile"><span>◉</span>Profil</button>
+
+    <nav class="v3-mobile-nav" aria-label="Navigation mobile">
+      <button type="button" data-nav="home" class="active" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="m3 10 9-7 9 7v11H3z"/><path d="M9 21v-8h6v8"/></svg><span>Accueil</span></button>
+      <button type="button" data-nav="program"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg><span>Programme</span></button>
+      <button type="button" data-nav="progress"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 5v14h17M8 16l4-5 3 2 5-7"/></svg><span>Progrès</span></button>
+      <button type="button" data-nav="profile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c.3-4 3.4-6 8-6s7.7 2 8 6"/></svg><span>Profil</span></button>
     </nav>
   </div>
-  <div id="modal-root"></div><div id="toast" role="status" aria-live="polite"></div>
+  <div id="quick-root"></div>
+  <div id="modal-root"></div>
+  <div id="toast" role="status" aria-live="polite"></div>
   <?!= include('Client'); ?>
 </body>
 </html>
