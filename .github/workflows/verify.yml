@@ -16,4 +16,4 @@ jobs:
         with:
           node-version: "22"
       - name: Tester syntaxe, confidentialité et non-régression
-        run: npm run verify
+        run: |\n          npm run verify\n          bash -n scripts/publier-v0.2-cloud-shell.sh
