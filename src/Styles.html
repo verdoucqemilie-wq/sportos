@@ -12,4 +12,89 @@ main{max-width:1220px;margin:auto;padding:34px clamp(22px,4vw,58px) 94px;outline
 @media(max-width:760px){.sidebar{display:none}.mobile-nav{display:flex;position:fixed;z-index:40;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--line);justify-content:space-around;padding:8px 8px max(9px,env(safe-area-inset-bottom));box-shadow:0 -2px 24px #173b2611}.mobile-nav button{border:0;background:transparent;color:#88978c;display:flex;flex-direction:column;align-items:center;gap:0;font-size:10px;padding:5px;min-width:65px}.mobile-nav button span{font-size:23px;line-height:1.1}.mobile-nav button.active{color:var(--forest);font-weight:800}.mobile-brand{display:flex;align-items:center;gap:6px;letter-spacing:-.5px;font-size:18px}.breadcrumb{display:none}.topbar{height:65px;padding:0 20px}.top-actions{gap:8px}.date-pill{font-size:11px}main{padding:26px 17px 113px}.cols-3,.cols-4{grid-template-columns:repeat(2,minmax(0,1fr))}.cols-2{grid-template-columns:1fr}.card{padding:19px}.hero{padding:22px;min-height:205px}.hero-figure{font-size:65px}.hero-title{font-size:30px}.page-title{font-size:32px}.activity{padding:12px;gap:10px}.activity-actions .pill{font-size:10px}.modal-backdrop{align-items:end;padding:0}.modal{max-height:94vh;border-radius:20px 20px 0 0}.modal-head{padding:17px 19px 13px}.modal-content{padding:18px 19px 28px}.form-grid.cols-3{grid-template-columns:repeat(2,minmax(0,1fr))}.date-pill{display:none}#toast{bottom:83px;left:18px;right:18px;max-width:none}}
 @media(max-width:390px){.cols-3{grid-template-columns:1fr 1fr}.hero-figure{display:none}.hero{min-height:188px}.program-tab{font-size:12px;padding:8px 9px}.activity-actions{align-items:stretch}.pill{padding:5px 8px}}
 @media(prefers-reduced-motion:reduce){.btn{transition:none}}
+
+/* === SportOS Athletic Wellness — accueil v0.2, isolé du reste de l'application === */
+.ath-home{color:var(--ink);padding-bottom:10px}
+.ath-home-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:24px;margin:4px 0 25px}
+.ath-overline{font-size:10px;font-weight:850;letter-spacing:2px;text-transform:uppercase;color:#6e887c;margin:0 0 12px}
+.ath-home-heading h1{font-size:clamp(33px,4vw,53px);line-height:1.04;letter-spacing:-2.2px;font-weight:800;margin:0 0 12px}
+.ath-home-heading p:last-child{font-size:14px;color:#78887e;margin:0;max-width:640px}
+.ath-head-signature{font-size:12px;line-height:.88;letter-spacing:-1.5px;font-weight:900;color:#adc4b7;display:flex;align-items:flex-end;gap:11px;margin-top:6px}
+.ath-head-signature span{font-size:48px;color:#bddc8e;font-weight:400;line-height:.68}
+.ath-main-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(350px,.85fr);gap:19px;align-items:stretch}
+.ath-hero{min-height:390px;border-radius:24px;background:linear-gradient(123deg,#103b32 10%,#17483a 67%,#275b46);color:white;padding:31px;position:relative;overflow:hidden;display:flex;align-items:center;isolation:isolate}
+.ath-hero::after{content:"";position:absolute;inset:auto -20% -55% auto;width:490px;height:490px;border-radius:50%;background:radial-gradient(circle,#c2eb8b24,transparent 65%);z-index:-1}
+.ath-hero-content{z-index:2;max-width:470px;position:relative}
+.ath-light-overline{color:#c8dfbd;font-size:10px;display:inline-flex;gap:8px;align-items:center;margin:0}
+.ath-dot{height:7px;width:7px;border-radius:50%;background:#dbf2a8;display:inline-block;box-shadow:0 0 0 4px #d9f3a820}
+.ath-hero-title{font-size:clamp(34px,3.4vw,48px);line-height:1.07;letter-spacing:-1.9px;font-weight:810;margin:25px 0 18px;max-width:360px}
+.ath-hero-title span{display:block;color:#d6eab5;font-size:clamp(20px,2vw,26px);font-weight:530;letter-spacing:-.7px;margin-top:7px}
+.ath-hero-meta{display:flex;flex-direction:column;gap:8px;color:#d1e1d3;font-size:12px;margin-bottom:29px;max-width:365px}
+.ath-hero-meta span:first-child{display:flex;gap:7px;align-items:center;color:#f0f7e6;font-weight:730}
+.ath-hero-actions{display:flex;gap:15px;flex-wrap:wrap;align-items:center}
+.ath-cta{border:0;border-radius:12px;background:#def3ab;color:#173c31;padding:13px 18px;font-weight:800;display:inline-flex;gap:18px;align-items:center;justify-content:space-between;box-shadow:0 6px 24px #081b141b}
+.ath-cta:hover{background:#eefac9}.ath-quiet-action{border:0;background:none;color:#e4f0df;padding:10px 0;font-weight:650;text-align:left}
+.ath-quiet-action:hover,.ath-text-action:hover,.ath-week-bottom button:hover{text-decoration:underline}
+.ath-hero-disclaimer{font-size:10px;color:#afcabb;margin:16px 0 0}
+.ath-hero-graphic{position:absolute;right:-75px;top:40px;height:310px;width:310px;opacity:.8;pointer-events:none}
+.ath-hero-orbit{position:absolute;inset:0;border:1px solid #c2e9a94f;border-radius:50%;transform:rotate(-25deg) scaleY(.72)}
+.ath-orbit-b{inset:43px;border-color:#d9f4b080;transform:rotate(20deg) scaleY(.7)}
+.ath-hero-initial{font-size:94px;font-weight:800;color:#d5efa4;position:absolute;inset:0;display:grid;place-items:center;text-shadow:0 2px 24px #0c27143b}
+.ath-week-panel{min-height:390px;border:1px solid #e3eae2;background:#fff;border-radius:24px;padding:28px;box-shadow:0 13px 39px rgba(13,53,38,.035)}
+.ath-panel-overline{font-size:10px;letter-spacing:1.75px;font-weight:850;color:#899c90;margin:0 0 8px}
+.ath-panel-head{display:flex;align-items:flex-start;justify-content:space-between;gap:15px}
+.ath-panel-head h2{font-size:22px;line-height:1.2;letter-spacing:-.65px;margin:0}
+.ath-week-count{font-size:12px;white-space:nowrap;color:#8b9f90;background:#eef5eb;border-radius:20px;padding:7px 12px}
+.ath-week-count b{color:#204e3e;font-size:15px}
+.ath-progress-track{height:8px;border-radius:10px;background:#edf2e9;margin:23px 0 11px;overflow:hidden}
+.ath-progress-track span{display:block;height:100%;background:linear-gradient(90deg,#2e7559,#c6e9a0);border-radius:10px;transition:width .35s}
+.ath-week-caption{font-size:12px;color:#7a8d80;min-height:18px;margin:0 0 21px}
+.ath-week-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.ath-week-item{border:1px solid #edf1eb;background:#f8faf6;border-radius:14px;display:grid;grid-template-columns:38px minmax(0,1fr);grid-template-rows:auto auto;align-items:center;text-align:left;gap:0 9px;padding:12px;min-height:77px;color:#2b4536}
+.ath-week-item:hover{border-color:#bbd6b3;background:#f2f8ef}
+.ath-week-item.is-done{background:#edf5e7;border-color:#d6e7cc}
+.ath-week-icon{grid-row:span 2;width:36px;height:36px;background:#e7f0e5;border-radius:11px;display:grid;place-items:center;color:#3c755c}
+.ath-week-item.is-done .ath-week-icon{background:#d5ead1;color:#246548}
+.ath-week-name{font-size:12px;font-weight:800;white-space:nowrap}
+.ath-week-state{font-size:10px;color:#8a9b90}
+.ath-week-item.is-done .ath-week-state{color:#477758;font-weight:800}
+.ath-week-bottom{border-top:1px solid #eef1ed;margin-top:20px;padding-top:16px;display:flex;justify-content:space-between;gap:14px;align-items:center;color:#93a096;font-size:11px}
+.ath-week-bottom button,.ath-text-action{border:0;background:transparent;color:#215a44;font-weight:800;font-size:12px;padding:3px 0;text-align:left}
+.ath-section-line{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;margin:34px 0 15px}
+.ath-section-line h2{font-size:24px;letter-spacing:-.8px;margin:0}
+.ath-section-line>span{color:#8d9d91;font-size:12px}
+.ath-insights{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:17px}
+.ath-insight-card{min-width:0;min-height:265px;border-radius:21px;padding:25px;background:white;border:1px solid #e6ede5;display:flex;flex-direction:column;box-shadow:0 10px 29px #1c4a2910}
+.ath-insight-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px;font-size:10px;font-weight:800;letter-spacing:1.45px;color:#7f9187}
+.ath-insight-icon{display:grid;place-items:center;background:#e4f0e7;color:#2c684c;border-radius:13px;height:43px;width:43px;flex-shrink:0}
+.ath-big-number{font-size:clamp(33px,3vw,46px);letter-spacing:-1.8px;line-height:1.06}
+.ath-big-word{font-size:clamp(35px,3vw,46px);letter-spacing:-2.2px;line-height:1.1}
+.ath-big-word span{color:#7aa97d}
+.ath-insight-heading{font-size:27px;line-height:1.15;letter-spacing:-.8px}
+.ath-insight-card>p{font-size:12px;color:#7c8c80;margin:10px 0 16px;line-height:1.55}
+.ath-insight-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;padding-top:13px;border-top:1px solid #edf0eb;font-size:11px;color:#8d9c90;margin-top:auto}
+.ath-insight-foot b{font-size:14px;color:#1d4c3c;white-space:nowrap}
+.ath-text-action{margin-top:19px}
+.ath-bike-card{background:#f2f6ed}
+.ath-bike-card .ath-insight-icon{background:#e0e8d5}
+.ath-coach-card{background:#fcf9f1}
+.ath-coach-card .ath-insight-icon{background:#f1e8d6;color:#866c42}
+.ath-star-icon{font-size:30px}
+.ath-coach-card h3{font-size:22px;line-height:1.2;letter-spacing:-.55px;margin:0 0 8px}
+.ath-coach-card>p{font-size:13px;color:#4e5e50;margin-bottom:12px}
+.ath-coach-caution{color:#89775a;font-size:11px;line-height:1.55;margin-top:auto;padding-top:13px;border-top:1px solid #ede7db}
+.ath-home-footer{margin:24px 0 0;border-radius:21px;background:#e9f0e7;padding:23px 26px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.ath-home-footer>div{display:flex;align-items:center;gap:15px}
+.ath-home-footer h2{font-size:16px;letter-spacing:-.3px;margin:0 0 4px}
+.ath-home-footer p{font-size:12px;color:#718477;margin:0;max-width:600px}
+.ath-footer-icon{font-size:27px;background:#d6e5d3}
+.ath-footer-button{background:#164334;color:white;border:0;border-radius:11px;padding:12px 16px;flex-shrink:0;font-weight:770}
+.ath-footer-button:hover{background:#275b47}
+.ath-history-note{font-size:11px;color:#93a098;margin:18px 0 0}
+.ath-home button:focus-visible{outline:3px solid #a2ca82;outline-offset:3px}
+@media(max-width:1120px){.ath-main-grid{grid-template-columns:minmax(0,1fr)}.ath-week-panel{min-height:auto}.ath-hero{min-height:330px}.ath-insights{grid-template-columns:repeat(2,minmax(0,1fr))}.ath-coach-card{grid-column:1/-1;min-height:185px}}
+@media(max-width:760px){.ath-home-heading{margin:0 0 19px}.ath-home-heading h1{font-size:36px;letter-spacing:-1.5px}.ath-head-signature{display:none}.ath-main-grid{gap:12px}.ath-hero{min-height:330px;padding:26px 23px;border-radius:20px}.ath-hero-title{font-size:39px;margin:20px 0 15px}.ath-hero-title span{font-size:22px}.ath-hero-graphic{right:-145px;opacity:.4}.ath-hero-meta{max-width:300px}.ath-week-panel{padding:21px;border-radius:20px}.ath-week-caption{margin-bottom:16px}.ath-section-line{margin:28px 0 14px}.ath-section-line>span{display:none}.ath-insights{grid-template-columns:1fr;gap:11px}.ath-insight-card{min-height:220px;padding:22px}.ath-coach-card{grid-column:auto}.ath-home-footer{align-items:stretch;flex-direction:column;padding:21px}.ath-footer-button{width:100%}}
+@media(max-width:390px){.ath-home-heading h1{font-size:32px}.ath-hero{padding:23px 18px}.ath-hero-actions{gap:8px}.ath-hero-title{font-size:34px}.ath-quiet-action{font-size:12px}.ath-week-panel{padding:17px}.ath-week-item{padding:9px;grid-template-columns:30px minmax(0,1fr);gap:0 7px}.ath-week-icon{height:29px;width:29px}.ath-week-icon svg{width:18px}.ath-week-name{font-size:11px}.ath-week-state{font-size:9px}}
+@media(prefers-reduced-motion:reduce){.ath-progress-track span{transition:none}}
+
 </style>
