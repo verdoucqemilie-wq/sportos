@@ -1,12 +1,12 @@
 # SportOS V0.1.1 — Installation sur l'environnement unique
 
-**Statut** : code préparé et testé localement. Le dépôt GitHub et le projet Apps Script seront créés uniquement après connexion/authentification dans Cloud Shell ; ils ne sont pas encore créés à distance.
+**Statut au 20/10/2026 :** le dépôt GitHub privé est créé et les 5 fichiers ont été poussés dans Apps Script. Le déploiement WebApp `@1` a été créé par Cloud Shell. **L'ouverture effective de la WebApp, les paramètres d'accès du déploiement et la lecture des données en navigateur restent à confirmer.** Aucune saisie sportive de test n'a été effectuée.
 
 ## Source de vérité
 
-Google Sheet personnel déjà existant : [SportOS — Base sportive & gouvernance](https://docs.google.com/spreadsheets/d/1_GX-1Fnsfq0XSAPoJy9UyHtA9Cca140_TEixjCSNmhQ/edit). Aucun autre Google Sheet ni environnement de recette. Le projet Apps Script est lié à ce classeur ; code versionné dans **un dépôt GitHub privé** `verdoucqemilie-wq/sportos` (à créer).
+Google Sheet personnel déjà existant : [SportOS — Base sportive & gouvernance](https://docs.google.com/spreadsheets/d/1_GX-1Fnsfq0XSAPoJy9UyHtA9Cca140_TEixjCSNmhQ/edit). Aucun autre Google Sheet ni environnement de recette. Le projet Apps Script est lié à ce classeur ; code versionné dans **un dépôt GitHub privé** `verdoucqemilie-wq/sportos` (créé, privé).
 
-## Déploiement depuis Google Cloud Shell
+## Installation initiale (déjà effectuée le 20/10/2026) depuis Google Cloud Shell
 
 1. Ouvrir [Google Cloud Shell](https://shell.cloud.google.com/) et se connecter avec le compte Google **personnel** qui possède SportOS.
 2. Depuis ce chat, télécharger le fichier `SportOS_deploiement_unique.zip`. Dans Cloud Shell, utiliser le bouton **Importer un fichier** pour importer le ZIP à la racine de son dossier utilisateur.
@@ -23,6 +23,9 @@ bash scripts/installer-cloud-shell.sh
 5. Si `clasp` dit que l'API Google Apps Script est désactivée, l'activer dans les [paramètres Apps Script](https://script.google.com/home/usersettings) puis relancer la commande ci-dessus. Les fichiers de liaison Apps Script sont stockés dans `~/.config/sportos/` et **jamais dans GitHub**.
 6. Récupérer l'URL `/exec` de la WebApp en ouvrant le projet Apps Script depuis le Sheet (**Extensions > Apps Script**, puis **Déployer > Gérer les déploiements**). Vérifier que le déploiement est `Exécuter en tant que : Moi` / `Accès : Moi uniquement`.
 7. Première vérification : ouvrir la WebApp sur ordinateur puis téléphone, s'assurer qu'elle affiche **2 séances de renforcement, 1 course (19/10/2026) et 0 vélo** ; consulter les quatre programmes et le profil. **N'enregistrer aucune séance fictive**, mais seulement sa prochaine véritable séance.
+
+
+**Important pour les prochaines versions :** ne relance pas `scripts/installer-cloud-shell.sh` pour publier un correctif sans supervision. Si `~/.config/sportos/deployment-id.txt` n'existe pas, cette commande peut créer un **nouveau déploiement**, plutôt que de mettre à jour `@1`. Pour une évolution, contrôler la liaison `.clasp.json` et cibler explicitement le déploiement existant. Ne pas faire de saisies fictives dans le Sheet unique.
 
 ## Sécurité
 
