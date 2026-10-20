@@ -43,14 +43,118 @@
   const activeEx=type=>S.data.exercises.filter(x=>x.Séance===type&&x.Statut==='Proposé — S2'&&x.Version==='V1-S2').sort((a,b)=>toNum(a.Ordre)-toNum(b.Ordre));
   function activityInfo(type){if(type==='A')return {icon:'◈',name:'Fessiers & full body',sub:'5 exercices · 35–45 min',cls:''};if(type==='B')return {icon:'✦',name:'Haut du corps & fessiers',sub:'5 exercices · 35–45 min',cls:''};if(type==='Vélo')return {icon:'♢',name:'Sortie vélo',sub:'Reprise 25–40 min',cls:'bike'};return {icon:'↗',name:'Course / marche',sub:'Prochain objectif : 8 × 1 min / 1 min',cls:'run'};}
   function activityRow(type){const x=activityInfo(type),all=currentWeekActivities(),done=all.some(s=>(type==='A'||type==='B')?s.Type===type:s.Type===type);return `<div class="activity"><div class="activity-icon ${x.cls}">${x.icon}</div><div class="activity-info"><strong>${x.name}</strong><p>${x.sub}</p></div><div class="activity-actions">${done?badge('✓ Réalisée'):badge('À faire','gray')}<button class="tiny-link" data-log="${type}">${done?'Ajouter une séance':'Enregistrer ↗'}</button></div></div>`}
-  function home(){const all=currentWeekActivities(),done=['A','B','Course','Vélo'].filter(t=>all.some(r=>r.Type===t)).length;const last=S.data.cardio.filter(x=>x.Type==='Course').slice(-1)[0];return `${header('Ton sport, à ton rythme.','Un espace pour tes entraînements, tes objectifs et chacun de tes petits progrès.','BONJOUR, BIENVENUE DANS SPORTOS')}
-    <div class="grid cols-2"><div class="card dark hero"><div><span class="pill white">✳ Ton rythme de semaine</span><h2 class="hero-title">Chaque séance<br>compte vraiment.</h2><p class="muted-on-dark">${done} activité${done>1?'s':''} réalisée${done>1?'s':''} sur 4 prévues</p><button class="btn light" data-nav-go="program">Voir mon programme →</button></div><div class="hero-figure" aria-hidden="true">✳</div></div>
-    <div class="card"><div class="card-heading"><h2>Cette semaine</h2>${badge(done+'/4 activités')}</div><div style="margin:27px 0 12px" class="progress-track"><div class="progress-fill darkfill" style="width:${done*25}%"></div></div><p class="small">${done===0?'Tu peux commencer quand tu veux.':done===4?'Tu as terminé les quatre activités prévues !':'C’est une progression, pas une course.'}</p><div class="grid cols-2" style="margin-top:23px"><div><div class="stat">${S.data.sessions.filter(x=>x.Statut==='Terminée').length}</div><span class="stat-label">Renforcements enregistrés</span></div><div><div class="stat">${S.data.cardio.filter(x=>x.Statut==='Terminée').length}</div><span class="stat-label">Sorties cardio enregistrées</span></div></div></div></div>
-    <div class="section-row"><h2>Mon planning</h2><button class="tiny-link" data-nav-go="program">Voir les programmes →</button></div>
-    <div class="grid cols-2"><section class="card"><div class="card-heading"><h2>Renforcement</h2><span class="small">2 séances</span></div>${activityRow('A')}${activityRow('B')}</section><section class="card"><div class="card-heading"><h2>Endurance</h2><span class="small">2 séances</span></div>${activityRow('Course')}${activityRow('Vélo')}</section></div>
-    <div class="section-row"><h2>Les objectifs qui me motivent</h2><button class="tiny-link" data-nav-go="profile">Tous mes objectifs →</button></div>
-    <div class="grid cols-3"><div class="card feature"><span class="feat-icon">◈</span><h3>Des fessiers plus forts</h3><p>Renforcement ciblé et progression adaptée.</p></div><div class="card feature"><span class="feat-icon">↗</span><h3>30 min de course</h3><p>${last?'Dernière séance : '+safeRaw(last['Durée min'])+' min, effort '+safeRaw(last['Effort 1-10'])+'/10.':'Commencer avec les intervalles course-marche.'}</p></div><div class="card feature"><span class="feat-icon">♢</span><h3>Espiენს · Mai 2027</h3><p>Rejoindre Espiens à vélo, avec un scénario sur deux jours.</p></div></div>
-    <div class="section-row"><h2>Mon bilan</h2><span class="small">Une fois par semaine</span></div><section class="card row-between"><div><b>Comment s’est passée ta semaine ?</b><p class="small" style="margin:5px 0">Fatigue, sommeil, satisfaction et axes d’amélioration.</p></div><button class="btn" data-review="1">Faire mon bilan ↗</button></section>`}
+  function home(){
+    const all=currentWeekActivities();
+    const types=['A','B','Course','Vélo'];
+    const doneTypes=types.filter(type=>all.some(entry=>entry.Type===type));
+    const done=doneTypes.length;
+    const next=types.find(type=>!doneTypes.includes(type))||null;
+    const weekMessage=done===4?'Tu as déjà réalisé les quatre activités que tu avais prévues.':
+      done===0?'Ta semaine est à écrire, sans pression.':
+      `${done} activité${done>1?'s':''} enregistrée${done>1?'s':''} cette semaine.`;
+    const dateText=new Date((S.data.today||'2026-10-20')+'T12:00:00').toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+    const nextInfo={
+      A:{title:'Renforcement A',subtitle:'Fessiers & full body',time:'35–45 min environ',tip:'5 exercices · technique et confort avant l’intensité',symbol:'A'},
+      B:{title:'Renforcement B',subtitle:'Haut du corps & fessiers',time:'35–45 min environ',tip:'5 exercices · aucune progression sur un mouvement douloureux',symbol:'B'},
+      Course:{title:'Course / marche',subtitle:'Consolider ta reprise',time:'16 min d’intervalles',tip:'8 × (1 min de course + 1 min de marche) · échauffement en plus',symbol:'C'},
+      Vélo:{title:'Sortie vélo',subtitle:'En route vers Espiens',time:'25–40 min proposées',tip:'Une première sortie facile, sans objectif de vitesse',symbol:'V'}
+    };
+    const feature=next?nextInfo[next]:null;
+    const glyph={
+      A:'<path d="M6.5 6.5l11 11M4.5 8.5l4-4M15.5 19.5l4-4M2.5 10.5l8-8M13.5 21.5l8-8"/>',
+      B:'<path d="M6.5 6.5l11 11M4.5 8.5l4-4M15.5 19.5l4-4M2.5 10.5l8-8M13.5 21.5l8-8"/>',
+      Course:'<path d="M13 3l2 2-2 3-3-2-3 4-3 1m6-1 3 3-1 4 5 4m-8-9-2 5-4 3M16 4a1.7 1.7 0 1 1-3.4 0A1.7 1.7 0 0 1 16 4Z"/>',
+      Vélo:'<circle cx="5.5" cy="17" r="3.5"/><circle cx="18.5" cy="17" r="3.5"/><path d="M5.5 17l5-10 4.5 10H5.5m5-10h4m-5 0H8m7 0 3.5 10"/>'
+    };
+    const icon=(type,size=22)=>`<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${glyph[type]}</svg>`;
+    const statusNames={A:'Renfo A',B:'Renfo B',Course:'Course',Vélo:'Vélo'};
+    const dateSorted=S.data.cardio.filter(x=>x.Type==='Course' && x.Statut==='Terminée' && /^\d{4}-\d\d-\d\d$/.test(x.Date||'')).sort((a,b)=>a.Date.localeCompare(b.Date));
+    const lastRun=dateSorted.length?dateSorted[dateSorted.length-1]:null;
+    const rpe=lastRun && lastRun['Effort 1-10']!==''?fmt(toNum(lastRun['Effort 1-10']))+'/10':'Non renseigné';
+    const duration=lastRun && lastRun['Durée min']!==''?fmt(toNum(lastRun['Durée min']))+' min':'Durée non renseignée';
+    const validPain=(S.data.logs||[]).some(x=>x.Douleur==='Oui');
+    const coachLead=lastRun&&lastRun['Effort 1-10']!==''&&toNum(lastRun['Effort 1-10'])<=3
+      ?`Ta course du ${niceDate(lastRun.Date)} t’a semblé facile (${rpe}). La prochaine proposition reste une séance de consolidation : 8 × 1 minute de course et 1 minute de marche.`
+      :'Continue à privilégier les sensations et la régularité. Les prochaines progressions seront proposées à partir de tes séances réellement renseignées.';
+    const coachSafety=validPain?'Des douleurs ont déjà été signalées sur certains exercices : ne force pas et garde leur progression suspendue tant que le mouvement n’est pas indolore.':'La technique, la récupération et l’absence de douleur passent avant l’augmentation de la difficulté.';
+    const topText=done===4?'Une semaine à savourer.':done===0?'Ton rythme commence ici.':'Un mouvement à la fois.';
+    const nextMarkup=feature?`<section class="ath-hero" aria-labelledby="ath-hero-title">
+        <div class="ath-hero-content">
+          <span class="ath-overline ath-light-overline"><span class="ath-dot"></span> PROCHAINE SÉANCE PROPOSÉE</span>
+          <h2 id="ath-hero-title" class="ath-hero-title">${feature.title}<span>${feature.subtitle}</span></h2>
+          <div class="ath-hero-meta"><span>${icon(next,18)} ${feature.time}</span><span>${esc(feature.tip)}</span></div>
+          <div class="ath-hero-actions">
+            <button type="button" class="ath-cta" data-open-program="${next}">Découvrir la séance <span aria-hidden="true">↗</span></button>
+            <button type="button" class="ath-quiet-action" data-log="${next}">Enregistrer après l’avoir faite</button>
+          </div>
+          <p class="ath-hero-disclaimer">Proposition du programme, pas un rendez-vous imposé.</p>
+        </div>
+        <div class="ath-hero-graphic" aria-hidden="true"><span class="ath-hero-orbit ath-orbit-a"></span><span class="ath-hero-orbit ath-orbit-b"></span><span class="ath-hero-initial">${feature.symbol}</span></div>
+      </section>`:
+      `<section class="ath-hero ath-hero-complete" aria-labelledby="ath-hero-title">
+        <div class="ath-hero-content">
+          <span class="ath-overline ath-light-overline"><span class="ath-dot"></span> CETTE SEMAINE</span>
+          <h2 id="ath-hero-title" class="ath-hero-title">Quel beau chemin.<span>Quatre activités enregistrées</span></h2>
+          <p class="ath-hero-copy">Prends aussi le temps de récupérer et de profiter de ce que tu as accompli.</p>
+          <div class="ath-hero-actions"><button type="button" class="ath-cta" data-review="1">Faire mon bilan <span aria-hidden="true">↗</span></button></div>
+        </div>
+        <div class="ath-hero-graphic" aria-hidden="true"><span class="ath-hero-orbit ath-orbit-a"></span><span class="ath-hero-orbit ath-orbit-b"></span><span class="ath-hero-initial">✳</span></div>
+      </section>`;
+    const weekCards=types.map(type=>{
+      const isDone=doneTypes.includes(type);
+      return `<button type="button" class="ath-week-item ${isDone?'is-done':''}" data-open-program="${type}" aria-label="${esc(statusNames[type])} : ${isDone?'activité enregistrée cette semaine':'pas encore enregistrée cette semaine'} ; consulter le programme">
+        <span class="ath-week-icon">${icon(type,23)}</span>
+        <span class="ath-week-name">${statusNames[type]}</span>
+        <span class="ath-week-state">${isDone?'✓ Réalisée':'À ton rythme'}</span>
+      </button>`;
+    }).join('');
+    return `<div class="ath-home">
+      <header class="ath-home-heading">
+        <div><p class="ath-overline">${esc(dateText)} · TON ESPACE</p>
+          <h1>${topText}</h1>
+          <p>Un espace pour bouger, progresser et te sentir bien. À ta façon.</p>
+        </div>
+        <span class="ath-head-signature" aria-hidden="true">SPORT<br>OS<span>✳</span></span>
+      </header>
+      <div class="ath-main-grid">
+        ${nextMarkup}
+        <section class="ath-week-panel" aria-labelledby="ath-week-title">
+          <div class="ath-panel-head"><div><p class="ath-panel-overline">MON ÉQUILIBRE</p><h2 id="ath-week-title">Ta semaine en mouvement</h2></div>
+          <span class="ath-week-count"><b>${done}</b><span> / 4</span></span></div>
+          <div class="ath-progress-track" role="progressbar" aria-label="Activités réalisées cette semaine" aria-valuemin="0" aria-valuemax="4" aria-valuenow="${done}"><span style="width:${done*25}%"></span></div>
+          <p class="ath-week-caption">${weekMessage}</p>
+          <div class="ath-week-grid">${weekCards}</div>
+          <div class="ath-week-bottom"><span>Régularité, pas perfection.</span><button type="button" data-nav-go="program">Tous mes programmes <span aria-hidden="true">↗</span></button></div>
+        </section>
+      </div>
+      <div class="ath-section-line"><div><p class="ath-panel-overline">GARDER LE CAP</p><h2>Ce qui te fait avancer</h2></div><span>Des repères, pas des obligations</span></div>
+      <div class="ath-insights">
+        <article class="ath-insight-card ath-run-card">
+          <div class="ath-insight-top"><span class="ath-insight-icon">${icon('Course',24)}</span><span>DERNIÈRE COURSE</span></div>
+          ${lastRun?`<strong class="ath-big-number">${duration}</strong><p>Course / marche · ${niceDate(lastRun.Date)}</p><div class="ath-insight-foot"><span>Effort ressenti</span><b>${rpe}</b></div>`:`<strong class="ath-insight-heading">À ton rythme.</strong><p>Ta première sortie de course apparaîtra ici une fois enregistrée.</p><div class="ath-insight-foot"><span>Objectif : courir 30 min facilement</span></div>`}
+          <button type="button" class="ath-text-action" data-open-program="Course">Voir ma progression <span aria-hidden="true">↗</span></button>
+        </article>
+        <article class="ath-insight-card ath-bike-card">
+          <div class="ath-insight-top"><span class="ath-insight-icon">${icon('Vélo',24)}</span><span>MON GRAND DÉFI</span></div>
+          <strong class="ath-big-word">Espiens<span>.</span></strong>
+          <p>Mai 2027 · En vélo depuis Toulouse</p>
+          <div class="ath-insight-foot"><span>Option de référence</span><b>Sur 2 jours</b></div>
+          <button type="button" class="ath-text-action" data-open-program="Vélo">Voir ma préparation <span aria-hidden="true">↗</span></button>
+        </article>
+        <article class="ath-insight-card ath-coach-card">
+          <div class="ath-insight-top"><span class="ath-insight-icon ath-star-icon" aria-hidden="true">✳</span><span>LE REGARD DU COACH</span></div>
+          <h3>Un conseil pour toi</h3>
+          <p>${esc(coachLead)}</p>
+          <div class="ath-coach-caution"><span aria-hidden="true">◌</span> ${esc(coachSafety)}</div>
+        </article>
+      </div>
+      <footer class="ath-home-footer">
+        <div><span class="ath-insight-icon ath-footer-icon" aria-hidden="true">✦</span><div><h2>Prendre du recul, c’est aussi avancer.</h2><p>Un petit bilan sur ta fatigue, ton sommeil et tes sensations, quand tu le souhaites.</p></div></div>
+        <button type="button" class="ath-footer-button" data-review="1">Faire mon bilan <span aria-hidden="true">↗</span></button>
+      </footer>
+      <p class="ath-history-note">Depuis le début : ${S.data.sessions.filter(x=>x.Statut==='Terminée').length} renforcements et ${S.data.cardio.filter(x=>x.Statut==='Terminée').length} sorties cardio enregistrés. Les séances sans date ne sont pas comptabilisées dans la semaine.</p>
+    </div>`;
+  }
   function program(){const type=S.programTab;const p=type==='A'||type==='B';const ex=p?activeEx(type):[];const stepType=type==='Course'?'Course':'Vélo';const steps=p?[]:S.data.steps.filter(x=>x.Type===stepType);
     const tabs=['A','B','Course','Vélo'].map(t=>`<button class="program-tab ${type===t?'active':''}" data-program-tab="${t}">${{A:'🍑 Séance A',B:'💪 Séance B',Course:'↗ Course',Vélo:'♢ Vélo'}[t]}</button>`).join('');
     const titles={A:'Fessiers & full body',B:'Haut du corps & fessiers',Course:'Reprendre la course, doucement',Vélo:'En route vers Espiens !'};
@@ -86,7 +190,7 @@
   function profile(){const kv=Object.fromEntries(S.data.profile.map(x=>[x.Champ,x.Valeur]));const goals=S.data.goals.filter(g=>g.Statut&&(g.Statut.startsWith('Actif')));const measurements=S.data.measurements.filter(x=>x.Poids_kg).slice(-4);return `${header('Mon profil','Ton point de départ, tes objectifs et tes préférences au même endroit.','MON IDENTITÉ SPORTIVE')}<div class="grid cols-2"><section class="card"><div class="row-between"><h2 class="section-title">Mes repères</h2>${badge('Privé')}</div><div class="grid cols-3" style="margin-top:18px"><div class="measure"><small>Âge</small><b>${esc(kv.Age||'—')} <small>ans</small></b></div><div class="measure"><small>Taille</small><b>${kv.Taille?fmt(toNum(kv.Taille)/100):'—'} <small>m</small></b></div><div class="measure"><small>Poids de départ</small><b>${esc(kv['Poids de référence']||'—')} <small>kg</small></b></div></div><div class="kpi-line"><span>Équipement</span><b class="s12">2 haltères de 5 kg + tapis</b></div><div class="kpi-line"><span>Renforcement</span><b class="s12">2 fois / semaine</b></div><div class="kpi-line"><span>Course + vélo</span><b class="s12">1 fois chacun / semaine</b></div><div class="kpi-line"><span>Strava</span>${badge('Non connecté','gray')}</div><button class="btn outline full" data-weight="1" style="margin-top:18px">Ajouter une mesure de poids (facultatif)</button><p class="micro">Ce suivi n’a aucun objectif de perte de poids.</p></section>
       <section class="card"><div class="card-heading"><h2>Mes objectifs personnels</h2></div><div class="goal-list">${goals.map(g=>`<div class="goal"><div class="row-between"><strong>${esc(g.Axe)}</strong>${badge(g.Priorité,g.Priorité==='Bloquante'?'orange':'gray')}</div><p>${esc(g['Résultat visé'])}</p></div>`).join('')}</div></section></div>
       <div class="grid cols-2" style="margin-top:17px"><div class="card"><h2 class="section-title">Mon évolution physique</h2><p class="small">Les mesures sont facultatives et privées. Les performances et les sensations restent centrales.</p>${measurements.map(x=>`<div class="kpi-line"><span>${niceDate(x.Date_mesure)}</span><b>${esc(x.Poids_kg)} kg</b></div>`).join('')||'<div class="empty">Tu n’as pas encore ajouté de mesure datée.</div>'}</div><div class="card"><h2 class="section-title">Connexions et données</h2><p class="small">Le suivi fonctionne sans Strava. Un import de fichiers et une connexion sécurisée sont envisagés plus tard.</p><div class="well">Tes données de pratique restent dans ton Google Sheet personnel. Déploiement recommandé : accès réservé uniquement à toi.</div></div></div>`;}
-  function bind(){qAll('[data-nav-go]').forEach(b=>b.onclick=()=>navigate(b.dataset.navGo));qAll('[data-log]').forEach(b=>b.onclick=()=>openLog(b.dataset.log));qAll('[data-program-tab]').forEach(b=>b.onclick=()=>{S.programTab=b.dataset.programTab;render()});qAll('[data-review]').forEach(b=>b.onclick=openReview);qAll('[data-weight]').forEach(b=>b.onclick=openWeight);const pick=q('#exercise-picker');if(pick)pick.onchange=()=>{S.exerciseSelected=pick.value;render()};}
+  function bind(){qAll('[data-nav-go]').forEach(b=>b.onclick=()=>navigate(b.dataset.navGo));qAll('[data-open-program]').forEach(b=>b.onclick=()=>{S.programTab=b.dataset.openProgram;navigate('program')});qAll('[data-log]').forEach(b=>b.onclick=()=>openLog(b.dataset.log));qAll('[data-program-tab]').forEach(b=>b.onclick=()=>{S.programTab=b.dataset.programTab;render()});qAll('[data-review]').forEach(b=>b.onclick=openReview);qAll('[data-weight]').forEach(b=>b.onclick=openWeight);const pick=q('#exercise-picker');if(pick)pick.onchange=()=>{S.exerciseSelected=pick.value;render()};}
   function showModal(title,inner,onSubmit){q('#modal-root').innerHTML=`<div class="modal-backdrop" id="modal-backdrop"><div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title"><div class="modal-head"><h2 id="modal-title">${esc(title)}</h2><button class="close" id="modal-close" aria-label="Fermer">×</button></div><form class="modal-content" id="form-modal">${inner}<div class="modal-actions"><button class="btn ghost" type="button" id="modal-cancel">Annuler</button><button class="btn" id="modal-submit" type="submit">Enregistrer</button></div></form></div></div>`;
     const close=()=>q('#modal-root').innerHTML='';q('#modal-close').onclick=close;q('#modal-cancel').onclick=close;q('#modal-backdrop').onclick=e=>{if(e.target.id==='modal-backdrop')close()};q('#form-modal').onsubmit=async e=>{e.preventDefault();if(S.loading)return;S.loading=true;const b=q('#modal-submit');b.disabled=true;b.textContent='Enregistrement…';try{await onSubmit(new FormData(e.target));close();toast(S.demo?'Enregistré pour cet aperçu (non synchronisé)':'Séance enregistrée dans SportOS ✓');await reload();}catch(err){toast('Erreur : '+err.message);b.disabled=false;b.textContent='Réessayer';}finally{S.loading=false}};}
   async function reload(){if(S.demo){render();return}try{S.data=await server('getBootstrap');render()}catch(e){toast('Enregistrement effectué mais actualisation impossible : '+e.message);render()}}
