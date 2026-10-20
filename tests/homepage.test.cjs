@@ -1,80 +1,95 @@
 'use strict';
-// Tests purs de l'accueil SportOS — aucune connexion Google, aucune écriture Sheets.
-const fs = require('node:fs');
-const path = require('node:path');
-const assert = require('node:assert/strict');
-const vm = require('node:vm');
+// SportOS V0.3 — QA selectors/shell. Exécution isolée, sans Google Sheets.
+const assert=require('node:assert/strict');
+const fs=require('node:fs');
+const path=require('node:path');
+const vm=require('node:vm');
+const root=path.join(__dirname,'..');
+const cli=fs.readFileSync(root+'/src/Client.html','utf8');
+const idx=fs.readFileSync(root+'/src/Index.html','utf8');
+const css=fs.readFileSync(root+'/src/Styles.html','utf8');
 
-const client = fs.readFileSync(path.join(__dirname, '../src/Client.html'), 'utf8');
-const styles = fs.readFileSync(path.join(__dirname, '../src/Styles.html'), 'utf8');
-const source = client.match(/\n  function home\(\)\{[\s\S]*?(?=\n  function program\(\))/);
-assert.ok(source, 'La fonction home doit être repérable dans Client.html');
-assert.match(client, /\[data-open-program\]/, 'Les liens contextuels doivent être câblés');
-assert.match(styles, /@media\(max-width:760px\)/, 'Le mobile doit être pris en compte');
-assert.match(styles, /\.ath-home/, 'Style accueil absent');
+const modelSource=cli.match(/\n  function homeModel\(data\) \{[\s\S]*?(?=\n  function home\(\))/);
+const homeSource=cli.match(/\n  function home\(\) \{[\s\S]*?(?=\n  function program\(\))/);
+const iconSource=cli.match(/\n  function v3Icon\(type\) \{[\s\S]*?(?=\n  function homeModel\(data\))/);
+for(const [name,s] of [['homeModel',modelSource],['home',homeSource],['v3Icon',iconSource]])
+  assert.ok(s,'Fonction '+name+' introuvable');
+const evaluate=(src,ctx)=>vm.runInNewContext('('+src[0].trim()+')',ctx);
+const model=evaluate(modelSource,{});
+const icon=evaluate(iconSource,{});
+const format=n=>Number(n||0).toLocaleString('fr-FR',{maximumFractionDigits:1});
+const num=x=>Number(String(x||0).replace(',','.'));
+const esc=x=>String(x==null?'':x).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const niceDate=s=>{const x=new Date(s+'T12:00:00');return x.toLocaleDateString('fr-FR',{day:'numeric',month:'short',year:'numeric'})};
 
-const escapeHtml = value => String(value == null ? '' : value)
-  .replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-const format = value => Number(value || 0).toLocaleString('fr-FR', { maximumFractionDigits: 1 });
-const number = value => Number(String(value || 0).replace(',', '.'));
-const prettyDate = value => new Date(value + 'T12:00:00')
-  .toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' });
-
-function render(types, options = {}) {
-  const cardio = options.cardio === false ? [] : [{
-    Type: 'Course', Statut: 'Terminée', Date: '2026-10-19',
-    'Durée min': '16', 'Effort 1-10': '2,5'
-  }];
-  const S = {
-    data: {
-      today: '2026-10-20',
-      sessions: [{Type: 'A', Statut: 'Terminée', Date: ''},
-                 {Type: 'B', Statut: 'Terminée', Date: ''}],
-      cardio,
-      logs: options.pain === false ? [] : [{ Douleur: 'Oui' }]
-    }
-  };
-  const ctx = {
-    S,
-    currentWeekActivities: () => types.map(Type => ({ Type })),
-    toNum: number,
-    fmt: format,
-    esc: escapeHtml,
-    niceDate: prettyDate
-  };
-  const home = vm.runInNewContext('(' + source[0].trim() + ')', ctx);
-  return home();
+function fixture({today='2026-10-20',sessions=[],cardio=[],logs=[],reviews=[]}={}){
+ return {today,sessions,cardio,logs,reviews};
 }
+const oldA={Type:'A',Statut:'Terminée',Date:'',Seance_ID:'STR-S1-A'};
+const oldB={Type:'B',Statut:'Terminée',Date:'',Seance_ID:'STR-S1-B'};
+const run={Type:'Course',Statut:'Terminée',Date:'2026-10-19','Durée min':'16','Effort 1-10':'2,5'};
+const base=fixture({sessions:[oldA,oldB],cardio:[run],logs:[{Douleur:'Oui'}]});
+const m=model(base);
+assert.equal(m.done.length,1,'Course = une activité de cette semaine');
+assert.equal(m.done[0],'Course');
+assert.equal(m.next,'A');
+assert.equal(m.totals.strength,2);
+assert.equal(m.totals.cardio,1);
+assert.equal(m.last.Type,'Course');
+assert.equal(m.pain,true);
 
-const none = render([]);
-assert.match(none, /Renforcement A/);
-assert.match(none, /data-log="A"/);
-assert.match(none, /0<\/b><span> \/ 4/);
-assert.match(none, /2,5\/10/);
-assert.match(none, /douleurs ont déjà été signalées/);
-assert.doesNotMatch(none, /Espiենս/);
+function render(data){
+  const modelFor=data=>model(data);
+  const ctx={S:{data},homeModel:modelFor,v3Icon:icon,esc,fmt:format,toNum:num,niceDate};
+  return evaluate(homeSource,ctx)();
+}
+const current=render(base);
+for(const s of ['v3-dashboard','v3-feature','v3-week-panel','v3-coach','v3-checkin','ESPIENS','data-open-program="A"'])
+ assert.ok(current.includes(s),'Bloc manquant: '+s);
+assert.match(current,/aria-valuenow="1"/);
+assert.match(current,/2,5/);
+assert.match(current,/douleurs ont été signalées/);
+assert.match(current,/Dernier mouvement|DERNIER MOUVEMENT/);
+assert.doesNotMatch(current,/NaN/);
 
-const oneRun = render(['Course']);
-assert.match(oneRun, /1<\/b><span> \/ 4/);
-assert.match(oneRun, /data-open-program="Course"/);
-assert.match(oneRun, /16 min/);
-assert.match(oneRun, /20 octobre 2026/);
+const zero=render(fixture());
+assert.match(zero,/aria-valuenow="0"/);
+assert.match(zero,/Ta première séance datée/);
+assert.match(zero,/Enregistrer une activité/);
 
-const afterA = render(['A','Course']);
-assert.match(afterA, /Renforcement B/);
-assert.match(afterA, /data-log="B"/);
-assert.match(afterA, /2<\/b><span> \/ 4/);
+const doubleRun=fixture({cardio:[run,{...run,Date:'2026-10-20','Effort 1-10':'3'}]});
+assert.equal(model(doubleRun).done.length,1,'Deux courses ne valent pas 2/4');
 
-const all = render(['A','B','Course','Vélo']);
-assert.match(all, /Quel beau chemin/);
-assert.match(all, /data-review="1"/);
-assert.doesNotMatch(all, /data-log="A"/);
-assert.match(all, /aria-valuenow="4"/);
+const newerStrength=fixture({sessions:[{Type:'B',Statut:'Terminée',Date:'2026-10-20','Durée réelle min':'39','Effort global 1-10':'4'}],cardio:[run]});
+assert.equal(model(newerStrength).last.Type,'B','La dernière activité inclut les renforcements');
+assert.match(render(newerStrength),/Renforcement B/);
+assert.match(render(newerStrength),/39/);
 
-const noRun = render([], {cardio:false, pain:false});
-assert.match(noRun, /Ta première sortie/);
-assert.match(noRun, /La technique, la récupération/);
-assert.doesNotMatch(noRun, /Effort ressenti/);
+const all=fixture({sessions:[{Type:'A',Statut:'Terminée',Date:'2026-10-19'},{Type:'B',Statut:'Terminée',Date:'2026-10-20'}],
+cardio:[run,{Type:'Vélo',Statut:'Terminée',Date:'2026-10-20','Durée min':'25'}]});
+assert.equal(model(all).done.length,4);
+assert.equal(model(all).next,null);
+assert.match(render(all),/aria-valuenow="4"/);
+assert.match(render(all),/BRAVO/);
 
-console.log('ACCUEIL_TESTS=PASS');
-console.log('SCENARIOS=5 ; DATASHEET_WRITE=NONE');
+const sunday=fixture({today:'2026-10-25',cardio:[run]});
+assert.equal(model(sunday).done.length,1);
+const monday=fixture({today:'2026-10-26',cardio:[run]});
+assert.equal(model(monday).done.length,0,'La course de la semaine précédente ne remonte pas');
+const boundary=fixture({today:'2027-01-01',sessions:[{Type:'A',Date:'2026-12-28',Statut:'Terminée'}],reviews:[{Semaine:'2026-W53'}]});
+assert.equal(model(boundary).done.length,1,'Passage nouvelle année');
+assert.equal(model(boundary).isAppReview,true,'ISO week à cheval sur deux années');
+
+const withReview=fixture({today:'2026-10-20',reviews:[{Semaine:'2026-W43'}]});
+assert.equal(model(withReview).isAppReview,true);
+assert.match(render(withReview),/Ton bilan est enregistré/);
+
+assert.ok(idx.includes('id="quick-root"')&&idx.includes('data-quick-log'),'Quick action globale absente');
+assert.ok(idx.includes('data-nav="home"')&&idx.includes('v3-mobile-nav'),'Navigation mobile absente');
+assert.ok(cli.includes('function openQuickLog()')&&cli.includes('openLog(type)'),'Quick log non fonctionnel');
+assert.ok(cli.includes("b.setAttribute('aria-current','page')"),'État nav accessible absent');
+assert.ok(css.includes('v3-feature')&&css.includes('@media(max-width:760px)'),'Design responsive absent');
+assert.ok(!idx.includes('data-search')&&!idx.includes('data-notifications'),'Contrôle inerte non souhaité');
+
+console.log('V0_3_SHELL_HOME_QA=PASS');
+console.log('SCENARIOS=9 ; DATA_SHEET_WRITES=0');
