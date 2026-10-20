@@ -18,6 +18,91 @@ main{max-width:1220px;margin:auto;padding:34px clamp(22px,4vw,58px) 94px;outline
 @media(max-width:760px){.sidebar{display:none}.mobile-nav{display:flex;position:fixed;z-index:40;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--line);justify-content:space-around;padding:8px 8px max(9px,env(safe-area-inset-bottom));box-shadow:0 -2px 24px #173b2611}.mobile-nav button{border:0;background:transparent;color:#88978c;display:flex;flex-direction:column;align-items:center;gap:0;font-size:10px;padding:5px;min-width:65px}.mobile-nav button span{font-size:23px;line-height:1.1}.mobile-nav button.active{color:var(--forest);font-weight:800}.mobile-brand{display:flex;align-items:center;gap:6px;letter-spacing:-.5px;font-size:18px}.breadcrumb{display:none}.topbar{height:65px;padding:0 20px}.top-actions{gap:8px}.date-pill{font-size:11px}main{padding:26px 17px 113px}.cols-3,.cols-4{grid-template-columns:repeat(2,minmax(0,1fr))}.cols-2{grid-template-columns:1fr}.card{padding:19px}.hero{padding:22px;min-height:205px}.hero-figure{font-size:65px}.hero-title{font-size:30px}.page-title{font-size:32px}.activity{padding:12px;gap:10px}.activity-actions .pill{font-size:10px}.modal-backdrop{align-items:end;padding:0}.modal{max-height:94vh;border-radius:20px 20px 0 0}.modal-head{padding:17px 19px 13px}.modal-content{padding:18px 19px 28px}.form-grid.cols-3{grid-template-columns:repeat(2,minmax(0,1fr))}.date-pill{display:none}#toast{bottom:83px;left:18px;right:18px;max-width:none}}
 @media(max-width:390px){.cols-3{grid-template-columns:1fr 1fr}.hero-figure{display:none}.hero{min-height:188px}.program-tab{font-size:12px;padding:8px 9px}.activity-actions{align-items:stretch}.pill{padding:5px 8px}}
 @media(prefers-reduced-motion:reduce){.btn{transition:none}}
+
+/* === SportOS Athletic Wellness — accueil v0.2, isolé du reste de l'application === */
+.ath-home{color:var(--ink);padding-bottom:10px}
+.ath-home-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:24px;margin:4px 0 25px}
+.ath-overline{font-size:10px;font-weight:850;letter-spacing:2px;text-transform:uppercase;color:#6e887c;margin:0 0 12px}
+.ath-home-heading h1{font-size:clamp(33px,4vw,53px);line-height:1.04;letter-spacing:-2.2px;font-weight:800;margin:0 0 12px}
+.ath-home-heading p:last-child{font-size:14px;color:#78887e;margin:0;max-width:640px}
+.ath-head-signature{font-size:12px;line-height:.88;letter-spacing:-1.5px;font-weight:900;color:#adc4b7;display:flex;align-items:flex-end;gap:11px;margin-top:6px}
+.ath-head-signature span{font-size:48px;color:#bddc8e;font-weight:400;line-height:.68}
+.ath-main-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(350px,.85fr);gap:19px;align-items:stretch}
+.ath-hero{min-height:390px;border-radius:24px;background:linear-gradient(123deg,#103b32 10%,#17483a 67%,#275b46);color:white;padding:31px;position:relative;overflow:hidden;display:flex;align-items:center;isolation:isolate}
+.ath-hero::after{content:"";position:absolute;inset:auto -20% -55% auto;width:490px;height:490px;border-radius:50%;background:radial-gradient(circle,#c2eb8b24,transparent 65%);z-index:-1}
+.ath-hero-content{z-index:2;max-width:470px;position:relative}
+.ath-light-overline{color:#c8dfbd;font-size:10px;display:inline-flex;gap:8px;align-items:center;margin:0}
+.ath-dot{height:7px;width:7px;border-radius:50%;background:#dbf2a8;display:inline-block;box-shadow:0 0 0 4px #d9f3a820}
+.ath-hero-title{font-size:clamp(34px,3.4vw,48px);line-height:1.07;letter-spacing:-1.9px;font-weight:810;margin:25px 0 18px;max-width:360px}
+.ath-hero-title span{display:block;color:#d6eab5;font-size:clamp(20px,2vw,26px);font-weight:530;letter-spacing:-.7px;margin-top:7px}
+.ath-hero-meta{display:flex;flex-direction:column;gap:8px;color:#d1e1d3;font-size:12px;margin-bottom:29px;max-width:365px}
+.ath-hero-meta span:first-child{display:flex;gap:7px;align-items:center;color:#f0f7e6;font-weight:730}
+.ath-hero-actions{display:flex;gap:15px;flex-wrap:wrap;align-items:center}
+.ath-cta{border:0;border-radius:12px;background:#def3ab;color:#173c31;padding:13px 18px;font-weight:800;display:inline-flex;gap:18px;align-items:center;justify-content:space-between;box-shadow:0 6px 24px #081b141b}
+.ath-cta:hover{background:#eefac9}.ath-quiet-action{border:0;background:none;color:#e4f0df;padding:10px 0;font-weight:650;text-align:left}
+.ath-quiet-action:hover,.ath-text-action:hover,.ath-week-bottom button:hover{text-decoration:underline}
+.ath-hero-disclaimer{font-size:10px;color:#afcabb;margin:16px 0 0}
+.ath-hero-graphic{position:absolute;right:-75px;top:40px;height:310px;width:310px;opacity:.8;pointer-events:none}
+.ath-hero-orbit{position:absolute;inset:0;border:1px solid #c2e9a94f;border-radius:50%;transform:rotate(-25deg) scaleY(.72)}
+.ath-orbit-b{inset:43px;border-color:#d9f4b080;transform:rotate(20deg) scaleY(.7)}
+.ath-hero-initial{font-size:94px;font-weight:800;color:#d5efa4;position:absolute;inset:0;display:grid;place-items:center;text-shadow:0 2px 24px #0c27143b}
+.ath-week-panel{min-height:390px;border:1px solid #e3eae2;background:#fff;border-radius:24px;padding:28px;box-shadow:0 13px 39px rgba(13,53,38,.035)}
+.ath-panel-overline{font-size:10px;letter-spacing:1.75px;font-weight:850;color:#899c90;margin:0 0 8px}
+.ath-panel-head{display:flex;align-items:flex-start;justify-content:space-between;gap:15px}
+.ath-panel-head h2{font-size:22px;line-height:1.2;letter-spacing:-.65px;margin:0}
+.ath-week-count{font-size:12px;white-space:nowrap;color:#8b9f90;background:#eef5eb;border-radius:20px;padding:7px 12px}
+.ath-week-count b{color:#204e3e;font-size:15px}
+.ath-progress-track{height:8px;border-radius:10px;background:#edf2e9;margin:23px 0 11px;overflow:hidden}
+.ath-progress-track span{display:block;height:100%;background:linear-gradient(90deg,#2e7559,#c6e9a0);border-radius:10px;transition:width .35s}
+.ath-week-caption{font-size:12px;color:#7a8d80;min-height:18px;margin:0 0 21px}
+.ath-week-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.ath-week-item{border:1px solid #edf1eb;background:#f8faf6;border-radius:14px;display:grid;grid-template-columns:38px minmax(0,1fr);grid-template-rows:auto auto;align-items:center;text-align:left;gap:0 9px;padding:12px;min-height:77px;color:#2b4536}
+.ath-week-item:hover{border-color:#bbd6b3;background:#f2f8ef}
+.ath-week-item.is-done{background:#edf5e7;border-color:#d6e7cc}
+.ath-week-icon{grid-row:span 2;width:36px;height:36px;background:#e7f0e5;border-radius:11px;display:grid;place-items:center;color:#3c755c}
+.ath-week-item.is-done .ath-week-icon{background:#d5ead1;color:#246548}
+.ath-week-name{font-size:12px;font-weight:800;white-space:nowrap}
+.ath-week-state{font-size:10px;color:#8a9b90}
+.ath-week-item.is-done .ath-week-state{color:#477758;font-weight:800}
+.ath-week-bottom{border-top:1px solid #eef1ed;margin-top:20px;padding-top:16px;display:flex;justify-content:space-between;gap:14px;align-items:center;color:#93a096;font-size:11px}
+.ath-week-bottom button,.ath-text-action{border:0;background:transparent;color:#215a44;font-weight:800;font-size:12px;padding:3px 0;text-align:left}
+.ath-section-line{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;margin:34px 0 15px}
+.ath-section-line h2{font-size:24px;letter-spacing:-.8px;margin:0}
+.ath-section-line>span{color:#8d9d91;font-size:12px}
+.ath-insights{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:17px}
+.ath-insight-card{min-width:0;min-height:265px;border-radius:21px;padding:25px;background:white;border:1px solid #e6ede5;display:flex;flex-direction:column;box-shadow:0 10px 29px #1c4a2910}
+.ath-insight-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px;font-size:10px;font-weight:800;letter-spacing:1.45px;color:#7f9187}
+.ath-insight-icon{display:grid;place-items:center;background:#e4f0e7;color:#2c684c;border-radius:13px;height:43px;width:43px;flex-shrink:0}
+.ath-big-number{font-size:clamp(33px,3vw,46px);letter-spacing:-1.8px;line-height:1.06}
+.ath-big-word{font-size:clamp(35px,3vw,46px);letter-spacing:-2.2px;line-height:1.1}
+.ath-big-word span{color:#7aa97d}
+.ath-insight-heading{font-size:27px;line-height:1.15;letter-spacing:-.8px}
+.ath-insight-card>p{font-size:12px;color:#7c8c80;margin:10px 0 16px;line-height:1.55}
+.ath-insight-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;padding-top:13px;border-top:1px solid #edf0eb;font-size:11px;color:#8d9c90;margin-top:auto}
+.ath-insight-foot b{font-size:14px;color:#1d4c3c;white-space:nowrap}
+.ath-text-action{margin-top:19px}
+.ath-bike-card{background:#f2f6ed}
+.ath-bike-card .ath-insight-icon{background:#e0e8d5}
+.ath-coach-card{background:#fcf9f1}
+.ath-coach-card .ath-insight-icon{background:#f1e8d6;color:#866c42}
+.ath-star-icon{font-size:30px}
+.ath-coach-card h3{font-size:22px;line-height:1.2;letter-spacing:-.55px;margin:0 0 8px}
+.ath-coach-card>p{font-size:13px;color:#4e5e50;margin-bottom:12px}
+.ath-coach-caution{color:#89775a;font-size:11px;line-height:1.55;margin-top:auto;padding-top:13px;border-top:1px solid #ede7db}
+.ath-home-footer{margin:24px 0 0;border-radius:21px;background:#e9f0e7;padding:23px 26px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.ath-home-footer>div{display:flex;align-items:center;gap:15px}
+.ath-home-footer h2{font-size:16px;letter-spacing:-.3px;margin:0 0 4px}
+.ath-home-footer p{font-size:12px;color:#718477;margin:0;max-width:600px}
+.ath-footer-icon{font-size:27px;background:#d6e5d3}
+.ath-footer-button{background:#164334;color:white;border:0;border-radius:11px;padding:12px 16px;flex-shrink:0;font-weight:770}
+.ath-footer-button:hover{background:#275b47}
+.ath-history-note{font-size:11px;color:#93a098;margin:18px 0 0}
+.ath-home button:focus-visible{outline:3px solid #a2ca82;outline-offset:3px}
+@media(max-width:1120px){.ath-main-grid{grid-template-columns:minmax(0,1fr)}.ath-week-panel{min-height:auto}.ath-hero{min-height:330px}.ath-insights{grid-template-columns:repeat(2,minmax(0,1fr))}.ath-coach-card{grid-column:1/-1;min-height:185px}}
+@media(max-width:760px){.ath-home-heading{margin:0 0 19px}.ath-home-heading h1{font-size:36px;letter-spacing:-1.5px}.ath-head-signature{display:none}.ath-main-grid{gap:12px}.ath-hero{min-height:330px;padding:26px 23px;border-radius:20px}.ath-hero-title{font-size:39px;margin:20px 0 15px}.ath-hero-title span{font-size:22px}.ath-hero-graphic{right:-145px;opacity:.4}.ath-hero-meta{max-width:300px}.ath-week-panel{padding:21px;border-radius:20px}.ath-week-caption{margin-bottom:16px}.ath-section-line{margin:28px 0 14px}.ath-section-line>span{display:none}.ath-insights{grid-template-columns:1fr;gap:11px}.ath-insight-card{min-height:220px;padding:22px}.ath-coach-card{grid-column:auto}.ath-home-footer{align-items:stretch;flex-direction:column;padding:21px}.ath-footer-button{width:100%}}
+@media(max-width:390px){.ath-home-heading h1{font-size:32px}.ath-hero{padding:23px 18px}.ath-hero-actions{gap:8px}.ath-hero-title{font-size:34px}.ath-quiet-action{font-size:12px}.ath-week-panel{padding:17px}.ath-week-item{padding:9px;grid-template-columns:30px minmax(0,1fr);gap:0 7px}.ath-week-icon{height:29px;width:29px}.ath-week-icon svg{width:18px}.ath-week-name{font-size:11px}.ath-week-state{font-size:9px}}
+@media(prefers-reduced-motion:reduce){.ath-progress-track span{transition:none}}
+
 </style>
 
 </head>
@@ -53,6 +138,9 @@ main{max-width:1220px;margin:auto;padding:34px clamp(22px,4vw,58px) 94px;outline
   <div id="modal-root"></div><div id="toast" role="status" aria-live="polite"></div>
   <script>window.__SPORTOS_DEMO__=true;
 window.__SPORTOS_FIXTURE__={"version": "0.1.0", "today": "2026-10-19", "profile": [{"Champ": "Age", "Valeur": "25"}, {"Champ": "Taille", "Valeur": "164"}, {"Champ": "Poids de référence", "Valeur": "53"}], "goals": [{"ID": "OBJ-01", "Axe": "Fessiers", "Résultat visé": "Développer les fessiers", "Priorité": "Haute", "Précision": "Progression adaptée et sans précipitation.", "Statut": "Actif"}, {"ID": "OBJ-02", "Axe": "Force", "Résultat visé": "Renforcer l’ensemble du corps", "Priorité": "Haute", "Précision": "Progression adaptée et sans précipitation.", "Statut": "Actif"}, {"ID": "OBJ-03", "Axe": "Bras", "Résultat visé": "Des bras plus forts et dessinés", "Priorité": "Haute", "Précision": "Progression adaptée et sans précipitation.", "Statut": "Actif"}, {"ID": "OBJ-04", "Axe": "Abdominaux", "Résultat visé": "Renforcer les abdominaux", "Priorité": "Haute", "Précision": "Progression adaptée et sans précipitation.", "Statut": "Actif"}, {"ID": "OBJ-05", "Axe": "Cardio", "Résultat visé": "Améliorer l’endurance", "Priorité": "Haute", "Précision": "Progression adaptée et sans précipitation.", "Statut": "Actif"}, {"ID": "OBJ-06", "Axe": "Mobilité", "Résultat visé": "Bouger régulièrement", "Priorité": "Haute", "Précision": "Progression adaptée et sans précipitation.", "Statut": "Actif"}, {"ID": "OBJ-07", "Axe": "Sécurité", "Résultat visé": "Respecter les douleurs", "Priorité": "Haute", "Précision": "Progression adaptée et sans précipitation.", "Statut": "Actif"}, {"ID": "OBJ-08", "Axe": "Course", "Résultat visé": "Courir 30 minutes en continu", "Priorité": "Haute", "Précision": "Progression adaptée et sans précipitation.", "Statut": "Actif"}, {"ID": "OBJ-09", "Axe": "Vélo", "Résultat visé": "Rejoindre Espiens à vélo en mai 2027", "Priorité": "Haute", "Précision": "Progression adaptée et sans précipitation.", "Statut": "Actif"}], "programs": [{"Programme_ID": "SP-REPRISE", "Version": "V1-S2", "Séance": "A", "Activité": "Renforcement", "Objectifs_ID": "OBJ-01; OBJ-02; OBJ-04", "Statut": "Proposé — S2"}, {"Programme_ID": "SP-REPRISE", "Version": "V1-S2", "Séance": "B", "Activité": "Renforcement", "Objectifs_ID": "OBJ-01; OBJ-03; OBJ-04", "Statut": "Proposé — S2"}, {"Programme_ID": "P-COURSE-2026", "Version": "V1-CARDIO", "Séance": "D", "Activité": "Course", "Objectifs_ID": "OBJ-05; OBJ-08", "Statut": "Actif — reprise"}, {"Programme_ID": "P-VELO-ESPIENS-2027", "Version": "V1-CARDIO", "Séance": "C", "Activité": "Vélo", "Objectifs_ID": "OBJ-05; OBJ-09", "Statut": "Proposé"}], "exercises": [{"Version": "V1-S2", "Semaine": "S2", "Séance": "A", "Ordre": 1, "Exercice_ID": "EX-SQUAT", "Nom": "Goblet squat", "Séries": "2", "Rép_min": "12", "Rép_max": "15", "Temps_s": "", "Charge_kg indicative": "5", "Tempo": "3 s descente", "Sécurité": "Sans douleur", "Progression": "Technique", "Objectifs_ID": "OBJ-01; OBJ-02", "Programme_ID": "SP-REPRISE", "Statut": "Proposé — S2"}, {"Version": "V1-S2", "Semaine": "S2", "Séance": "A", "Ordre": 2, "Exercice_ID": "EX-HIP", "Nom": "Pont fessier lesté", "Séries": "2", "Rép_min": "15", "Rép_max": "20", "Temps_s": "", "Charge_kg indicative": "5", "Tempo": "Contraction 2–3 s en haut", "Sécurité": "Sans douleur", "Progression": "Technique", "Objectifs_ID": "OBJ-01", "Programme_ID": "SP-REPRISE", "Statut": "Proposé — S2"}, {"Version": "V1-S2", "Semaine": "S2", "Séance": "A", "Ordre": 3, "Exercice_ID": "EX-FENTE", "Nom": "Fentes arrière", "Séries": "2", "Rép_min": "8", "Rép_max": "10", "Temps_s": "", "Charge_kg indicative": "", "Tempo": "Mouvement contrôlé", "Sécurité": "Sans douleur", "Progression": "Technique", "Objectifs_ID": "OBJ-01; OBJ-02", "Programme_ID": "SP-REPRISE", "Statut": "Proposé — S2"}, {"Version": "V1-S2", "Semaine": "S2", "Séance": "A", "Ordre": 4, "Exercice_ID": "EX-ROW-APPUI", "Nom": "Rowing avec appui", "Séries": "2", "Rép_min": "10", "Rép_max": "12", "Temps_s": "", "Charge_kg indicative": "", "Tempo": "Test sans charge", "Sécurité": "À retirer si douleur", "Progression": "Technique", "Objectifs_ID": "OBJ-02; OBJ-03", "Programme_ID": "SP-REPRISE", "Statut": "Proposé — S2"}, {"Version": "V1-S2", "Semaine": "S2", "Séance": "A", "Ordre": 5, "Exercice_ID": "EX-DEADBUG", "Nom": "Dead bug", "Séries": "2", "Rép_min": "10", "Rép_max": "10", "Temps_s": "", "Charge_kg indicative": "0", "Tempo": "Lent", "Sécurité": "Sans douleur", "Progression": "Technique", "Objectifs_ID": "OBJ-04", "Programme_ID": "SP-REPRISE", "Statut": "Proposé — S2"}, {"Version": "V1-S2", "Semaine": "S2", "Séance": "B", "Ordre": 1, "Exercice_ID": "EX-PONT-1J", "Nom": "Pont fessier une jambe", "Séries": "2", "Rép_min": "8", "Rép_max": "10", "Temps_s": "", "Charge_kg indicative": "0", "Tempo": "Bassin stable", "Sécurité": "Sans douleur", "Progression": "Technique", "Objectifs_ID": "OBJ-01", "Programme_ID": "SP-REPRISE", "Statut": "Proposé — S2"}, {"Version": "V1-S2", "Semaine": "S2", "Séance": "B", "Ordre": 2, "Exercice_ID": "EX-POMPE", "Nom": "Pompes inclinées", "Séries": "2", "Rép_min": "8", "Rép_max": "12", "Temps_s": "", "Charge_kg indicative": "0", "Tempo": "Corps aligné", "Sécurité": "Sans douleur", "Progression": "Technique", "Objectifs_ID": "OBJ-03", "Programme_ID": "SP-REPRISE", "Statut": "Proposé — S2"}, {"Version": "V1-S2", "Semaine": "S2", "Séance": "B", "Ordre": 3, "Exercice_ID": "EX-EPAULE", "Nom": "Développé épaules", "Séries": "2", "Rép_min": "8", "Rép_max": "10", "Temps_s": "", "Charge_kg indicative": "", "Tempo": "Sans cambrer", "Sécurité": "Sans douleur", "Progression": "Technique", "Objectifs_ID": "OBJ-03", "Programme_ID": "SP-REPRISE", "Statut": "Proposé — S2"}, {"Version": "V1-S2", "Semaine": "S2", "Séance": "B", "Ordre": 4, "Exercice_ID": "EX-CURL", "Nom": "Curl biceps", "Séries": "2", "Rép_min": "10", "Rép_max": "12", "Temps_s": "", "Charge_kg indicative": "", "Tempo": "Contrôlé", "Sécurité": "Sans douleur", "Progression": "Technique", "Objectifs_ID": "OBJ-03", "Programme_ID": "SP-REPRISE", "Statut": "Proposé — S2"}, {"Version": "V1-S2", "Semaine": "S2", "Séance": "B", "Ordre": 5, "Exercice_ID": "EX-GAINAGE", "Nom": "Gainage", "Séries": "2", "Rép_min": "", "Rép_max": "", "Temps_s": "40", "Charge_kg indicative": "0", "Tempo": "Aligné", "Sécurité": "Sans douleur", "Progression": "Technique", "Objectifs_ID": "OBJ-04", "Programme_ID": "SP-REPRISE", "Statut": "Proposé — S2"}], "steps": [{"Plan_ID": "P-COURSE-2026", "Type": "Course", "Séance_no": "1", "Période / cycle": "Séance 1", "Statut": "Réalisée 19/10/2026", "Blocs": "1 min course / 1 min marche × 8"}, {"Plan_ID": "P-COURSE-2026", "Type": "Course", "Séance_no": "2", "Période / cycle": "Séance 2", "Statut": "Proposée", "Blocs": "1 min course / 1 min marche × 8"}, {"Plan_ID": "P-COURSE-2026", "Type": "Course", "Séance_no": "3", "Période / cycle": "Séance 3", "Statut": "Conditionnelle", "Blocs": "1.5 min course / 1 min marche × 8"}, {"Plan_ID": "P-COURSE-2026", "Type": "Course", "Séance_no": "4", "Période / cycle": "Séance 4", "Statut": "Conditionnelle", "Blocs": "1.5 min course / 1 min marche × 8"}, {"Plan_ID": "P-COURSE-2026", "Type": "Course", "Séance_no": "5", "Période / cycle": "Séance 5", "Statut": "Conditionnelle", "Blocs": "2 min course / 1 min marche × 7"}, {"Plan_ID": "P-COURSE-2026", "Type": "Course", "Séance_no": "6", "Période / cycle": "Séance 6", "Statut": "Conditionnelle", "Blocs": "2 min course / 1 min marche × 7"}, {"Plan_ID": "P-COURSE-2026", "Type": "Course", "Séance_no": "7", "Période / cycle": "Séance 7", "Statut": "Conditionnelle", "Blocs": "3 min course / 1 min marche × 6"}, {"Plan_ID": "P-COURSE-2026", "Type": "Course", "Séance_no": "8", "Période / cycle": "Séance 8", "Statut": "Conditionnelle", "Blocs": "3 min course / 1 min marche × 6"}, {"Plan_ID": "P-COURSE-2026", "Type": "Course", "Séance_no": "9", "Période / cycle": "Séance 9", "Statut": "Conditionnelle", "Blocs": "4 min course / 1 min marche × 5"}, {"Plan_ID": "P-COURSE-2026", "Type": "Course", "Séance_no": "10", "Période / cycle": "Séance 10", "Statut": "Conditionnelle", "Blocs": "4 min course / 1 min marche × 5"}, {"Plan_ID": "P-COURSE-2026", "Type": "Course", "Séance_no": "11", "Période / cycle": "Séance 11", "Statut": "Conditionnelle", "Blocs": "5 min course / 1 min marche × 5"}, {"Plan_ID": "P-COURSE-2026", "Type": "Course", "Séance_no": "12", "Période / cycle": "Séance 12", "Statut": "Conditionnelle", "Blocs": "5 min course / 1 min marche × 5"}, {"Plan_ID": "P-VELO-ESPIENS-2027", "Type": "Vélo", "Séance_no": "1", "Période / cycle": "Octobre 2026", "Statut": "Proposée", "Blocs": "25–40 min"}, {"Plan_ID": "P-VELO-ESPIENS-2027", "Type": "Vélo", "Séance_no": "2", "Période / cycle": "Novembre 2026", "Statut": "Jalon conditionnel", "Blocs": "40–60 min"}, {"Plan_ID": "P-VELO-ESPIENS-2027", "Type": "Vélo", "Séance_no": "3", "Période / cycle": "Décembre 2026", "Statut": "Jalon conditionnel", "Blocs": "60–90 min"}, {"Plan_ID": "P-VELO-ESPIENS-2027", "Type": "Vélo", "Séance_no": "4", "Période / cycle": "Janvier 2027", "Statut": "Jalon conditionnel", "Blocs": "75–120 min"}, {"Plan_ID": "P-VELO-ESPIENS-2027", "Type": "Vélo", "Séance_no": "5", "Période / cycle": "Février 2027", "Statut": "Jalon conditionnel", "Blocs": "90–150 min"}, {"Plan_ID": "P-VELO-ESPIENS-2027", "Type": "Vélo", "Séance_no": "6", "Période / cycle": "Mars 2027", "Statut": "Jalon conditionnel", "Blocs": "120–210 min"}, {"Plan_ID": "P-VELO-ESPIENS-2027", "Type": "Vélo", "Séance_no": "7", "Période / cycle": "Avril 2027", "Statut": "Jalon conditionnel", "Blocs": "180–300 min"}, {"Plan_ID": "P-VELO-ESPIENS-2027", "Type": "Vélo", "Séance_no": "8", "Période / cycle": "Mai 2027", "Statut": "Jalon conditionnel", "Blocs": "Défi en 2 jours"}], "sessions": [{"Seance_ID": "STR-S1-A", "Semaine": "S1", "Date": "", "Type": "A", "Statut": "Terminée"}, {"Seance_ID": "STR-S1-B", "Semaine": "S1", "Date": "", "Type": "B", "Statut": "Terminée"}], "logs": [{"Log_ID": "LOG-S1-B-01", "Seance_ID": "STR-S1-B", "Exercice_ID": "EX-RDL", "Exercice": "Soulevé de terre roumain", "Douleur": "Oui"}, {"Log_ID": "LOG-S1-B-04", "Seance_ID": "STR-S1-B", "Exercice_ID": "EX-ROW", "Exercice": "Rowing haltère", "Douleur": "Oui"}], "cardio": [{"Cardio_ID": "CARD-20261019-RUN-01", "Semaine": "S2", "Date": "2026-10-19", "Type": "Course", "Durée min": "16", "Effort 1-10": "2,5", "Statut": "Terminée"}], "advice": [], "reviews": [], "measurements": [{"Mesure_ID": "MES-INITIAL", "Date_mesure": "", "Poids_kg": "53"}]};
+
+window.__SPORTOS_FIXTURE__.today='2026-10-20';
+window.__SPORTOS_FIXTURE__.version='0.2.0-preview';
 </script>
 <script>
 (function(){
@@ -99,14 +187,118 @@ window.__SPORTOS_FIXTURE__={"version": "0.1.0", "today": "2026-10-19", "profile"
   const activeEx=type=>S.data.exercises.filter(x=>x.Séance===type&&x.Statut==='Proposé — S2'&&x.Version==='V1-S2').sort((a,b)=>toNum(a.Ordre)-toNum(b.Ordre));
   function activityInfo(type){if(type==='A')return {icon:'◈',name:'Fessiers & full body',sub:'5 exercices · 35–45 min',cls:''};if(type==='B')return {icon:'✦',name:'Haut du corps & fessiers',sub:'5 exercices · 35–45 min',cls:''};if(type==='Vélo')return {icon:'♢',name:'Sortie vélo',sub:'Reprise 25–40 min',cls:'bike'};return {icon:'↗',name:'Course / marche',sub:'Prochain objectif : 8 × 1 min / 1 min',cls:'run'};}
   function activityRow(type){const x=activityInfo(type),all=currentWeekActivities(),done=all.some(s=>(type==='A'||type==='B')?s.Type===type:s.Type===type);return `<div class="activity"><div class="activity-icon ${x.cls}">${x.icon}</div><div class="activity-info"><strong>${x.name}</strong><p>${x.sub}</p></div><div class="activity-actions">${done?badge('✓ Réalisée'):badge('À faire','gray')}<button class="tiny-link" data-log="${type}">${done?'Ajouter une séance':'Enregistrer ↗'}</button></div></div>`}
-  function home(){const all=currentWeekActivities(),done=['A','B','Course','Vélo'].filter(t=>all.some(r=>r.Type===t)).length;const last=S.data.cardio.filter(x=>x.Type==='Course').slice(-1)[0];return `${header('Ton sport, à ton rythme.','Un espace pour tes entraînements, tes objectifs et chacun de tes petits progrès.','BONJOUR, BIENVENUE DANS SPORTOS')}
-    <div class="grid cols-2"><div class="card dark hero"><div><span class="pill white">✳ Ton rythme de semaine</span><h2 class="hero-title">Chaque séance<br>compte vraiment.</h2><p class="muted-on-dark">${done} activité${done>1?'s':''} réalisée${done>1?'s':''} sur 4 prévues</p><button class="btn light" data-nav-go="program">Voir mon programme →</button></div><div class="hero-figure" aria-hidden="true">✳</div></div>
-    <div class="card"><div class="card-heading"><h2>Cette semaine</h2>${badge(done+'/4 activités')}</div><div style="margin:27px 0 12px" class="progress-track"><div class="progress-fill darkfill" style="width:${done*25}%"></div></div><p class="small">${done===0?'Tu peux commencer quand tu veux.':done===4?'Tu as terminé les quatre activités prévues !':'C’est une progression, pas une course.'}</p><div class="grid cols-2" style="margin-top:23px"><div><div class="stat">${S.data.sessions.filter(x=>x.Statut==='Terminée').length}</div><span class="stat-label">Renforcements enregistrés</span></div><div><div class="stat">${S.data.cardio.filter(x=>x.Statut==='Terminée').length}</div><span class="stat-label">Sorties cardio enregistrées</span></div></div></div></div>
-    <div class="section-row"><h2>Mon planning</h2><button class="tiny-link" data-nav-go="program">Voir les programmes →</button></div>
-    <div class="grid cols-2"><section class="card"><div class="card-heading"><h2>Renforcement</h2><span class="small">2 séances</span></div>${activityRow('A')}${activityRow('B')}</section><section class="card"><div class="card-heading"><h2>Endurance</h2><span class="small">2 séances</span></div>${activityRow('Course')}${activityRow('Vélo')}</section></div>
-    <div class="section-row"><h2>Les objectifs qui me motivent</h2><button class="tiny-link" data-nav-go="profile">Tous mes objectifs →</button></div>
-    <div class="grid cols-3"><div class="card feature"><span class="feat-icon">◈</span><h3>Des fessiers plus forts</h3><p>Renforcement ciblé et progression adaptée.</p></div><div class="card feature"><span class="feat-icon">↗</span><h3>30 min de course</h3><p>${last?'Dernière séance : '+safeRaw(last['Durée min'])+' min, effort '+safeRaw(last['Effort 1-10'])+'/10.':'Commencer avec les intervalles course-marche.'}</p></div><div class="card feature"><span class="feat-icon">♢</span><h3>Espiენს · Mai 2027</h3><p>Rejoindre Espiens à vélo, avec un scénario sur deux jours.</p></div></div>
-    <div class="section-row"><h2>Mon bilan</h2><span class="small">Une fois par semaine</span></div><section class="card row-between"><div><b>Comment s’est passée ta semaine ?</b><p class="small" style="margin:5px 0">Fatigue, sommeil, satisfaction et axes d’amélioration.</p></div><button class="btn" data-review="1">Faire mon bilan ↗</button></section>`}
+  function home(){
+    const all=currentWeekActivities();
+    const types=['A','B','Course','Vélo'];
+    const doneTypes=types.filter(type=>all.some(entry=>entry.Type===type));
+    const done=doneTypes.length;
+    const next=types.find(type=>!doneTypes.includes(type))||null;
+    const weekMessage=done===4?'Tu as déjà réalisé les quatre activités que tu avais prévues.':
+      done===0?'Ta semaine est à écrire, sans pression.':
+      `${done} activité${done>1?'s':''} enregistrée${done>1?'s':''} cette semaine.`;
+    const dateText=new Date((S.data.today||'2026-10-20')+'T12:00:00').toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+    const nextInfo={
+      A:{title:'Renforcement A',subtitle:'Fessiers & full body',time:'35–45 min environ',tip:'5 exercices · technique et confort avant l’intensité',symbol:'A'},
+      B:{title:'Renforcement B',subtitle:'Haut du corps & fessiers',time:'35–45 min environ',tip:'5 exercices · aucune progression sur un mouvement douloureux',symbol:'B'},
+      Course:{title:'Course / marche',subtitle:'Consolider ta reprise',time:'16 min d’intervalles',tip:'8 × (1 min de course + 1 min de marche) · échauffement en plus',symbol:'C'},
+      Vélo:{title:'Sortie vélo',subtitle:'En route vers Espiens',time:'25–40 min proposées',tip:'Une première sortie facile, sans objectif de vitesse',symbol:'V'}
+    };
+    const feature=next?nextInfo[next]:null;
+    const glyph={
+      A:'<path d="M6.5 6.5l11 11M4.5 8.5l4-4M15.5 19.5l4-4M2.5 10.5l8-8M13.5 21.5l8-8"/>',
+      B:'<path d="M6.5 6.5l11 11M4.5 8.5l4-4M15.5 19.5l4-4M2.5 10.5l8-8M13.5 21.5l8-8"/>',
+      Course:'<path d="M13 3l2 2-2 3-3-2-3 4-3 1m6-1 3 3-1 4 5 4m-8-9-2 5-4 3M16 4a1.7 1.7 0 1 1-3.4 0A1.7 1.7 0 0 1 16 4Z"/>',
+      Vélo:'<circle cx="5.5" cy="17" r="3.5"/><circle cx="18.5" cy="17" r="3.5"/><path d="M5.5 17l5-10 4.5 10H5.5m5-10h4m-5 0H8m7 0 3.5 10"/>'
+    };
+    const icon=(type,size=22)=>`<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${glyph[type]}</svg>`;
+    const statusNames={A:'Renfo A',B:'Renfo B',Course:'Course',Vélo:'Vélo'};
+    const dateSorted=S.data.cardio.filter(x=>x.Type==='Course' && x.Statut==='Terminée' && /^\d{4}-\d\d-\d\d$/.test(x.Date||'')).sort((a,b)=>a.Date.localeCompare(b.Date));
+    const lastRun=dateSorted.length?dateSorted[dateSorted.length-1]:null;
+    const rpe=lastRun && lastRun['Effort 1-10']!==''?fmt(toNum(lastRun['Effort 1-10']))+'/10':'Non renseigné';
+    const duration=lastRun && lastRun['Durée min']!==''?fmt(toNum(lastRun['Durée min']))+' min':'Durée non renseignée';
+    const validPain=(S.data.logs||[]).some(x=>x.Douleur==='Oui');
+    const coachLead=lastRun&&lastRun['Effort 1-10']!==''&&toNum(lastRun['Effort 1-10'])<=3
+      ?`Ta course du ${niceDate(lastRun.Date)} t’a semblé facile (${rpe}). La prochaine proposition reste une séance de consolidation : 8 × 1 minute de course et 1 minute de marche.`
+      :'Continue à privilégier les sensations et la régularité. Les prochaines progressions seront proposées à partir de tes séances réellement renseignées.';
+    const coachSafety=validPain?'Des douleurs ont déjà été signalées sur certains exercices : ne force pas et garde leur progression suspendue tant que le mouvement n’est pas indolore.':'La technique, la récupération et l’absence de douleur passent avant l’augmentation de la difficulté.';
+    const topText=done===4?'Une semaine à savourer.':done===0?'Ton rythme commence ici.':'Un mouvement à la fois.';
+    const nextMarkup=feature?`<section class="ath-hero" aria-labelledby="ath-hero-title">
+        <div class="ath-hero-content">
+          <span class="ath-overline ath-light-overline"><span class="ath-dot"></span> PROCHAINE SÉANCE PROPOSÉE</span>
+          <h2 id="ath-hero-title" class="ath-hero-title">${feature.title}<span>${feature.subtitle}</span></h2>
+          <div class="ath-hero-meta"><span>${icon(next,18)} ${feature.time}</span><span>${esc(feature.tip)}</span></div>
+          <div class="ath-hero-actions">
+            <button type="button" class="ath-cta" data-open-program="${next}">Découvrir la séance <span aria-hidden="true">↗</span></button>
+            <button type="button" class="ath-quiet-action" data-log="${next}">Enregistrer après l’avoir faite</button>
+          </div>
+          <p class="ath-hero-disclaimer">Proposition du programme, pas un rendez-vous imposé.</p>
+        </div>
+        <div class="ath-hero-graphic" aria-hidden="true"><span class="ath-hero-orbit ath-orbit-a"></span><span class="ath-hero-orbit ath-orbit-b"></span><span class="ath-hero-initial">${feature.symbol}</span></div>
+      </section>`:
+      `<section class="ath-hero ath-hero-complete" aria-labelledby="ath-hero-title">
+        <div class="ath-hero-content">
+          <span class="ath-overline ath-light-overline"><span class="ath-dot"></span> CETTE SEMAINE</span>
+          <h2 id="ath-hero-title" class="ath-hero-title">Quel beau chemin.<span>Quatre activités enregistrées</span></h2>
+          <p class="ath-hero-copy">Prends aussi le temps de récupérer et de profiter de ce que tu as accompli.</p>
+          <div class="ath-hero-actions"><button type="button" class="ath-cta" data-review="1">Faire mon bilan <span aria-hidden="true">↗</span></button></div>
+        </div>
+        <div class="ath-hero-graphic" aria-hidden="true"><span class="ath-hero-orbit ath-orbit-a"></span><span class="ath-hero-orbit ath-orbit-b"></span><span class="ath-hero-initial">✳</span></div>
+      </section>`;
+    const weekCards=types.map(type=>{
+      const isDone=doneTypes.includes(type);
+      return `<button type="button" class="ath-week-item ${isDone?'is-done':''}" data-open-program="${type}" aria-label="${esc(statusNames[type])} : ${isDone?'activité enregistrée cette semaine':'pas encore enregistrée cette semaine'} ; consulter le programme">
+        <span class="ath-week-icon">${icon(type,23)}</span>
+        <span class="ath-week-name">${statusNames[type]}</span>
+        <span class="ath-week-state">${isDone?'✓ Réalisée':'À ton rythme'}</span>
+      </button>`;
+    }).join('');
+    return `<div class="ath-home">
+      <header class="ath-home-heading">
+        <div><p class="ath-overline">${esc(dateText)} · TON ESPACE</p>
+          <h1>${topText}</h1>
+          <p>Un espace pour bouger, progresser et te sentir bien. À ta façon.</p>
+        </div>
+        <span class="ath-head-signature" aria-hidden="true">SPORT<br>OS<span>✳</span></span>
+      </header>
+      <div class="ath-main-grid">
+        ${nextMarkup}
+        <section class="ath-week-panel" aria-labelledby="ath-week-title">
+          <div class="ath-panel-head"><div><p class="ath-panel-overline">MON ÉQUILIBRE</p><h2 id="ath-week-title">Ta semaine en mouvement</h2></div>
+          <span class="ath-week-count"><b>${done}</b><span> / 4</span></span></div>
+          <div class="ath-progress-track" role="progressbar" aria-label="Activités réalisées cette semaine" aria-valuemin="0" aria-valuemax="4" aria-valuenow="${done}"><span style="width:${done*25}%"></span></div>
+          <p class="ath-week-caption">${weekMessage}</p>
+          <div class="ath-week-grid">${weekCards}</div>
+          <div class="ath-week-bottom"><span>Régularité, pas perfection.</span><button type="button" data-nav-go="program">Tous mes programmes <span aria-hidden="true">↗</span></button></div>
+        </section>
+      </div>
+      <div class="ath-section-line"><div><p class="ath-panel-overline">GARDER LE CAP</p><h2>Ce qui te fait avancer</h2></div><span>Des repères, pas des obligations</span></div>
+      <div class="ath-insights">
+        <article class="ath-insight-card ath-run-card">
+          <div class="ath-insight-top"><span class="ath-insight-icon">${icon('Course',24)}</span><span>DERNIÈRE COURSE</span></div>
+          ${lastRun?`<strong class="ath-big-number">${duration}</strong><p>Course / marche · ${niceDate(lastRun.Date)}</p><div class="ath-insight-foot"><span>Effort ressenti</span><b>${rpe}</b></div>`:`<strong class="ath-insight-heading">À ton rythme.</strong><p>Ta première sortie de course apparaîtra ici une fois enregistrée.</p><div class="ath-insight-foot"><span>Objectif : courir 30 min facilement</span></div>`}
+          <button type="button" class="ath-text-action" data-open-program="Course">Voir ma progression <span aria-hidden="true">↗</span></button>
+        </article>
+        <article class="ath-insight-card ath-bike-card">
+          <div class="ath-insight-top"><span class="ath-insight-icon">${icon('Vélo',24)}</span><span>MON GRAND DÉFI</span></div>
+          <strong class="ath-big-word">Espiens<span>.</span></strong>
+          <p>Mai 2027 · En vélo depuis Toulouse</p>
+          <div class="ath-insight-foot"><span>Option de référence</span><b>Sur 2 jours</b></div>
+          <button type="button" class="ath-text-action" data-open-program="Vélo">Voir ma préparation <span aria-hidden="true">↗</span></button>
+        </article>
+        <article class="ath-insight-card ath-coach-card">
+          <div class="ath-insight-top"><span class="ath-insight-icon ath-star-icon" aria-hidden="true">✳</span><span>LE REGARD DU COACH</span></div>
+          <h3>Un conseil pour toi</h3>
+          <p>${esc(coachLead)}</p>
+          <div class="ath-coach-caution"><span aria-hidden="true">◌</span> ${esc(coachSafety)}</div>
+        </article>
+      </div>
+      <footer class="ath-home-footer">
+        <div><span class="ath-insight-icon ath-footer-icon" aria-hidden="true">✦</span><div><h2>Prendre du recul, c’est aussi avancer.</h2><p>Un petit bilan sur ta fatigue, ton sommeil et tes sensations, quand tu le souhaites.</p></div></div>
+        <button type="button" class="ath-footer-button" data-review="1">Faire mon bilan <span aria-hidden="true">↗</span></button>
+      </footer>
+      <p class="ath-history-note">Depuis le début : ${S.data.sessions.filter(x=>x.Statut==='Terminée').length} renforcements et ${S.data.cardio.filter(x=>x.Statut==='Terminée').length} sorties cardio enregistrés. Les séances sans date ne sont pas comptabilisées dans la semaine.</p>
+    </div>`;
+  }
   function program(){const type=S.programTab;const p=type==='A'||type==='B';const ex=p?activeEx(type):[];const stepType=type==='Course'?'Course':'Vélo';const steps=p?[]:S.data.steps.filter(x=>x.Type===stepType);
     const tabs=['A','B','Course','Vélo'].map(t=>`<button class="program-tab ${type===t?'active':''}" data-program-tab="${t}">${{A:'🍑 Séance A',B:'💪 Séance B',Course:'↗ Course',Vélo:'♢ Vélo'}[t]}</button>`).join('');
     const titles={A:'Fessiers & full body',B:'Haut du corps & fessiers',Course:'Reprendre la course, doucement',Vélo:'En route vers Espiens !'};
@@ -142,7 +334,7 @@ window.__SPORTOS_FIXTURE__={"version": "0.1.0", "today": "2026-10-19", "profile"
   function profile(){const kv=Object.fromEntries(S.data.profile.map(x=>[x.Champ,x.Valeur]));const goals=S.data.goals.filter(g=>g.Statut&&(g.Statut.startsWith('Actif')));const measurements=S.data.measurements.filter(x=>x.Poids_kg).slice(-4);return `${header('Mon profil','Ton point de départ, tes objectifs et tes préférences au même endroit.','MON IDENTITÉ SPORTIVE')}<div class="grid cols-2"><section class="card"><div class="row-between"><h2 class="section-title">Mes repères</h2>${badge('Privé')}</div><div class="grid cols-3" style="margin-top:18px"><div class="measure"><small>Âge</small><b>${esc(kv.Age||'—')} <small>ans</small></b></div><div class="measure"><small>Taille</small><b>${kv.Taille?fmt(toNum(kv.Taille)/100):'—'} <small>m</small></b></div><div class="measure"><small>Poids de départ</small><b>${esc(kv['Poids de référence']||'—')} <small>kg</small></b></div></div><div class="kpi-line"><span>Équipement</span><b class="s12">2 haltères de 5 kg + tapis</b></div><div class="kpi-line"><span>Renforcement</span><b class="s12">2 fois / semaine</b></div><div class="kpi-line"><span>Course + vélo</span><b class="s12">1 fois chacun / semaine</b></div><div class="kpi-line"><span>Strava</span>${badge('Non connecté','gray')}</div><button class="btn outline full" data-weight="1" style="margin-top:18px">Ajouter une mesure de poids (facultatif)</button><p class="micro">Ce suivi n’a aucun objectif de perte de poids.</p></section>
       <section class="card"><div class="card-heading"><h2>Mes objectifs personnels</h2></div><div class="goal-list">${goals.map(g=>`<div class="goal"><div class="row-between"><strong>${esc(g.Axe)}</strong>${badge(g.Priorité,g.Priorité==='Bloquante'?'orange':'gray')}</div><p>${esc(g['Résultat visé'])}</p></div>`).join('')}</div></section></div>
       <div class="grid cols-2" style="margin-top:17px"><div class="card"><h2 class="section-title">Mon évolution physique</h2><p class="small">Les mesures sont facultatives et privées. Les performances et les sensations restent centrales.</p>${measurements.map(x=>`<div class="kpi-line"><span>${niceDate(x.Date_mesure)}</span><b>${esc(x.Poids_kg)} kg</b></div>`).join('')||'<div class="empty">Tu n’as pas encore ajouté de mesure datée.</div>'}</div><div class="card"><h2 class="section-title">Connexions et données</h2><p class="small">Le suivi fonctionne sans Strava. Un import de fichiers et une connexion sécurisée sont envisagés plus tard.</p><div class="well">Tes données de pratique restent dans ton Google Sheet personnel. Déploiement recommandé : accès réservé uniquement à toi.</div></div></div>`;}
-  function bind(){qAll('[data-nav-go]').forEach(b=>b.onclick=()=>navigate(b.dataset.navGo));qAll('[data-log]').forEach(b=>b.onclick=()=>openLog(b.dataset.log));qAll('[data-program-tab]').forEach(b=>b.onclick=()=>{S.programTab=b.dataset.programTab;render()});qAll('[data-review]').forEach(b=>b.onclick=openReview);qAll('[data-weight]').forEach(b=>b.onclick=openWeight);const pick=q('#exercise-picker');if(pick)pick.onchange=()=>{S.exerciseSelected=pick.value;render()};}
+  function bind(){qAll('[data-nav-go]').forEach(b=>b.onclick=()=>navigate(b.dataset.navGo));qAll('[data-open-program]').forEach(b=>b.onclick=()=>{S.programTab=b.dataset.openProgram;navigate('program')});qAll('[data-log]').forEach(b=>b.onclick=()=>openLog(b.dataset.log));qAll('[data-program-tab]').forEach(b=>b.onclick=()=>{S.programTab=b.dataset.programTab;render()});qAll('[data-review]').forEach(b=>b.onclick=openReview);qAll('[data-weight]').forEach(b=>b.onclick=openWeight);const pick=q('#exercise-picker');if(pick)pick.onchange=()=>{S.exerciseSelected=pick.value;render()};}
   function showModal(title,inner,onSubmit){q('#modal-root').innerHTML=`<div class="modal-backdrop" id="modal-backdrop"><div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title"><div class="modal-head"><h2 id="modal-title">${esc(title)}</h2><button class="close" id="modal-close" aria-label="Fermer">×</button></div><form class="modal-content" id="form-modal">${inner}<div class="modal-actions"><button class="btn ghost" type="button" id="modal-cancel">Annuler</button><button class="btn" id="modal-submit" type="submit">Enregistrer</button></div></form></div></div>`;
     const close=()=>q('#modal-root').innerHTML='';q('#modal-close').onclick=close;q('#modal-cancel').onclick=close;q('#modal-backdrop').onclick=e=>{if(e.target.id==='modal-backdrop')close()};q('#form-modal').onsubmit=async e=>{e.preventDefault();if(S.loading)return;S.loading=true;const b=q('#modal-submit');b.disabled=true;b.textContent='Enregistrement…';try{await onSubmit(new FormData(e.target));close();toast(S.demo?'Enregistré pour cet aperçu (non synchronisé)':'Séance enregistrée dans SportOS ✓');await reload();}catch(err){toast('Erreur : '+err.message);b.disabled=false;b.textContent='Réessayer';}finally{S.loading=false}};}
   async function reload(){if(S.demo){render();return}try{S.data=await server('getBootstrap');render()}catch(e){toast('Enregistrement effectué mais actualisation impossible : '+e.message);render()}}
@@ -155,10 +347,10 @@ window.__SPORTOS_FIXTURE__={"version": "0.1.0", "today": "2026-10-19", "profile"
     showModal('Séance '+type+' — mon retour',html,async f=>{
       const exercises=ex.map((x,i)=>{const read=k=>f.get(k+i)||'';return {id:read('id'),sets:read('sets'),reps:read('reps'),weight:read('weight'),seconds:read('seconds'),difficulty:read('difficulty'),rir:read('rir'),pain:read('pain'),painWhere:read('painWhere'),note:read('note')}}).filter(x=>x.sets!==''||x.reps!==''||x.weight!==''||x.seconds!==''||x.difficulty!==''||x.pain!==''||x.note!=='');
       if(!exercises.length)throw Error('Renseigne au moins un exercice');
-      await server('saveStrength',{id:entryId,date:f.get('date'),type,week:W(),duration:f.get('duration'),effort:f.get('effort'),energyAfter:f.get('energyAfter'),note:f.get('note'),exercises});
+      await server('saveStrength',{id:entryId,date:f.get('date'),type,duration:f.get('duration'),effort:f.get('effort'),energyAfter:f.get('energyAfter'),note:f.get('note'),exercises});
     });}
   function cardioForm(type){const entryId=key();const isRun=type==='Course';const html=`<p class="small">${isRun?'En reprise : privilégie les sensations et les intervalles, pas la vitesse.':'Pour Espiens, suis surtout la durée et le confort de tes sorties.'}</p><div class="form-grid">${field('Date','date',{type:'date',value:S.data.today,required:true})}${field('Durée totale (min)','duration',{min:1,max:1440,step:1,required:true,placeholder:'16'})}${field('Distance (km) · facultatif','distance',{min:0,max:600,step:.01,placeholder:'Si connue'})}${field('Difficulté /10','effort',{min:0,max:10,step:.5,required:true,placeholder:'2,5'})}</div>${isRun?`<div class="well" style="margin-bottom:16px">Prochaine proposition : 8 × (1 min course + 1 min marche), plus marche d'échauffement et retour au calme.</div><div class="form-grid cols-3">${field('Course par bloc (sec)','runSeconds',{min:0,max:3600,step:1,value:60})}${field('Marche par bloc (sec)','walkSeconds',{min:0,max:3600,step:1,value:60})}${field('Nombre de blocs','rounds',{min:0,max:200,step:1,value:8})}</div>`:''}${select('Douleur pendant/après','pain',[['','Non renseignée'],['Non','Non'],['Oui','Oui']])}${longtext('Mes sensations','note')}`;
-    showModal(type==='Course'?'Enregistrer ma course':'Enregistrer ma sortie vélo',html,async f=>{const p={id:entryId,date:f.get('date'),type,week:W(),duration:f.get('duration'),distance:f.get('distance'),effort:f.get('effort'),runSeconds:isRun?f.get('runSeconds'):'',walkSeconds:isRun?f.get('walkSeconds'):'',rounds:isRun?f.get('rounds'):'',pain:f.get('pain'),note:f.get('note'),planStep:isRun?'RUN-02':'BIKE-01'};if(Number(p.duration)<=0)throw Error('Renseigne la durée');await server('saveCardio',p)});}
+    showModal(type==='Course'?'Enregistrer ma course':'Enregistrer ma sortie vélo',html,async f=>{const p={id:entryId,date:f.get('date'),type,duration:f.get('duration'),distance:f.get('distance'),effort:f.get('effort'),runSeconds:isRun?f.get('runSeconds'):'',walkSeconds:isRun?f.get('walkSeconds'):'',rounds:isRun?f.get('rounds'):'',pain:f.get('pain'),note:f.get('note'),planStep:isRun?'RUN-02':'BIKE-01'};if(Number(p.duration)<=0)throw Error('Renseigne la durée');await server('saveCardio',p)});}
   function openReview(){const html=`<p class="small">Ce bilan sert à comprendre ton ressenti, pas à juger tes résultats.</p><div class="form-grid">${field('Fatigue /10','fatigue',{min:0,max:10,step:1,placeholder:'5'})}${field('Sommeil /10','sleep',{min:0,max:10,step:1,placeholder:'7'})}${field('Satisfaction /10','satisfaction',{min:0,max:10,step:1,placeholder:'8'})}</div>${longtext('Ce qui a bien fonctionné','note')}${longtext('Pour la semaine prochaine','next')}`;showModal('Mon bilan hebdomadaire',html,async f=>server('saveReview',{week:W(),fatigue:f.get('fatigue'),sleep:f.get('sleep'),satisfaction:f.get('satisfaction'),note:f.get('note'),next:f.get('next')}));}
   function openWeight(){const entryId=key();const html=`<p class="small">Mesure complètement facultative. Aucune obligation de te peser.</p>${field('Date de mesure','date',{type:'date',value:S.data.today,required:true})}${field('Poids en kg','weight',{min:20,max:250,step:.1,required:true,placeholder:'53'})}${longtext('Note facultative','note')}`;showModal('Ajouter une mesure',html,async f=>server('saveMeasurement',{id:entryId,date:f.get('date'),weight:f.get('weight'),note:f.get('note')}));}
   qAll('[data-nav]').forEach(b=>b.addEventListener('click',()=>navigate(b.dataset.nav)));
