@@ -11,7 +11,7 @@ const css=fs.readFileSync(root+'/src/Styles.html','utf8');
 
 const modelSource=cli.match(/\n  function homeModel\(data\) \{[\s\S]*?(?=\n  function home\(\))/);
 const homeSource=cli.match(/\n  function home\(\) \{[\s\S]*?(?=\n  function program\(\))/);
-const iconSource=cli.match(/\n  function v3Icon\(type\) \{[\s\S]*?(?=\n  function homeModel\(data\))/);
+const iconSource=cli.match(/\n  function v3Icon\(type\)\s*\{[\s\S]*?(?=\n  function homeModel\(data\))/);
 for(const [name,s] of [['homeModel',modelSource],['home',homeSource],['v3Icon',iconSource]])
   assert.ok(s,'Fonction '+name+' introuvable');
 const evaluate=(src,ctx)=>vm.runInNewContext('('+src[0].trim()+')',ctx);
