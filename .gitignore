@@ -1,0 +1,8 @@
+.clasp.json
+.clasprc.json
+*.token
+.env
+.env.*
+node_modules/
+.DS_Store
+*.zip

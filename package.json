@@ -1,0 +1,10 @@
+{
+  "name": "sportos-personal",
+  "version": "0.1.1",
+  "private": true,
+  "description": "WebApp sportive personnelle avec Google Sheets et Apps Script",
+  "scripts": {
+    "test": "node tests/backend.test.cjs",
+    "verify": "node scripts/verify-local.cjs && npm test"
+  }
+}
