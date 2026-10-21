@@ -20,6 +20,7 @@ jobs:
           npm run verify
           bash -n scripts/publier-v0.2-cloud-shell.sh
           bash -n scripts/publier-v0.3-cloud-shell.sh
+          bash -n scripts/publier-v0.4-cloud-shell.sh
 
   visual:
     name: Navigateur et captures responsive
