@@ -85,7 +85,7 @@ const {pathToFileURL}=require('node:url');
   await reduced.locator('.v3-top-cta').click();
   await reduced.locator('[data-choose-type="B"]').click();
   await reduced.locator('.so-session-page').waitFor();
-  const reducedCSS=await reduced.locator('.so-exercise-expand').evaluate(el=>getComputedStyle(el).transitionDuration);
+  const reducedCSS=await reduced.locator('.so-exercise-expand').first().evaluate(el=>getComputedStyle(el).transitionDuration);
   assert.equal(reducedCSS,'0s','Reduced motion must disable interactive transition');
   await reduced.close();
   console.log('FEEDBACK_REDUCED_MOTION=PASS');
