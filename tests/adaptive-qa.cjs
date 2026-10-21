@@ -40,7 +40,10 @@ const {chromium}=require('playwright');
         pageHeading:by('.v3-dashboard h1')?.textContent
       };
     });
-    assert(m.width<=m.viewport+2,'Horizontal overflow at '+width+'x'+height+': '+m.width+' vs '+m.viewport);
+    if(m.width>m.viewport+2){
+      const offending=await page.evaluate(()=>Array.from(document.body.querySelectorAll('*')).map(e=>({el:e,rect:e.getBoundingClientRect()})).filter(x=>x.rect.width>0&&x.rect.right>innerWidth+2).slice(0,18).map(x=>({tag:x.el.tagName,classes:x.el.className?.baseVal||x.el.className,right:Math.round(x.rect.right),width:Math.round(x.rect.width),text:x.el.textContent?.slice(0,38)})));
+      throw new Error('Horizontal overflow '+width+'x'+height+': '+m.width+' vs '+m.viewport+' ; offenders='+JSON.stringify(offending));
+    }
     assert(m.marks===2,'Brand mark must be duplicated exactly in desktop & mobile');
     assert(m.brandVisible&&m.actionVisible,'Logo or session CTA hidden');
     assert(m.label==='MOVE WITH INTENTION','Brand tagline mismatch');
