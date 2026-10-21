@@ -35,11 +35,15 @@ jobs:
       - name: Installer Chromium
         run: npx playwright install --with-deps chromium
       - name: Tester les 6 formats et les boutons
-        run: node tests/visual-qa.cjs
+        run: |
+          node tests/visual-qa.cjs
+          node tests/adaptive-qa.cjs
       - name: Joindre les captures d'écran
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: sportos-v0.3-visual-qa
-          path: artifacts/v0.3/*.png
+          path: |
+            artifacts/v0.3/*.png
+            artifacts/v0.4/*.png
           if-no-files-found: ignore
