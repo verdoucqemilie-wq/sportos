@@ -769,4 +769,368 @@ body.sport-v4 .v3-dashboard .v3-feature-art svg path{
   body.sport-v4 .v3-dashboard .v3-feature-art svg path{stroke-dashoffset:0}
 }
 
+
+/* === SPORTOS V0.6 / HOME ICONS + SESSION FEEDBACK WORKSPACE =============
+   Scoped to V0.6 home refinements and workout feedback only.
+   Same Arial / Helvetica / brand tokens; no new data fields or dependencies. */
+body.sport-v4 .v3-dashboard .so-home-kicker-icon{
+  width:26px;height:26px;border:1px solid rgba(212,241,123,.26);
+  background:rgba(212,241,123,.10);
+  color:#D4F17B;border-radius:8px;display:inline-grid;place-items:center;
+  flex:none;
+}
+body.sport-v4 .v3-dashboard .so-home-kicker-icon .so-icon{width:16px;height:16px}
+body.sport-v4 .v3-dashboard .so-feature-sport-icon{
+  width:28px;height:28px;
+  display:inline-grid;place-items:center;
+  vertical-align:middle;margin:0 9px 3px 0;
+  background:#d4f17b1c;border:1px solid #d4f17b52;
+  color:#D4F17B;border-radius:8px;
+  font-size:inherit;letter-spacing:normal;
+}
+body.sport-v4 .v3-dashboard .so-feature-sport-icon .so-icon{width:18px;height:18px}
+body.sport-v4 .v3-dashboard .v3-feature-workout>span:not(.so-feature-sport-icon){display:block}
+body.sport-v4 .v3-dashboard .so-activity-icon.so-activity-B{background:#edeadd;color:#876e3a}
+body.sport-v4 .v3-dashboard .so-activity-icon.so-activity-run{background:#e1efda;color:#2e8056}
+body.sport-v4 .v3-dashboard .so-activity-icon.so-activity-bike{background:#e7ebdd;color:#55724e}
+body.sport-v4 .v3-dashboard .v3-coach .so-coach-icon{
+  width:32px;height:32px;display:inline-grid;place-items:center;
+  border-radius:9px;background:#dcd4c4;color:#415b43;flex:none;
+}
+body.sport-v4 .v3-dashboard .v3-coach .so-coach-icon .so-icon{width:19px;height:19px}
+body.sport-v4 .v3-dashboard .v3-btn-subtle .so-icon{width:16px;height:16px;vertical-align:middle}
+body.sport-v4 .v3-dashboard .v3-feature-kicker{align-items:center;gap:9px}
+body.sport-v4 .v3-dashboard .v3-week-row .so-icon{stroke-width:1.9}
+body.sport-v4 .v3-dashboard .v3-week-row:hover .so-icon,
+body.sport-v4 .v3-dashboard .v3-week-row:focus-visible .so-icon{color:#244d38}
+/* Full-screen-like journal: a focused flow, NOT a dashboard card modal. */
+body.sport-v4 .so-session-backdrop{
+  z-index:190;
+  background:rgba(10,20,15,.75);
+  padding:clamp(9px,2vw,25px);
+  backdrop-filter:blur(7px);
+}
+body.sport-v4 .so-session-page{
+  width:min(1180px,100%);
+  max-width:1180px;
+  height:min(900px,calc(100dvh - 32px));
+  max-height:calc(100dvh - 20px);
+  min-height:0;
+  display:grid;
+  grid-template-columns:minmax(260px,.79fr) minmax(0,1.55fr);
+  overflow:hidden;
+  border-radius:20px;
+  background:#f5f4ef;
+  border:1px solid #e1e7de;
+  box-shadow:0 25px 90px #080e0a6b;
+  font-family:Arial,Helvetica,sans-serif;
+}
+body.sport-v4 .so-session-page *{box-sizing:border-box}
+body.sport-v4 .so-session-rail{
+  min-width:0;
+  padding:clamp(24px,2.4vw,36px);
+  color:#fff;
+  background:radial-gradient(ellipse at 100% 77%,#355d43 0,transparent 45%),linear-gradient(154deg,#17231c,#1b3c2c);
+  display:flex;
+  flex-direction:column;
+  overflow-y:auto;
+}
+body.sport-v4 .so-session-rail-brand{
+  display:flex;align-items:center;gap:9px;
+  font-size:12px;font-weight:850;letter-spacing:.07em;
+  color:#d4f17b;
+}
+body.sport-v4 .so-session-rail-brand>span:last-child{font-size:10px;color:#d1dbc9;letter-spacing:.08em}
+body.sport-v4 .so-session-rail-symbol{
+  display:inline-grid;place-items:center;
+  height:32px;width:32px;background:#d4f17b;
+  color:#172c1c;border-radius:9px;
+}
+body.sport-v4 .so-session-rail-symbol svg{width:18px;height:18px}
+body.sport-v4 .so-session-rail-body{margin:auto 0}
+body.sport-v4 .so-session-rail-icon{
+  width:78px;height:78px;
+  display:grid;place-items:center;
+  background:#d4f17b;color:#1a3222;border-radius:21px;
+  margin-bottom:33px;
+}
+body.sport-v4 .so-session-rail-icon svg{width:37px;height:37px;stroke-width:1.65}
+body.sport-v4 .so-session-rail-label{
+  font-size:11px;line-height:1.5;letter-spacing:.11em;
+  color:#c8dea7;font-weight:800;
+}
+body.sport-v4 .so-session-rail-name{
+  font-size:clamp(32px,2.75vw,48px);
+  font-weight:850;letter-spacing:-.045em;line-height:1.02;
+  max-width:285px;overflow-wrap:break-word;margin:13px 0 16px;
+}
+body.sport-v4 .so-session-rail-body>p{
+  color:#cbd7c9;line-height:1.6;font-size:14px;max-width:280px;
+}
+body.sport-v4 .so-session-rail-steps{
+  border-top:1px solid #b9d2b93d;
+  margin-top:37px;padding-top:17px;display:grid;gap:15px;
+}
+body.sport-v4 .so-session-rail-steps>div{display:flex;gap:14px;align-items:center;font-size:13px;color:#e4eee3}
+body.sport-v4 .so-session-rail-steps span{font-size:11px;color:#d4f17b;font-weight:850}
+body.sport-v4 .so-session-rail-bottom{
+  display:flex;align-items:center;gap:10px;margin-top:24px;
+  color:#d4e1d2;font-size:11px;
+}
+body.sport-v4 .so-session-rail-bottom svg{width:17px;height:17px}
+body.sport-v4 .so-session-main{
+  display:flex;flex-direction:column;
+  height:100%;min-height:0;min-width:0;overflow:hidden;
+}
+body.sport-v4 .so-session-head{
+  flex:0 0 auto;
+  position:relative;top:auto;
+  background:#f5f4ef;
+  padding:clamp(20px,2.3vw,31px) clamp(23px,3vw,42px) 20px;
+  border-bottom:1px solid #e1e4dd;align-items:flex-start;
+  gap:12px;
+}
+body.sport-v4 .so-session-heading-label{
+  font-size:10px;font-weight:850;letter-spacing:.13em;color:#507158;
+  margin-bottom:8px;
+}
+body.sport-v4 .so-session-heading-label span{color:#acb9ab;margin-inline:4px}
+body.sport-v4 .so-session-header-title{display:flex;align-items:center;gap:10px}
+body.sport-v4 .so-session-head #modal-title{
+  font-family:Arial,Helvetica,sans-serif;
+  font-size:clamp(26px,2.5vw,35px);
+  font-weight:850;letter-spacing:-.035em;
+  line-height:1.07;color:#151915;
+  margin:0;
+}
+body.sport-v4 #so-session-description{
+  margin:12px 0 0;color:#667569;font-size:12px;line-height:1.6;
+  max-width:560px;
+}
+body.sport-v4 .so-session-mobile-icon{display:none}
+body.sport-v4 .so-session-head #modal-close{
+  width:44px;height:44px;min-width:44px;flex:none;
+  border-radius:50%;background:#e4e9df;
+  color:#294434;display:grid;place-items:center;
+}
+body.sport-v4 .so-session-head #modal-close:hover{background:#d6e6cd}
+body.sport-v4 .so-session-head #modal-close svg{width:18px;height:18px}
+body.sport-v4 .so-session-form{
+  flex:1;min-height:0;
+  overflow:hidden;display:flex;flex-direction:column;
+  padding:0;
+}
+body.sport-v4 .so-session-fields{
+  flex:1;min-height:0;
+  overflow-y:auto;overscroll-behavior:contain;
+  padding:0 clamp(23px,3vw,42px) 25px;
+  scrollbar-width:thin;
+}
+body.sport-v4 .so-feedback-section{
+  padding:30px 0;
+  border-bottom:1px solid #dce2d9;
+}
+body.sport-v4 .so-feedback-section:last-child{border:0}
+body.sport-v4 .so-feedback-section-title{
+  display:flex;align-items:center;gap:14px;
+  margin:0 0 18px;
+}
+body.sport-v4 .so-feedback-section-title>.so-icon{
+  width:24px;height:24px;
+  color:#456949;margin-left:auto;
+}
+body.sport-v4 .so-section-number{
+  width:38px;height:38px;min-width:38px;
+  display:grid;place-items:center;border-radius:11px;
+  background:#e3ebdf;color:#325a42;
+  font-size:12px;font-weight:900;font-variant-numeric:tabular-nums;
+}
+body.sport-v4 .so-overline{
+  font-size:10px;font-weight:820;letter-spacing:.12em;color:#61796a;
+  margin:0 0 5px;
+}
+body.sport-v4 .so-feedback-section-title h3{
+  font:850 22px/1.2 Arial,Helvetica,sans-serif;
+  letter-spacing:-.03em;margin:0;color:#17211a;
+}
+body.sport-v4 .so-section-desc{
+  font-size:12px;line-height:1.65;color:#5a6c60;
+  margin:0 0 17px;
+}
+body.sport-v4 .so-session-page .form-grid{
+  gap:0 14px;
+}
+body.sport-v4 .so-session-page .field label{
+  font-size:12px;line-height:1.4;color:#35473a;font-weight:750;
+}
+body.sport-v4 .so-session-page .input{
+  border-radius:9px;background:white;
+  border:1px solid #cdd9ce;
+  min-height:47px;font-size:14px;
+  color:#14291c;
+  padding:12px 13px;
+}
+body.sport-v4 .so-session-page textarea.input{min-height:100px;resize:vertical}
+body.sport-v4 .so-session-page :is(.input,button,summary):focus-visible{
+  outline:3px solid #8bbb70;outline-offset:3px;
+}
+body.sport-v4 .so-effort-scale{
+  display:grid;grid-template-columns:repeat(5,minmax(0,1fr));
+  gap:7px;margin:4px 0 0;
+}
+body.sport-v4 .so-effort-scale button{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:9px 5px;min-height:64px;
+  background:white;border:1px solid #d6dfd2;border-radius:10px;
+  color:#496352;cursor:pointer;
+  transition:background-color .15s,border-color .15s;
+}
+body.sport-v4 .so-effort-scale button strong{font-size:20px;font-weight:800;line-height:1.3;color:#213a29}
+body.sport-v4 .so-effort-scale button small{font-size:9px;line-height:1.4}
+body.sport-v4 .so-effort-scale button:hover,
+body.sport-v4 .so-effort-scale button[aria-pressed=true]{background:#d4f17b;border-color:#b2d15e}
+body.sport-v4 .so-effort-hint{
+  grid-column:1/-1;font-size:11px;color:#5e705f;margin:5px 0 0;
+}
+body.sport-v4 .so-safety-inline{
+  background:#e7ede2;border-radius:12px;
+  padding:12px 14px;margin-top:20px;
+  display:flex;align-items:center;gap:14px;
+}
+body.sport-v4 .so-safety-inline>.so-icon{color:#57714e;width:23px;height:23px;flex:none}
+body.sport-v4 .so-safety-inline .field{margin:0;flex:1}
+body.sport-v4 .so-session-page .so-progress-row{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  margin-bottom:8px;font-size:11px;color:#566b59;
+}
+body.sport-v4 .so-progress-track{
+  height:5px;border-radius:10px;overflow:hidden;background:#dfe8dc;
+  margin-bottom:16px;
+}
+body.sport-v4 #so-progress-fill{
+  display:block;width:0;height:100%;background:#689955;
+  transition:width .18s ease;
+}
+body.sport-v4 .so-session-page .so-exercise{
+  padding:0;margin-bottom:10px;
+  border:1px solid #d7ded3;
+  background:#fff;
+  border-radius:12px;overflow:hidden;
+}
+body.sport-v4 .so-exercise summary{list-style:none;cursor:pointer}
+body.sport-v4 .so-exercise summary::-webkit-details-marker{display:none}
+body.sport-v4 .so-exercise-summary{
+  display:flex;align-items:center;gap:12px;
+  padding:16px;min-height:70px;
+}
+body.sport-v4 .so-exercise[open]>.so-exercise-summary{background:#edf3e8}
+body.sport-v4 .so-exercise-count{
+  height:36px;width:36px;min-width:36px;
+  display:grid;place-items:center;
+  border:1px solid #c5d8c0;border-radius:10px;
+  color:#406b4a;font-size:12px;font-weight:850;
+}
+body.sport-v4 .so-exercise-summary-text{flex:1;min-width:0}
+body.sport-v4 .so-exercise-summary-text strong{
+  display:block;font-size:14px;color:#1f2c21;font-weight:800;
+}
+body.sport-v4 .so-exercise-summary-text small{
+  display:block;color:#68766a;margin-top:5px;font-size:11px;line-height:1.5;
+}
+body.sport-v4 .so-exercise-expand{
+  display:grid;place-items:center;width:26px;height:26px;color:#456d4f;
+  transition:transform .17s;
+}
+body.sport-v4 .so-exercise-expand .so-icon{width:19px;height:19px}
+body.sport-v4 .so-exercise[open] .so-exercise-expand{transform:rotate(90deg)}
+body.sport-v4 .so-exercise-body{padding:17px 17px 8px}
+body.sport-v4 .so-exercise-instruction{
+  color:#647368;font-size:11px;line-height:1.6;margin:0 0 16px;
+}
+body.sport-v4 .so-exercise-safety{
+  background:#f3f3ed;border-radius:10px;
+  margin:8px 0 16px;padding:15px 14px 2px;
+}
+body.sport-v4 .so-safety-title{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:790;margin-bottom:12px}
+body.sport-v4 .so-safety-title svg{width:18px;height:18px;color:#6a724a}
+body.sport-v4 .so-exercise-info{
+  display:flex;align-items:flex-start;gap:9px;
+  font-size:11px;line-height:1.7;color:#6b533d;
+  margin-top:12px;
+}
+body.sport-v4 .so-exercise-info .so-icon{width:18px;height:18px;flex:none}
+body.sport-v4 .so-session-actions{
+  flex:0 0 auto;position:relative;bottom:auto;
+  background:#fff;border-top:1px solid #dce4d9;
+  display:flex;gap:10px;align-items:center;justify-content:flex-end;
+  padding:15px clamp(23px,3vw,42px) calc(16px + env(safe-area-inset-bottom));
+  box-shadow:0 -8px 22px rgba(21,25,21,.03);
+  flex-wrap:wrap;
+}
+body.sport-v4 .so-session-actions .btn{min-height:47px;border-radius:9px}
+body.sport-v4 .so-session-actions .ghost{background:#edf1ea;color:#2d4534}
+body.sport-v4 .so-session-actions .so-save-cta{
+  background:#151915;color:#fff;
+  border:0;display:inline-flex;align-items:center;
+  gap:14px;padding:12px 19px;font-weight:850;
+}
+body.sport-v4 .so-session-actions .so-save-cta:hover{background:#153c30}
+body.sport-v4 .so-session-actions .so-save-cta .so-icon{width:17px;height:17px}
+body.sport-v4 .so-session-actions .so-save-cta:disabled{opacity:.64;cursor:wait}
+body.sport-v4 .so-session-actions .so-save-error{
+  flex:0 0 100%;color:#87412d;font-size:12px;
+  line-height:1.5;margin:0 0 4px;
+}
+body.sport-v4 .so-session-actions .so-save-error[hidden]{display:none}
+@media(max-width:900px){
+  body.sport-v4 .so-session-page{grid-template-columns:240px minmax(0,1fr)}
+  body.sport-v4 .so-session-rail{padding:24px 18px}
+  body.sport-v4 .so-session-rail-icon{height:60px;width:60px}
+  body.sport-v4 .so-session-rail-icon svg{height:29px;width:29px}
+  body.sport-v4 .so-session-rail-name{font-size:35px}
+  body.sport-v4 .so-session-fields{padding-inline:23px}
+}
+@media(max-width:700px){
+  body.sport-v4 .so-session-backdrop{
+    display:block;padding:0;background:#f5f4ef;backdrop-filter:none;
+  }
+  body.sport-v4 .so-session-page{
+    height:100dvh;max-height:100dvh;width:100%;max-width:100%;
+    display:block;border-radius:0;border:0;box-shadow:none;
+  }
+  body.sport-v4 .so-session-rail{display:none}
+  body.sport-v4 .so-session-main{height:100dvh}
+  body.sport-v4 .so-session-head{padding:20px 18px 17px}
+  body.sport-v4 .so-session-header-title{gap:12px;align-items:center}
+  body.sport-v4 .so-session-mobile-icon{
+    width:39px;height:39px;min-width:39px;
+    background:#d4f17b;color:#1d3823;display:grid;
+    place-items:center;border-radius:11px;
+  }
+  body.sport-v4 .so-session-mobile-icon svg{width:23px;height:23px}
+  body.sport-v4 .so-session-head #modal-title{font-size:clamp(22px,5.5vw,27px)}
+  body.sport-v4 #so-session-description{font-size:11px;margin-top:9px}
+  body.sport-v4 .so-session-fields{padding:0 17px 25px}
+  body.sport-v4 .so-feedback-section{padding:24px 0}
+  body.sport-v4 .so-feedback-section-title h3{font-size:21px}
+  body.sport-v4 .so-session-actions{padding:12px 17px calc(12px + env(safe-area-inset-bottom))}
+  body.sport-v4 .so-session-actions .so-save-cta{flex:1;justify-content:center}
+  body.sport-v4 .so-session-page .form-grid.cols-3{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:390px){
+  body.sport-v4 .so-session-page .form-grid{grid-template-columns:1fr}
+  body.sport-v4 .so-session-page .form-grid.cols-3{grid-template-columns:1fr}
+  body.sport-v4 .so-effort-scale{grid-template-columns:repeat(5,minmax(0,1fr));gap:4px}
+  body.sport-v4 .so-effort-scale button{padding:8px 2px}
+  body.sport-v4 .so-effort-scale button small{font-size:8px}
+  body.sport-v4 .so-session-actions .btn.ghost{min-width:83px}
+}
+@media(prefers-reduced-motion:reduce){
+  body.sport-v4 .so-session-page *,
+  body.sport-v4 .so-session-page *::before,
+  body.sport-v4 .so-session-page *::after{
+    transition:none!important;animation:none!important;
+  }
+}
+
 </style>
