@@ -75,25 +75,10 @@ npm run verify
 echo "==== Inspection du déploiement existant ===="
 BEFORE="$(clasp list-deployments)"
 printf '%s\n' "$BEFORE"
-MATCHES="$(printf '%s\n' "$BEFORE" | grep -F -c -- "$DEPLOYMENT @" || true)"
-[[ "$MATCHES" == "1" ]] || {
-  echo "STOP : déploiement cible introuvable ou ambigu." >&2; exit 1;
-}
-TARGET_LINE="$(printf '%s\n' "$BEFORE" | grep -F -- "$DEPLOYMENT @")"
-if [[ "$TARGET_LINE" == *"SportOS v0.5.0"* ]]; then
-  echo "SPORTOS_V0_5_DEJA_PUBLIE — aucun push ni nouveau déploiement.";
-  exit 0
-fi
-# La version distante n'est pas confirmée ici. Le code V0.5 inclut les versions 0.3 et 0.4.
-if [[ "$TARGET_LINE" == *"SportOS v0.3.0"* ]]; then
-  echo "PRECHECK=PASS — déploiement actuel V0.3, migration cumulative vers V0.5"
-elif [[ "$TARGET_LINE" == *"SportOS v0.4.0"* ]]; then
-  echo "PRECHECK=PASS — déploiement actuel V0.4, mise à jour vers V0.5"
-else
-  echo "STOP : version Apps Script inattendue. Aucune écriture sur le projet." >&2
-  echo "Ligne observée : $TARGET_LINE" >&2
-  exit 1
-fi
+# clasp n'affiche pas toujours le descriptif ; identifier STRICTEMENT l'ID et @6.
+# Tout autre numéro ou ID provoque un arrêt AVANT clasp push.
+PREVIOUS_VERSION="$(node scripts/deployment-version-guard-v0.5.cjs before "$DEPLOYMENT" "$BEFORE")"
+echo "DEPLOIEMENT_CIBLE_VERIFIE=@$PREVIOUS_VERSION"
 echo "==== Fichiers à synchroniser ===="
 clasp show-file-status
 echo "==== Synchronisation du code (sans saisie sportive) ===="
@@ -103,9 +88,8 @@ clasp create-deployment --deploymentId "$DEPLOYMENT" --description "SportOS v0.5
 echo "==== Contrôle final ===="
 AFTER="$(clasp list-deployments)"
 printf '%s\n' "$AFTER"
-FINAL_LINE="$(printf '%s\n' "$AFTER" | grep -F -- "$DEPLOYMENT @" || true)"
-[[ "$FINAL_LINE" == *"SportOS v0.5.0"* ]] || {
-  echo "ATTENTION : version cible non confirmée, contrôler Apps Script." >&2; exit 1;
-}
+# Contrôle par progression numérique et identifiant, même en cas de description vide.
+NEW_VERSION="$(node scripts/deployment-version-guard-v0.5.cjs after "$DEPLOYMENT" "$AFTER" "$PREVIOUS_VERSION")"
+echo "DEPLOIEMENT_CIBLE_MIS_A_JOUR=@$NEW_VERSION"
 echo "SPORTOS_V0_5_DEPLOIEMENT_CIBLE=TERMINE"
 echo "Vérifier /exec sur téléphone et PC, ainsi que l'accès Moi uniquement."
