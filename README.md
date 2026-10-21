@@ -1,19 +1,19 @@
 # SportOS — WebApp personnelle
 
-**Version de code préparée : V0.4.0 (21/10/2026).** Branding SportOS et responsive adaptatif validés ; **GitHub `main` fusionné**, synchronisation Apps Script encore à lancer dans Cloud Shell. La V0.3 est visible sur la dernière capture de la WebApp ; la version du déploiement doit être vérifiée avant mise à jour. La seule base sportive reste le Sheet personnel existant.
+**Dernière version du code GitHub : V0.5.0 (21/10/2026).** Typographie de l'accueil, pictogrammes SVG et animations premium validés, PR #4 fusionnée. Le déploiement Apps Script doit encore être synchronisé dans Cloud Shell ; la version actuellement en ligne n'est pas confirmée.
 
-**Publier V0.4 depuis Cloud Shell, après connexion avec le compte Google personnel :**
+**Publier V0.5 depuis Cloud Shell avec le compte Google personnel :**
 
 ```bash
 cd ~/SportOS_deploiement_unique
 git switch main
 git pull --ff-only origin main
-bash scripts/publier-v0.4-cloud-shell.sh
+bash scripts/publier-v0.5-cloud-shell.sh
 ```
 
-Le script vérifie la cible, la confidentialité, les tests et la version existante avant d'exécuter `clasp push` et de mettre à jour **l'identifiant de déploiement déjà en service**. Si le déploiement n'annonce pas `SportOS v0.3.0`, il s'arrête sans publier : transmettre le message d'erreur et ne pas contourner les gardes. Aucun nouveau projet ni aucun nouveau déploiement n'est créé.
+Ce script vérifie les tests, la confidentialité, le Sheet unique, la présence du code V0.5 et l'identifiant du déploiement existant. Il accepte la V0.3 ou la V0.4 comme point de départ ; si le déploiement affiche une autre version, **il s'arrête avant tout push**. Il met à jour la même WebApp, sans nouveau déploiement et sans écriture de données sportives.
 
-**Documentation de la charte :** [Identité V0.4](docs/brand-guidelines-v0.4.md) · [Planche de marque](docs/brand-board-v0.4.html) · [Contrôles responsive](tests/adaptive-qa.cjs).
+**Design** : [Charte SportOS V0.4](docs/brand-guidelines-v0.4.md) · [Polish Accueil V0.5](docs/design-home-v0.5.md) · [Aperçu sans données personnelles](docs/apercu-v0.5.html) · [Tests responsive](tests/adaptive-qa.cjs).
 
 ---
 
