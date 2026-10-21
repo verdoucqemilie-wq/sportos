@@ -51,17 +51,28 @@
   function activityInfo(type){if(type==='A')return {icon:'◈',name:'Fessiers & full body',sub:'5 exercices · 35–45 min',cls:''};if(type==='B')return {icon:'✦',name:'Haut du corps & fessiers',sub:'5 exercices · 35–45 min',cls:''};if(type==='Vélo')return {icon:'♢',name:'Sortie vélo',sub:'Reprise 25–40 min',cls:'bike'};return {icon:'↗',name:'Course / marche',sub:'Prochain objectif : 8 × 1 min / 1 min',cls:'run'};}
   function activityRow(type){const x=activityInfo(type),all=currentWeekActivities(),done=all.some(s=>(type==='A'||type==='B')?s.Type===type:s.Type===type);return `<div class="activity"><div class="activity-icon ${x.cls}">${x.icon}</div><div class="activity-info"><strong>${x.name}</strong><p>${x.sub}</p></div><div class="activity-actions">${done?badge('✓ Réalisée'):badge('À faire','gray')}<button class="tiny-link" data-log="${type}">${done?'Ajouter une séance':'Enregistrer ↗'}</button></div></div>`}
   function v3Icon(type){
-  // SportOS Iconography v0.5: 24px grid, uniform 1.8 stroke, SVG with no font dependency.
+  // SportOS v0.6 — family of line icons, common stroke and optical size.
   const shapes={
     A:'<path d="m6.5 6.5 11 11M4.5 8.5l4-4m11 15 4-4M2.5 10.5l8-8m3 19 8-8"/>',
-    B:'<path d="m6.5 6.5 11 11M4.5 8.5l4-4m11 15 4-4M2.5 10.5l8-8m3 19 8-8"/>',
+    B:'<path d="M6 15.5c2.2-1 3-4.5 5.1-5.6L14 12l3-2 3 1.5-2 5-3-1-2.3 4H7L4 16z"/><path d="M11 10 9 6l-3 1M16 9.5l1-3"/>',
     Course:'<circle cx="15.5" cy="4" r="1.6"/><path d="m12 8-3-2.3-3 3m6-1 3 4-2 3m-1-7-3 6 4 3 1 4m-5-7-5 5m10-6 4.5-.5 3 3"/>',
     Vélo:'<circle cx="5" cy="17" r="3.2"/><circle cx="19" cy="17" r="3.2"/><path d="M5 17l5-10 5 10H5m5-10h4m1 0 4 10"/>',
     sparkle:'<path d="m12 2 2.6 7.4L22 12l-7.4 2.6L12 22l-2.6-7.4L2 12l7.4-2.6L12 2Z"/>',
     route:'<circle cx="5" cy="18" r="2"/><circle cx="19" cy="6" r="2"/><path d="M7 18h4a4 4 0 0 0 0-8h2a4 4 0 0 0 4-4"/>',
-    arrow:'<path d="M5 19 19 5M9 5h10v10"/>'
+    arrow:'<path d="M5 19 19 5M9 5h10v10"/>',
+    arrowRight:'<path d="M4 12h16m-6-6 6 6-6 6"/>',
+    clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+    calendar:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4m10-4v4M3 10h18"/>',
+    gauge:'<path d="M5 17a9 9 0 1 1 14 0"/><path d="m12 14 4-5m-7 9h6"/>',
+    check:'<path d="m4 12 5 5 11-11"/>',
+    clipboard:'<rect x="5" y="5" width="14" height="17" rx="2"/><path d="M9 5.5V3h6v2.5M9 12h6m-6 4h4"/>',
+    heart:'<path d="M20.8 8.4c0 5-8.8 11.3-8.8 11.3S3.2 13.4 3.2 8.4a4.5 4.5 0 0 1 8.8-1.3 4.5 4.5 0 0 1 8.8 1.3Z"/>',
+    shield:'<path d="m12 2 8 3.5v6.3c0 5.2-4 8.3-8 10.2-4-1.9-8-5-8-10.2V5.5z"/><path d="M12 7v6m0 3h.01"/>',
+    note:'<path d="M4 5h16v14H4zM8 9h8m-8 4h8m-8 4h5"/>',
+    close:'<path d="M5 5 19 19M19 5 5 19"/>'
   };
-  return '<svg class="so-icon so-icon-'+(Object.prototype.hasOwnProperty.call(shapes,type)?type:'sparkle')+'" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">'+(shapes[type]||shapes.sparkle)+'</svg>';
+  const known=Object.prototype.hasOwnProperty.call(shapes,type)?type:'sparkle';
+  return '<svg class="so-icon so-icon-'+known+'" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">'+shapes[known]+'</svg>';
 }
   function homeModel(data) {
   const validDate = value => {
@@ -113,15 +124,15 @@
     const nextName=first?meta[first].name:'Semaine accomplie';
     const hero=`<section class="v3-feature" aria-labelledby="v3-feature-title">
       <div class="v3-feature-copy">
-        <p class="v3-feature-kicker"><span class="v3-point"></span>${first?'À LA UNE / PROCHAINE SÉANCE PROPOSÉE':'TA SEMAINE / OBJECTIFS RÉALISÉS'}</p>
+        <p class="v3-feature-kicker"><span class="so-home-kicker-icon" aria-hidden="true">${v3Icon(first||'check')}</span>${first?'À LA UNE / PROCHAINE SÉANCE PROPOSÉE':'TA SEMAINE / OBJECTIFS RÉALISÉS'}</p>
         <h2 id="v3-feature-title">${first?'BOUGE.<br>À TA FAÇON.':'BRAVO.<br>ET RESPIRE.'}</h2>
         <p class="v3-feature-intro">${first?'Ton prochain mouvement':'Tu as réalisé les quatre activités proposées'}</p>
-        <div class="v3-feature-workout">${esc(nextName)}${first?'<span>'+esc(meta[first].subtitle)+'</span>':''}</div>
+        <div class="v3-feature-workout"><span class="so-feature-sport-icon" aria-hidden="true">${v3Icon(first||'check')}</span>${esc(nextName)}${first?'<span>'+esc(meta[first].subtitle)+'</span>':''}</div>
         ${first?`<div class="v3-feature-data"><span>${meta[first].duration}</span><span>${meta[first].sub}</span><span>À TON RYTHME</span></div>`:
         '<p class="v3-feature-recovery">Récupérer fait aussi partie de l’entraînement.</p>'}
         <div class="v3-feature-actions">
          ${first?`<button type="button" class="v3-btn-acid" data-open-program="${first}">VOIR MA SÉANCE ${v3Icon('arrow')}</button>
-         <button type="button" class="v3-btn-subtle" data-quick-log>Enregistrer une activité <span aria-hidden="true">↗</span></button>`:
+         <button type="button" class="v3-btn-subtle" data-quick-log>Enregistrer une activité ${v3Icon('arrow')}</button>`:
          `<button type="button" class="v3-btn-acid" ${vm.isAppReview?'data-nav-go="progress"':'data-review="1"'}>${vm.isAppReview?'VOIR MES PROGRÈS':'FAIRE MON BILAN'} ${v3Icon('arrow')}</button>`}
         </div>
         <p class="v3-hero-help">${first?'Une suggestion, jamais une obligation.':'Tu peux poursuivre à ton rythme la semaine prochaine.'}</p>
@@ -136,7 +147,7 @@
       const isDone=vm.done.includes(type),isNext=first===type;
       const status=isDone?'RÉALISÉE':isNext?'PROPOSÉE':'À PLANIFIER';
       return `<button type="button" class="v3-week-row ${isDone?'done':''} ${isNext?'next':''}" data-open-program="${type}" aria-label="${esc(weekLabel[type])} : ${isDone?'réalisée cette semaine':isNext?'proposée':'à planifier'}, voir le programme">
-        <span class="v3-week-icon">${v3Icon(type)}</span>
+        <span class="v3-week-icon so-activity-icon so-activity-${type==='Course'?'run':type==='Vélo'?'bike':type}">${v3Icon(type)}</span>
         <span class="v3-week-row-title">${esc(weekLabel[type])}<small>${isDone?'Un mouvement de plus.':isNext?'Ta prochaine proposition.':'Quand tu le souhaites.'}</small></span>
         <span class="v3-week-status">${isDone?'<span class="so-status-check" aria-hidden="true">✓</span> ':''}${status}</span>
       </button>`;
@@ -147,7 +158,7 @@
       <p class="v3-week-subtitle">${done===4?'Quatre activités réalisées.':done===0?'Tout est encore possible.':done+' activité'+(done>1?'s':'')+' réalisée'+(done>1?'s':'')+' cette semaine.'}</p>
       <div class="v3-week-track" role="progressbar" aria-label="Activités réalisées sur quatre cette semaine" aria-valuemin="0" aria-valuemax="4" aria-valuenow="${done}"><span style="width:${done*25}%"></span></div>
       <div class="v3-week-rows">${weekList}</div>
-      <button type="button" class="v3-link-arrow" data-nav-go="program">TOUS MES PROGRAMMES <span aria-hidden="true">↗</span></button>
+      <button type="button" class="v3-link-arrow" data-nav-go="program">TOUS MES PROGRAMMES ${v3Icon('arrow')}</button>
     </section>`;
     const l=vm.last;
     const isStrength=l&&['A','B'].includes(l.Type);
@@ -158,7 +169,7 @@
     const effortKnown=lastEffort!==''&&lastEffort!==undefined&&lastEffort!==null;
     const dateNice=l?niceDate(l.Date):'';
     const lastPanel=`<section class="v3-last" aria-labelledby="v3-last-title">
-      <div class="v3-panel-top"><span class="v3-label">DERNIER MOUVEMENT</span><span class="v3-panel-bubble" aria-hidden="true">${v3Icon(l?l.Type:'sparkle')}</span></div>
+      <div class="v3-panel-top"><span class="v3-label">DERNIER MOUVEMENT</span><span class="v3-panel-bubble so-activity-icon" aria-hidden="true">${v3Icon(l?l.Type:'sparkle')}</span></div>
       <h2 id="v3-last-title">${l?esc(lastKind):'À écrire.'}</h2>
       <p>${l?'Le '+esc(dateNice):'Ta première séance datée apparaîtra ici.'}</p>
       <div class="v3-last-numbers">
@@ -178,7 +189,7 @@
     let coachLine='Chaque séance nous donnera des repères. Pour l’instant, priorité au confort, à la régularité et à tes sensations.';
     if(r&&Number.isFinite(rpe)&&rpe<=3)coachLine='Ta course du '+niceDate(r.Date)+' t’a semblé facile ('+fmt(rpe)+'/10). On consolide encore 8 × (1 min course / 1 min marche) avant d’augmenter.';
     else if(r&&Number.isFinite(rpe))coachLine='Ta dernière course a été ressentie à '+fmt(rpe)+'/10. La prochaine étape dépendra de ta récupération et de l’absence de douleur.';
-    const coach=`<section class="v3-coach" aria-labelledby="v3-coach-title"><div class="v3-coach-tag">${v3Icon('sparkle')} <span>LE REGARD DU COACH</span></div>
+    const coach=`<section class="v3-coach" aria-labelledby="v3-coach-title"><div class="v3-coach-tag"><span class="so-coach-icon">${v3Icon('sparkle')}</span> <span>LE REGARD DU COACH</span></div>
       <h2 id="v3-coach-title">La suite se construit,<br>pas à pas.</h2>
       <p>${esc(coachLine)}</p>
       ${vm.pain?'<div class="v3-coach-warning">Des douleurs ont été signalées sur certains exercices. Leur progression reste prudente et conditionnée à un mouvement sans douleur.</div>':''}
