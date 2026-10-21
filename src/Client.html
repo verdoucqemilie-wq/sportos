@@ -269,8 +269,113 @@
     q('#v3-quick-close').focus();
   }
   function bind(){qAll('#content [data-quick-log]').forEach(b=>b.onclick=openQuickLog);qAll('[data-nav-go]').forEach(b=>b.onclick=()=>navigate(b.dataset.navGo));qAll('[data-open-program]').forEach(b=>b.onclick=()=>{S.programTab=b.dataset.openProgram;navigate('program')});qAll('[data-log]').forEach(b=>b.onclick=()=>openLog(b.dataset.log));qAll('[data-program-tab]').forEach(b=>b.onclick=()=>{S.programTab=b.dataset.programTab;render()});qAll('[data-review]').forEach(b=>b.onclick=openReview);qAll('[data-weight]').forEach(b=>b.onclick=openWeight);const pick=q('#exercise-picker');if(pick)pick.onchange=()=>{S.exerciseSelected=pick.value;render()};}
-  function showModal(title,inner,onSubmit){q('#modal-root').innerHTML=`<div class="modal-backdrop" id="modal-backdrop"><div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title"><div class="modal-head"><h2 id="modal-title">${esc(title)}</h2><button class="close" id="modal-close" aria-label="Fermer">×</button></div><form class="modal-content" id="form-modal">${inner}<div class="modal-actions"><button class="btn ghost" type="button" id="modal-cancel">Annuler</button><button class="btn" id="modal-submit" type="submit">Enregistrer</button></div></form></div></div>`;
-    const close=()=>q('#modal-root').innerHTML='';q('#modal-close').onclick=close;q('#modal-cancel').onclick=close;q('#modal-backdrop').onclick=e=>{if(e.target.id==='modal-backdrop')close()};q('#form-modal').onsubmit=async e=>{e.preventDefault();if(S.loading)return;S.loading=true;const b=q('#modal-submit');b.disabled=true;b.textContent='Enregistrement…';try{await onSubmit(new FormData(e.target));close();toast(S.demo?'Enregistré pour cet aperçu (non synchronisé)':'Séance enregistrée dans SportOS ✓');await reload();}catch(err){toast('Erreur : '+err.message);b.disabled=false;b.textContent='Réessayer';}finally{S.loading=false}};}
+  function showModal(title,inner,onSubmit,opts={}){
+  const session=opts.kind==='session';
+  const root=q('#modal-root');
+  const returnFocus=document.activeElement;
+  const sport=opts.type||'A';
+  const sessionIcon=v3Icon(sport);
+  const sessionName=opts.activity||title;
+  const caption=opts.caption||'Tes sensations, sans pression.';
+  const heading=session?`
+    <div class="so-session-heading-label">SPORTOS <span aria-hidden="true">/</span> JOURNAL D'ENTRAÎNEMENT</div>
+    <div class="so-session-header-title"><span class="so-session-mobile-icon" aria-hidden="true">${sessionIcon}</span><h2 id="modal-title">${esc(title)}</h2></div>
+    <p id="so-session-description">Renseigne seulement ce que tu as réellement fait. Rien n’est enregistré avant validation.</p>`:
+    `<h2 id="modal-title">${esc(title)}</h2>`;
+  const rail=session?`<aside class="so-session-rail" aria-label="Résumé de la séance">
+    <div class="so-session-rail-brand"><span class="so-session-rail-symbol" aria-hidden="true">${v3Icon('sparkle')}</span> SPORTOS <span> / TON JOURNAL</span></div>
+    <div class="so-session-rail-body">
+      <div class="so-session-rail-icon" aria-hidden="true">${sessionIcon}</div>
+      <div class="so-session-rail-label">UN MOUVEMENT APRÈS L'AUTRE</div>
+      <div class="so-session-rail-name">${esc(sessionName)}</div>
+      <p>${esc(caption)}</p>
+      <div class="so-session-rail-steps"><div><span>01</span> Les repères</div><div><span>02</span> Tes sensations</div><div><span>03</span> Ton retour</div></div>
+    </div>
+    <div class="so-session-rail-bottom">${v3Icon('shield')} Ton retour reste dans ton espace privé.</div>
+  </aside>`:'';
+  const footer=`<div class="modal-actions${session?' so-session-actions':''}">
+    ${session?'<p id="so-save-error" class="so-save-error" role="alert" hidden></p>':''}
+    <button class="btn ghost" type="button" id="modal-cancel">Annuler</button>
+    <button class="btn${session?' so-save-cta':''}" id="modal-submit" type="submit">${session?'Enregistrer mon retour':'Enregistrer'}${session?v3Icon('arrowRight'):''}</button>
+  </div>`;
+  root.innerHTML=`<div class="modal-backdrop${session?' so-session-backdrop':''}" id="modal-backdrop"><div class="modal${session?' so-session-page':''}" role="dialog" aria-modal="true" aria-labelledby="modal-title" ${session?'aria-describedby="so-session-description"':''}>
+    ${rail}<div class="${session?'so-session-main':'so-modal-main'}">
+    <div class="modal-head${session?' so-session-head':''}"><div class="so-modal-heading">${heading}</div><button type="button" class="close" id="modal-close" aria-label="Fermer le formulaire">${session?v3Icon('close'):'×'}</button></div>
+    <form class="modal-content${session?' so-session-form':''}" id="form-modal"><div class="${session?'so-session-fields':'so-modal-fields'}">${inner}</div>${footer}</form>
+    </div></div></div>`;
+  let dirty=false,closed=false;
+  const form=q('#form-modal'),dialog=root.querySelector('[role="dialog"]');
+  const updateProgress=()=>{
+    if(!session)return;
+    const item=q('#so-feedback-progress');
+    if(item){
+      const forms=[...form.querySelectorAll('.so-exercise')];
+      const count=forms.filter(el=>[...el.querySelectorAll('input:not([type="hidden"]),select,textarea')].some(input=>input.value.trim()!=='')).length;
+      item.textContent=count+' / '+forms.length+' exercices renseignés';
+      const fill=q('#so-progress-fill');
+      if(fill)fill.style.width=(forms.length?100*count/forms.length:0)+'%';
+    }
+    const input=form.querySelector('input[name="effort"]');
+    if(input)form.querySelectorAll('[data-effort-value]').forEach(b=>b.setAttribute('aria-pressed',String(input.value===b.dataset.effortValue)));
+  };
+  const close=(force=false)=>{
+    if(closed||S.loading)return;
+    if(session&&!force&&dirty&&!window.confirm('Quitter sans enregistrer ton retour de séance ?'))return;
+    closed=true;
+    document.removeEventListener('keydown',keyHandler);
+    root.innerHTML='';
+    if(returnFocus&&typeof returnFocus.focus==='function'&&returnFocus.isConnected)returnFocus.focus();
+  };
+  const keyHandler=e=>{
+    if(e.key==='Escape'){e.preventDefault();close();return}
+    if(e.key==='Tab'){
+      const nodes=[...dialog.querySelectorAll('button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),a[href]')].filter(n=>n.getClientRects().length>0);
+      if(!nodes.length)return;
+      if(e.shiftKey&&document.activeElement===nodes[0]){e.preventDefault();nodes[nodes.length-1].focus()}
+      else if(!e.shiftKey&&document.activeElement===nodes[nodes.length-1]){e.preventDefault();nodes[0].focus()}
+    }
+  };
+  document.addEventListener('keydown',keyHandler);
+  q('#modal-close').onclick=()=>close();
+  q('#modal-cancel').onclick=()=>close();
+  q('#modal-backdrop').onclick=e=>{if(e.target.id==='modal-backdrop')close()};
+  if(session){
+    form.addEventListener('input',()=>{dirty=true;updateProgress()});
+    form.addEventListener('change',()=>{dirty=true;updateProgress()});
+    form.querySelectorAll('[data-effort-value]').forEach(button=>{
+      button.onclick=()=>{
+        const effort=form.querySelector('[name="effort"]');
+        if(!effort)return;
+        effort.value=button.dataset.effortValue;
+        dirty=true;
+        effort.dispatchEvent(new Event('input',{bubbles:true}));
+      };
+    });
+    updateProgress();
+  }
+  q('#modal-close').focus();
+  form.onsubmit=async e=>{
+    e.preventDefault();
+    if(S.loading)return;
+    S.loading=true;
+    const b=q('#modal-submit');
+    b.disabled=true;b.textContent='Enregistrement…';
+    const error=q('#so-save-error');if(error){error.textContent='';error.hidden=true;}
+    try{
+      await onSubmit(new FormData(e.target));
+      dirty=false;
+      S.loading=false;
+      close(true);
+      toast(S.demo?'Retour simulé — aucune écriture dans ton Google Sheet.':'Ton retour de séance a bien été enregistré ✓');
+      await reload();
+    }catch(err){
+      if(error){error.textContent='Impossible d’enregistrer : '+err.message;error.hidden=false;}
+      else toast('Erreur : '+err.message);
+      b.disabled=false;
+      b.innerHTML=session?'Enregistrer mon retour '+v3Icon('arrowRight'):'Réessayer';
+    }finally{S.loading=false;}
+  };
+}
   async function reload(){if(S.demo){render();return}try{S.data=await server('getBootstrap');render()}catch(e){toast('Enregistrement effectué mais actualisation impossible : '+e.message);render()}}
   const field=(label,name,opts={})=>`<div class="field"><label for="f-${esc(name)}">${esc(label)}</label><input class="input" id="f-${esc(name)}" name="${esc(name)}" type="${opts.type||'number'}" ${opts.min!==undefined?'min="'+opts.min+'"':''} ${opts.max!==undefined?'max="'+opts.max+'"':''} ${opts.step?'step="'+opts.step+'"':''} ${opts.placeholder?'placeholder="'+esc(opts.placeholder)+'"':''} ${opts.value!==undefined?'value="'+esc(opts.value)+'"':''} ${opts.required?'required':''}></div>`;
   const select=(label,name,options)=>`<div class="field"><label for="f-${esc(name)}">${esc(label)}</label><select class="input" name="${esc(name)}" id="f-${esc(name)}">${options.map(([v,t])=>`<option value="${esc(v)}">${esc(t)}</option>`).join('')}</select></div>`;
