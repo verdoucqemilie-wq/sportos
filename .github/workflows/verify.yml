@@ -39,6 +39,7 @@ jobs:
         run: |
           node tests/visual-qa.cjs
           node tests/adaptive-qa.cjs
+          node tests/home-polish-qa.cjs
       - name: Joindre les captures d'écran
         if: always()
         uses: actions/upload-artifact@v4
@@ -47,4 +48,5 @@ jobs:
           path: |
             artifacts/v0.3/*.png
             artifacts/v0.4/*.png
+            artifacts/v0.5/*.png
           if-no-files-found: ignore
