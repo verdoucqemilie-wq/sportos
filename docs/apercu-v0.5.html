@@ -1044,7 +1044,7 @@ window.__SPORTOS_FIXTURE__.version='0.5.0-preview';
     </section>`;
     const checkin=`<section class="v3-checkin">
       <div><span class="v3-label">MOMENT POUR SOI</span><h2>${vm.isAppReview?'Ton bilan est enregistré.':'Et si tu faisais le point ?'}</h2><p>${vm.isAppReview?'Tes ressentis de la semaine sont conservés dans ton espace privé.':'Fatigue, sommeil, sensations : quelques minutes pour mieux avancer.'}</p></div>
-      ${vm.isAppReview?'<span class="v3-checkin-done">✓ CETTE SEMAINE</span>':'<button type="button" class="v3-checkin-cta" data-review="1">FAIRE MON BILAN ${v3Icon('arrow')}</button>'}
+      ${vm.isAppReview?'<span class="v3-checkin-done">✓ CETTE SEMAINE</span>':`<button type="button" class="v3-checkin-cta" data-review="1">FAIRE MON BILAN ${v3Icon('arrow')}</button>`}
     </section>`;
     return `<div class="v3-dashboard">
       <header class="v3-intro"><div><p class="v3-label">${esc(dateCaption)} / TON ESPACE</p><h1>${esc(intro)}</h1><p>L’entraînement à ta façon. Une séance après l’autre.</p></div><span class="v4-intro-index" aria-hidden="true">SPORTOS / 01</span></header>
