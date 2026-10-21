@@ -1,4 +1,25 @@
-# SportOS V0.1.1 — Installation sur l'environnement unique
+# SportOS — WebApp personnelle
+
+**Version de code préparée : V0.4.0 (21/10/2026).** Branding SportOS et responsive adaptatif validés ; **GitHub `main` fusionné**, synchronisation Apps Script encore à lancer dans Cloud Shell. La V0.3 est visible sur la dernière capture de la WebApp ; la version du déploiement doit être vérifiée avant mise à jour. La seule base sportive reste le Sheet personnel existant.
+
+**Publier V0.4 depuis Cloud Shell, après connexion avec le compte Google personnel :**
+
+```bash
+cd ~/SportOS_deploiement_unique
+git switch main
+git pull --ff-only origin main
+bash scripts/publier-v0.4-cloud-shell.sh
+```
+
+Le script vérifie la cible, la confidentialité, les tests et la version existante avant d'exécuter `clasp push` et de mettre à jour **l'identifiant de déploiement déjà en service**. Si le déploiement n'annonce pas `SportOS v0.3.0`, il s'arrête sans publier : transmettre le message d'erreur et ne pas contourner les gardes. Aucun nouveau projet ni aucun nouveau déploiement n'est créé.
+
+**Documentation de la charte :** [Identité V0.4](docs/brand-guidelines-v0.4.md) · [Planche de marque](docs/brand-board-v0.4.html) · [Contrôles responsive](tests/adaptive-qa.cjs).
+
+---
+
+## Installation initiale / Historique V0.1.1
+
+
 
 **Statut au 20/10/2026 :** le dépôt GitHub privé est créé et les 5 fichiers ont été poussés dans Apps Script. Le déploiement WebApp `@1` a été créé par Cloud Shell. **L'ouverture effective de la WebApp, les paramètres d'accès du déploiement et la lecture des données en navigateur restent à confirmer.** Aucune saisie sportive de test n'a été effectuée.
 
