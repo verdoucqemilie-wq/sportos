@@ -51,15 +51,17 @@
   function activityInfo(type){if(type==='A')return {icon:'◈',name:'Fessiers & full body',sub:'5 exercices · 35–45 min',cls:''};if(type==='B')return {icon:'✦',name:'Haut du corps & fessiers',sub:'5 exercices · 35–45 min',cls:''};if(type==='Vélo')return {icon:'♢',name:'Sortie vélo',sub:'Reprise 25–40 min',cls:'bike'};return {icon:'↗',name:'Course / marche',sub:'Prochain objectif : 8 × 1 min / 1 min',cls:'run'};}
   function activityRow(type){const x=activityInfo(type),all=currentWeekActivities(),done=all.some(s=>(type==='A'||type==='B')?s.Type===type:s.Type===type);return `<div class="activity"><div class="activity-icon ${x.cls}">${x.icon}</div><div class="activity-info"><strong>${x.name}</strong><p>${x.sub}</p></div><div class="activity-actions">${done?badge('✓ Réalisée'):badge('À faire','gray')}<button class="tiny-link" data-log="${type}">${done?'Ajouter une séance':'Enregistrer ↗'}</button></div></div>`}
   function v3Icon(type){
+  // SportOS Iconography v0.5: 24px grid, uniform 1.8 stroke, SVG with no font dependency.
   const shapes={
-    A:'<path d="M5 7h3m8 0h3M5 17h3m8 0h3M8 5v4m8-4v4M8 15v4m8-4v4M8 12h8"/>',
-    B:'<path d="M5 7h3m8 0h3M5 17h3m8 0h3M8 5v4m8-4v4M8 15v4m8-4v4M8 12h8"/>',
-    Course:'<circle cx="15" cy="4" r="1.5"/><path d="m14 8-4-2-4 3m4-3-2 6 4 3 1 5m-5-8-5 5m9-3 5-2 3 4"/>',
-    Vélo:'<circle cx="5" cy="17" r="3.3"/><circle cx="19" cy="17" r="3.3"/><path d="M5 17l5-10 5 10H5m5-10h4m1 0 4 10"/>',
-    sparkle:'<path d="M12 2v20M2 12h20M5 5l14 14M19 5 5 19"/>',
+    A:'<path d="m6.5 6.5 11 11M4.5 8.5l4-4m11 15 4-4M2.5 10.5l8-8m3 19 8-8"/>',
+    B:'<path d="m6.5 6.5 11 11M4.5 8.5l4-4m11 15 4-4M2.5 10.5l8-8m3 19 8-8"/>',
+    Course:'<circle cx="15.5" cy="4" r="1.6"/><path d="m12 8-3-2.3-3 3m6-1 3 4-2 3m-1-7-3 6 4 3 1 4m-5-7-5 5m10-6 4.5-.5 3 3"/>',
+    Vélo:'<circle cx="5" cy="17" r="3.2"/><circle cx="19" cy="17" r="3.2"/><path d="M5 17l5-10 5 10H5m5-10h4m1 0 4 10"/>',
+    sparkle:'<path d="m12 2 2.6 7.4L22 12l-7.4 2.6L12 22l-2.6-7.4L2 12l7.4-2.6L12 2Z"/>',
+    route:'<circle cx="5" cy="18" r="2"/><circle cx="19" cy="6" r="2"/><path d="M7 18h4a4 4 0 0 0 0-8h2a4 4 0 0 0 4-4"/>',
     arrow:'<path d="M5 19 19 5M9 5h10v10"/>'
   };
-  return '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+(shapes[type]||shapes.sparkle)+'</svg>';
+  return '<svg class="so-icon so-icon-'+(Object.prototype.hasOwnProperty.call(shapes,type)?type:'sparkle')+'" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">'+(shapes[type]||shapes.sparkle)+'</svg>';
 }
   function homeModel(data) {
   const validDate = value => {
@@ -136,7 +138,7 @@
       return `<button type="button" class="v3-week-row ${isDone?'done':''} ${isNext?'next':''}" data-open-program="${type}" aria-label="${esc(weekLabel[type])} : ${isDone?'réalisée cette semaine':isNext?'proposée':'à planifier'}, voir le programme">
         <span class="v3-week-icon">${v3Icon(type)}</span>
         <span class="v3-week-row-title">${esc(weekLabel[type])}<small>${isDone?'Un mouvement de plus.':isNext?'Ta prochaine proposition.':'Quand tu le souhaites.'}</small></span>
-        <span class="v3-week-status">${isDone?'✓ ':''}${status}</span>
+        <span class="v3-week-status">${isDone?'<span class="so-status-check" aria-hidden="true">✓</span> ':''}${status}</span>
       </button>`;
     }).join('');
     const week=`<section class="v3-week-panel" aria-labelledby="v3-week-title">
@@ -156,20 +158,20 @@
     const effortKnown=lastEffort!==''&&lastEffort!==undefined&&lastEffort!==null;
     const dateNice=l?niceDate(l.Date):'';
     const lastPanel=`<section class="v3-last" aria-labelledby="v3-last-title">
-      <div class="v3-panel-top"><span class="v3-label">DERNIER MOUVEMENT</span><span class="v3-panel-bubble">${v3Icon(l?l.Type:'sparkle')}</span></div>
+      <div class="v3-panel-top"><span class="v3-label">DERNIER MOUVEMENT</span><span class="v3-panel-bubble" aria-hidden="true">${v3Icon(l?l.Type:'sparkle')}</span></div>
       <h2 id="v3-last-title">${l?esc(lastKind):'À écrire.'}</h2>
       <p>${l?'Le '+esc(dateNice):'Ta première séance datée apparaîtra ici.'}</p>
       <div class="v3-last-numbers">
         <div><strong>${durationKnown?fmt(toNum(lastDuration)):'—'}</strong><span>${durationKnown?'MINUTES':'DURÉE NON RENSEIGNÉE'}</span></div>
         <div><strong>${effortKnown?fmt(toNum(lastEffort)):'—'}</strong><span>${effortKnown?'EFFORT / 10':'EFFORT NON RENSEIGNÉ'}</span></div>
       </div>
-      <button type="button" class="v3-link-arrow" data-nav-go="progress">VOIR MES PROGRÈS <span aria-hidden="true">↗</span></button>
+      <button type="button" class="v3-link-arrow" data-nav-go="progress">VOIR MES PROGRÈS ${v3Icon('arrow')}</button>
     </section>`;
     const challenge=`<section class="v3-challenge" aria-labelledby="v3-challenge-title">
-      <div class="v3-challenge-top"><span class="v3-label">LE GRAND DÉFI</span><span>05 / 2027</span></div>
-      <h2 id="v3-challenge-title">ESPIENS<span>.</span></h2>
+      <div class="v3-challenge-top"><span class="v3-challenge-label">${v3Icon('route')} <span class="v3-label">LE GRAND DÉFI</span></span><span>05 / 2027</span></div>
+      <h2 id="v3-challenge-title">Espiens<span>.</span></h2>
       <p>Depuis Toulouse, à vélo. Un défi qui se construit sortie après sortie.</p>
-      <div class="v3-challenge-foot"><span>OBJECTIF <strong>2 JOURS ENVISAGÉS</strong></span><button type="button" data-open-program="Vélo">VOIR LA PRÉPARATION <span aria-hidden="true">↗</span></button></div>
+      <div class="v3-challenge-foot"><span>OBJECTIF <strong>2 JOURS ENVISAGÉS</strong></span><button type="button" data-open-program="Vélo">VOIR LA PRÉPARATION ${v3Icon('arrow')}</button></div>
     </section>`;
     const r=vm.lastRun;
     const rpe=r?Number(String(r['Effort 1-10']||'').replace(',','.')):NaN;
@@ -180,20 +182,20 @@
       <h2 id="v3-coach-title">La suite se construit,<br>pas à pas.</h2>
       <p>${esc(coachLine)}</p>
       ${vm.pain?'<div class="v3-coach-warning">Des douleurs ont été signalées sur certains exercices. Leur progression reste prudente et conditionnée à un mouvement sans douleur.</div>':''}
-      <button type="button" class="v3-link-arrow" data-open-program="Course">VOIR LA REPRISE COURSE <span aria-hidden="true">↗</span></button>
+      <button type="button" class="v3-link-arrow" data-open-program="Course">VOIR LA REPRISE COURSE ${v3Icon('arrow')}</button>
     </section>`;
     const checkin=`<section class="v3-checkin">
       <div><span class="v3-label">MOMENT POUR SOI</span><h2>${vm.isAppReview?'Ton bilan est enregistré.':'Et si tu faisais le point ?'}</h2><p>${vm.isAppReview?'Tes ressentis de la semaine sont conservés dans ton espace privé.':'Fatigue, sommeil, sensations : quelques minutes pour mieux avancer.'}</p></div>
-      ${vm.isAppReview?'<span class="v3-checkin-done">✓ CETTE SEMAINE</span>':'<button type="button" class="v3-checkin-cta" data-review="1">FAIRE MON BILAN <span aria-hidden="true">↗</span></button>'}
+      ${vm.isAppReview?'<span class="v3-checkin-done">✓ CETTE SEMAINE</span>':'<button type="button" class="v3-checkin-cta" data-review="1">FAIRE MON BILAN ${v3Icon('arrow')}</button>'}
     </section>`;
     return `<div class="v3-dashboard">
       <header class="v3-intro"><div><p class="v3-label">${esc(dateCaption)} / TON ESPACE</p><h1>${esc(intro)}</h1><p>L’entraînement à ta façon. Une séance après l’autre.</p></div><span class="v4-intro-index" aria-hidden="true">SPORTOS / 01</span></header>
       <div class="v3-leading">${hero}${week}</div>
-      <div class="v3-section-title"><div><p class="v3-label">GARDER LE CAP</p><h2>TON ÉLAN<span>↗</span></h2></div><span>Les petits progrès font les grandes histoires.</span></div>
+      <div class="v3-section-title"><div><p class="v3-label">GARDER LE CAP</p><h2>TON ÉLAN<span aria-hidden="true">${v3Icon('arrow')}</span></h2></div><span>Les petits progrès font les grandes histoires.</span></div>
       <div class="v3-insights">${lastPanel}${challenge}</div>
       ${coach}
       ${checkin}
-      <div class="v3-fineprint">DEPUIS LE DÉBUT : ${vm.totals.strength} RENFORCEMENT${vm.totals.strength>1?'S':''} · ${vm.totals.cardio} SORTIE${vm.totals.cardio>1?'S':''} CARDIO. <button type="button" data-nav-go="progress">HISTORIQUE COMPLET ↗</button></div>
+      <div class="v3-fineprint">DEPUIS LE DÉBUT : ${vm.totals.strength} RENFORCEMENT${vm.totals.strength>1?'S':''} · ${vm.totals.cardio} SORTIE${vm.totals.cardio>1?'S':''} CARDIO. <button type="button" data-nav-go="progress">HISTORIQUE COMPLET ${v3Icon('arrow')}</button></div>
     </div>`;
   }
   function program(){const type=S.programTab;const p=type==='A'||type==='B';const ex=p?activeEx(type):[];const stepType=type==='Course'?'Course':'Vélo';const steps=p?[]:S.data.steps.filter(x=>x.Type===stepType);
