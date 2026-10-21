@@ -853,7 +853,8 @@ body.sport-v4 .so-session-rail-symbol{
   height:32px;width:32px;background:#d4f17b;
   color:#172c1c;border-radius:9px;
 }
-body.sport-v4 .so-session-rail-symbol svg{width:18px;height:18px}
+body.sport-v4 .so-session-rail-symbol{background:transparent}
+body.sport-v4 .so-session-rail-symbol svg{width:32px;height:32px}
 body.sport-v4 .so-session-rail-body{margin:auto 0}
 body.sport-v4 .so-session-rail-icon{
   width:78px;height:78px;
@@ -1499,19 +1500,20 @@ window.__SPORTOS_FIXTURE__.version='0.6.0-preview';
   const sessionIcon=v3Icon(sport);
   const sessionName=opts.activity||title;
   const caption=opts.caption||'Tes sensations, sans pression.';
+  const railSteps=opts.steps||['Les repères','Tes sensations','Ton retour'];
   const heading=session?`
     <div class="so-session-heading-label">SPORTOS <span aria-hidden="true">/</span> JOURNAL D'ENTRAÎNEMENT</div>
     <div class="so-session-header-title"><span class="so-session-mobile-icon" aria-hidden="true">${sessionIcon}</span><h2 id="modal-title">${esc(title)}</h2></div>
     <p id="so-session-description">Renseigne seulement ce que tu as réellement fait. Rien n’est enregistré avant validation.</p>`:
     `<h2 id="modal-title">${esc(title)}</h2>`;
   const rail=session?`<aside class="so-session-rail" aria-label="Résumé de la séance">
-    <div class="so-session-rail-brand"><span class="so-session-rail-symbol" aria-hidden="true">${v3Icon('sparkle')}</span> SPORTOS <span> / TON JOURNAL</span></div>
+    <div class="so-session-rail-brand"><span class="so-session-rail-symbol" aria-hidden="true">${q('.v3-logo .v4-brand-mark')?.outerHTML||v3Icon('sparkle')}</span> SPORTOS <span> / TON JOURNAL</span></div>
     <div class="so-session-rail-body">
       <div class="so-session-rail-icon" aria-hidden="true">${sessionIcon}</div>
       <div class="so-session-rail-label">UN MOUVEMENT APRÈS L'AUTRE</div>
       <div class="so-session-rail-name">${esc(sessionName)}</div>
       <p>${esc(caption)}</p>
-      <div class="so-session-rail-steps"><div><span>01</span> Les repères</div><div><span>02</span> Tes sensations</div><div><span>03</span> Ton retour</div></div>
+      <div class="so-session-rail-steps">${railSteps.map((label,i)=>`<div><span>${String(i+1).padStart(2,'0')}</span> ${esc(label)}</div>`).join('')}</div>
     </div>
     <div class="so-session-rail-bottom">${v3Icon('shield')} Ton retour reste dans ton espace privé.</div>
   </aside>`:'';
@@ -1657,10 +1659,10 @@ window.__SPORTOS_FIXTURE__.version='0.6.0-preview';
     const exercises=ex.map((x,i)=>{const read=k=>f.get(k+i)||'';return {
       id:read('id'),sets:read('sets'),reps:read('reps'),weight:read('weight'),seconds:read('seconds'),
       difficulty:read('difficulty'),rir:read('rir'),pain:read('pain'),painWhere:read('painWhere'),note:read('note')
-    }}).filter(x=>x.sets!==''||x.reps!==''||x.weight!==''||x.seconds!==''||x.difficulty!==''||x.pain!==''||x.note!=='');
+    }}).filter(x=>x.sets!==''||x.reps!==''||x.weight!==''||x.seconds!==''||x.difficulty!==''||x.pain!==''||x.note!==''||x.rir!==''||x.painWhere!=='');
     if(!exercises.length)throw Error('Renseigne au moins un exercice pour enregistrer ton renforcement.');
     await server('saveStrength',{id:entryId,date:f.get('date'),type,duration:f.get('duration'),effort:f.get('effort'),energyAfter:f.get('energyAfter'),note:f.get('note'),exercises});
-  },{kind:'session',type,activity:'Renforcement '+type,caption:type==='A'?'Fessiers & full body':'Haut du corps & fessiers'});
+  },{kind:'session',type,activity:'Renforcement '+type,caption:type==='A'?'Fessiers & full body':'Haut du corps & fessiers',steps:['Les repères','Tes sensations','Tes exercices','Ton retour']});
 }
   function cardioForm(type){
   const entryId=key(),isRun=type==='Course';
@@ -1692,7 +1694,7 @@ window.__SPORTOS_FIXTURE__.version='0.6.0-preview';
     const p={id:entryId,date:f.get('date'),type,duration:f.get('duration'),distance:f.get('distance'),effort:f.get('effort'),runSeconds:isRun?f.get('runSeconds'):'',walkSeconds:isRun?f.get('walkSeconds'):'',rounds:isRun?f.get('rounds'):'',pain:f.get('pain'),note:f.get('note'),planStep:isRun?'RUN-02':'BIKE-01'};
     if(Number(p.duration)<=0)throw Error('Renseigne la durée.');
     await server('saveCardio',p);
-  },{kind:'session',type,activity:isRun?'Course & marche':'Sortie vélo',caption:isRun?'Avancer progressivement, sans chercher la vitesse.':'Construire ton endurance pour Espiens.'});
+  },{kind:'session',type,activity:isRun?'Course & marche':'Sortie vélo',caption:isRun?'Avancer progressivement, sans chercher la vitesse.':'Construire ton endurance pour Espiens.',steps:isRun?['Les repères','Ton ressenti','Course et marche','Ton retour']:['Les repères','Ton ressenti','Ton retour']});
 }
   function openReview(){const html=`<p class="small">Ce bilan sert à comprendre ton ressenti, pas à juger tes résultats.</p><div class="form-grid">${field('Fatigue /10','fatigue',{min:0,max:10,step:1,placeholder:'5'})}${field('Sommeil /10','sleep',{min:0,max:10,step:1,placeholder:'7'})}${field('Satisfaction /10','satisfaction',{min:0,max:10,step:1,placeholder:'8'})}</div>${longtext('Ce qui a bien fonctionné','note')}${longtext('Pour la semaine prochaine','next')}`;showModal('Mon bilan hebdomadaire',html,async f=>server('saveReview',{week:W(),fatigue:f.get('fatigue'),sleep:f.get('sleep'),satisfaction:f.get('satisfaction'),note:f.get('note'),next:f.get('next')}));}
   function openWeight(){const entryId=key();const html=`<p class="small">Mesure complètement facultative. Aucune obligation de te peser.</p>${field('Date de mesure','date',{type:'date',value:S.data.today,required:true})}${field('Poids en kg','weight',{min:20,max:250,step:.1,required:true,placeholder:'53'})}${longtext('Note facultative','note')}`;showModal('Ajouter une mesure',html,async f=>server('saveMeasurement',{id:entryId,date:f.get('date'),weight:f.get('weight'),note:f.get('note')}));}
