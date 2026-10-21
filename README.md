@@ -11,7 +11,7 @@ git pull --ff-only origin main
 bash scripts/publier-v0.5-cloud-shell.sh
 ```
 
-Ce script vérifie les tests, la confidentialité, le Sheet unique, la présence du code V0.5 et l'identifiant du déploiement existant. Il accepte la V0.3 ou la V0.4 comme point de départ ; si le déploiement affiche une autre version, **il s'arrête avant tout push**. Il met à jour la même WebApp, sans nouveau déploiement et sans écriture de données sportives.
+Ce script vérifie les tests, la confidentialité, le Sheet unique, la présence du code V0.5 et l'identifiant du déploiement existant. **Correctif du 21/10/2026** : `clasp list-deployments` peut omettre toute description. La ligne observée dans Cloud Shell est `@6` sans description ; le script autorise **uniquement cet ID exact en @6**, puis confirme une nouvelle version numérique après publication. Tout changement d'ID ou de version avant l'opération stoppe la publication. Il met à jour la même WebApp, sans créer un autre déploiement ni écrire de données sportives.
 
 **Design** : [Charte SportOS V0.4](docs/brand-guidelines-v0.4.md) · [Polish Accueil V0.5](docs/design-home-v0.5.md) · [Aperçu sans données personnelles](docs/apercu-v0.5.html) · [Tests responsive](tests/adaptive-qa.cjs).
 
