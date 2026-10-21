@@ -99,7 +99,7 @@ clasp show-file-status
 echo "==== Synchronisation du code (sans saisie sportive) ===="
 clasp push
 echo "==== Actualisation de la WebApp existante, même URL ===="
-clasp create-deployment --deploymentId "$DEPLOYMENT" --description "SportOS v0.5.0 — Brand System & Adaptive Experience"
+clasp create-deployment --deploymentId "$DEPLOYMENT" --description "SportOS v0.5.0 — Home Typography, SVG Icons & Motion"
 echo "==== Contrôle final ===="
 AFTER="$(clasp list-deployments)"
 printf '%s\n' "$AFTER"
