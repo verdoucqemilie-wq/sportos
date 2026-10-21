@@ -29,6 +29,7 @@ const {chromium}=require('playwright');
       return{
         width:document.documentElement.scrollWidth,viewport:window.innerWidth,
         brandVisible:visible('.v3-sidebar')||visible('.v4-mobile-brand-mark'),
+        topMarkVisible:visible('.v4-mobile-brand-mark'),
         sidebarVisible:visible('.v3-sidebar'),mobileNavVisible:visible('.v3-mobile-nav'),
         marks:document.querySelectorAll('.v4-brand-mark').length,
         nestedScroll:inner.scrollHeight>inner.clientHeight+3,
@@ -46,6 +47,7 @@ const {chromium}=require('playwright');
     }
     assert(m.marks===2,'Brand mark must be duplicated exactly in desktop & mobile');
     assert(m.brandVisible&&m.actionVisible,'Logo or session CTA hidden');
+    assert(m.topMarkVisible===(width<768),'Logo du header dupliqué sur desktop/tablette : '+width);
     assert(m.label==='MOVE WITH INTENTION','Brand tagline mismatch');
     assert(m.heroAction.right<=width+2&&m.heroAction.left>=-2,'Hero CTA offscreen');
     assert(m.headingWidth<=m.headingBox+4,'Headline exceeds own box');
