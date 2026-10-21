@@ -554,4 +554,219 @@ body.sport-v4 :is(.v3-btn-acid,.v3-btn-subtle,.v3-week-row,.v3-nav-link,.v3-top-
   body.sport-v4 :is(.v3-btn-acid,.v3-btn-subtle,.v3-week-row,.v3-nav-link,.v3-top-cta,.v3-side-cta,.v3-top-profile){transition:none}
 }
 
+
+/* === SPORTOS V0.5 | TYPE / ICONOGRAPHY / MOTION (HOME ONLY) ==============
+   One display family, consistent weights, intentional levels, no idle movement.
+   CSS-only animations; no external fonts, images or runtime libraries. */
+:root{
+  --so-home-font:Arial,Helvetica,sans-serif;
+  --so-home-title-weight:800;
+  --so-motion-fast:170ms;
+  --so-motion-base:420ms;
+  --so-ease-out:cubic-bezier(.2,.8,.2,1)
+}
+body.sport-v4 .v3-dashboard{
+  font-family:var(--so-home-font);
+}
+body.sport-v4 .v3-dashboard :is(h1,h2,h3){
+  font-family:var(--so-home-font);
+  font-synthesis:weight;
+  font-stretch:normal;
+  font-weight:var(--so-home-title-weight);
+  letter-spacing:-.035em;
+  text-wrap:balance;
+}
+body.sport-v4 .v3-dashboard .v3-section-title h2{
+  font-size:clamp(29px,2.55vw,41px);
+  line-height:1.08;
+}
+body.sport-v4 .v3-dashboard .v3-last h2,
+body.sport-v4 .v3-dashboard .v3-challenge h2{
+  /* Both compact editorial card headlines intentionally share a single level */
+  font-size:clamp(37px,3.6vw,54px);
+  font-weight:800;
+  line-height:1.07;
+  letter-spacing:-.035em;
+  margin-block:12px 9px;
+  overflow-wrap:break-word;
+}
+body.sport-v4 .v3-dashboard .v3-last>p{margin-bottom:19px}
+body.sport-v4 .v3-dashboard .v3-challenge h2{
+  margin-top:clamp(24px,2.7vw,33px);
+  text-transform:none;
+  position:relative;
+}
+body.sport-v4 .v3-dashboard .v3-challenge h2 span{
+  color:#668b56;
+}
+body.sport-v4 .v3-dashboard .v3-coach h2{
+  font-size:clamp(29px,2.4vw,37px);
+  font-weight:800;
+  letter-spacing:-.033em;
+  line-height:1.15;
+}
+body.sport-v4 .v3-dashboard .v3-checkin h2{
+  font-weight:800;
+  line-height:1.12;
+}
+body.sport-v4 .v3-dashboard .v3-feature h2{
+  font-weight:800;
+  letter-spacing:-.038em;
+}
+body.sport-v4 .v3-dashboard .v3-label,
+body.sport-v4 .v3-dashboard .v3-coach-tag,
+body.sport-v4 .v3-dashboard .v3-panel-top,
+body.sport-v4 .v3-dashboard .v3-challenge-top{
+  font-family:var(--so-home-font);
+  font-weight:700;
+  letter-spacing:.09em;
+}
+body.sport-v4 .v3-dashboard .v3-last-numbers strong{
+  font-family:var(--so-home-font);
+  font-variant-numeric:tabular-nums;
+  font-weight:800;
+}
+body.sport-v4 .v3-dashboard .v3-challenge-label{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+}
+body.sport-v4 .v3-dashboard .v3-challenge-label .so-icon{
+  width:18px;height:18px;
+  color:#315c3c;
+}
+body.sport-v4 .v3-dashboard .so-icon{
+  display:inline-block;
+  flex:none;
+  vertical-align:middle;
+  stroke-width:1.8;
+  overflow:visible;
+}
+body.sport-v4 .v3-dashboard .v3-panel-bubble{
+  width:48px;height:48px;
+  background:#e5eee4;
+  color:#2f7050;
+}
+body.sport-v4 .v3-dashboard .v3-panel-bubble .so-icon{
+  width:23px;height:23px;
+}
+body.sport-v4 .v3-dashboard .v3-week-icon .so-icon{
+  width:20px;height:20px;
+}
+body.sport-v4 .v3-dashboard .v3-coach-tag .so-icon{
+  width:21px;height:21px;
+  color:#395e41;
+}
+body.sport-v4 .v3-dashboard .v3-section-title h2>span{
+  margin-left:11px;
+  display:inline-flex;align-items:center;
+  transform:none;
+  color:#6a9654;
+}
+body.sport-v4 .v3-dashboard .v3-section-title .so-icon{
+  width:25px;height:25px;stroke-width:2.1;
+}
+body.sport-v4 .v3-dashboard .v3-link-arrow,
+body.sport-v4 .v3-dashboard .v3-challenge-foot button,
+body.sport-v4 .v3-dashboard .v3-checkin-cta{
+  display:inline-flex;align-items:center;gap:8px;
+  min-height:44px;
+  justify-content:flex-start;
+  white-space:normal;
+}
+body.sport-v4 .v3-dashboard :is(.v3-link-arrow,.v3-challenge-foot button,.v3-checkin-cta) .so-icon{
+  width:15px;height:15px;
+  transition:transform var(--so-motion-fast) ease;
+}
+body.sport-v4 .v3-dashboard :is(.v3-link-arrow,.v3-challenge-foot button,.v3-checkin-cta):hover .so-icon,
+body.sport-v4 .v3-dashboard :is(.v3-link-arrow,.v3-challenge-foot button,.v3-checkin-cta):focus-visible .so-icon{
+  transform:translate(2px,-2px);
+}
+body.sport-v4 .v3-dashboard .v3-week-row{
+  transition:background-color var(--so-motion-fast) ease,border-color var(--so-motion-fast) ease;
+}
+body.sport-v4 .v3-dashboard .v3-week-icon{
+  transition:background-color var(--so-motion-fast) ease,color var(--so-motion-fast) ease;
+}
+body.sport-v4 .v3-dashboard .v3-week-row:hover .v3-week-icon,
+body.sport-v4 .v3-dashboard .v3-week-row:focus-visible .v3-week-icon{
+  background:#d7e8cb;
+  color:#315e40;
+}
+body.sport-v4 .v3-dashboard .so-status-check{
+  color:#2f7645;
+  font-weight:800;
+}
+body.sport-v4 .v3-dashboard .v3-btn-acid,
+body.sport-v4 .v3-dashboard .v3-checkin-cta{
+  transition:background-color var(--so-motion-fast) ease,box-shadow var(--so-motion-fast) ease;
+}
+body.sport-v4 .v3-dashboard :is(.v3-btn-acid,.v3-checkin-cta):hover{
+  box-shadow:0 5px 18px rgba(21,25,21,.13);
+}
+body.sport-v4 .v3-dashboard :is(.v3-btn-acid,.v3-checkin-cta):active{
+  box-shadow:none;
+}
+/* Gentle entrance: no never-ending effects or hover lifts on non-clickable cards. */
+@keyframes so-home-reveal {
+  from{opacity:0;transform:translateY(10px)}
+  to{opacity:1;transform:translateY(0)}
+}
+@keyframes so-home-fill {
+  from{transform:scaleX(0)}
+  to{transform:scaleX(1)}
+}
+@keyframes so-home-path {
+  from{stroke-dashoffset:900;opacity:.12}
+  to{stroke-dashoffset:0;opacity:.55}
+}
+body.sport-v4 .v3-dashboard .v3-intro,
+body.sport-v4 .v3-dashboard .v3-feature,
+body.sport-v4 .v3-dashboard .v3-week-panel,
+body.sport-v4 .v3-dashboard .v3-section-title,
+body.sport-v4 .v3-dashboard .v3-last,
+body.sport-v4 .v3-dashboard .v3-challenge,
+body.sport-v4 .v3-dashboard .v3-coach,
+body.sport-v4 .v3-dashboard .v3-checkin {
+  animation:so-home-reveal var(--so-motion-base) var(--so-ease-out) both;
+}
+body.sport-v4 .v3-dashboard .v3-feature{animation-delay:65ms}
+body.sport-v4 .v3-dashboard .v3-week-panel{animation-delay:110ms}
+body.sport-v4 .v3-dashboard .v3-section-title{animation-delay:135ms}
+body.sport-v4 .v3-dashboard .v3-last{animation-delay:165ms}
+body.sport-v4 .v3-dashboard .v3-challenge{animation-delay:195ms}
+body.sport-v4 .v3-dashboard .v3-coach{animation-delay:220ms}
+body.sport-v4 .v3-dashboard .v3-checkin{animation-delay:245ms}
+body.sport-v4 .v3-dashboard .v3-week-track span{
+  transform-origin:left center;
+  animation:so-home-fill 760ms cubic-bezier(.17,.67,.24,1) 140ms both;
+}
+body.sport-v4 .v3-dashboard .v3-feature-art svg path{
+  stroke-dasharray:900;
+  animation:so-home-path 1050ms var(--so-ease-out) 210ms both;
+}
+@media(max-width:767px){
+  body.sport-v4 .v3-dashboard .v3-last h2,
+  body.sport-v4 .v3-dashboard .v3-challenge h2{
+    font-size:clamp(37px,10vw,48px);
+  }
+  body.sport-v4 .v3-dashboard .v3-coach h2{
+    font-size:clamp(28px,8vw,34px);
+  }
+  body.sport-v4 .v3-dashboard .v3-section-title h2{
+    font-size:clamp(30px,8vw,37px);
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  body.sport-v4 .v3-dashboard *,
+  body.sport-v4 .v3-dashboard *::before,
+  body.sport-v4 .v3-dashboard *::after{
+    animation:none !important;
+    transition:none !important;
+    scroll-behavior:auto !important;
+  }
+  body.sport-v4 .v3-dashboard .v3-week-track span{transform:none}
+  body.sport-v4 .v3-dashboard .v3-feature-art svg path{stroke-dashoffset:0}
+}
+
 </style>

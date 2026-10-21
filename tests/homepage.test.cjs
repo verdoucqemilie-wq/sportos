@@ -44,13 +44,22 @@ function render(data){
   return evaluate(homeSource,ctx)();
 }
 const current=render(base);
-for(const s of ['v3-dashboard','v3-feature','v3-week-panel','v3-coach','v3-checkin','ESPIENS','data-open-program="A"'])
+for(const s of ['v3-dashboard','v3-feature','v3-week-panel','v3-coach','v3-checkin','Espiens','data-open-program="A"'])
  assert.ok(current.includes(s),'Bloc manquant: '+s);
 assert.match(current,/aria-valuenow="1"/);
 assert.match(current,/2,5/);
 assert.match(current,/douleurs ont été signalées/);
 assert.match(current,/Dernier mouvement|DERNIER MOUVEMENT/);
 assert.doesNotMatch(current,/NaN/);
+assert.match(current,/so-icon-Course/,'Icône course absente');
+assert.match(current,/so-icon-route/,'Icône route vers Espiens absente');
+assert.match(current,/so-icon-sparkle/,'Icône coaching absente');
+assert.match(current,/so-icon-arrow/,'Flèches de navigation unifiées absentes');
+assert.match(current,/v3-challenge-title">Espiens/,'Titre du défi non harmonisé');
+assert.ok(!current.includes('ESPIENS<span>'),'Ancien titre massif en capitales');
+assert.match(css,/so-home-reveal/,'Transition d’entrée absente');
+assert.match(css,/prefers-reduced-motion:reduce/,'Mode réduit absent');
+
 
 const zero=render(fixture());
 assert.match(zero,/aria-valuenow="0"/);
