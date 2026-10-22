@@ -23,7 +23,7 @@ function inspect(snapshotDir,repoDir){
     .map(x=>x.name).sort();
   if(JSON.stringify(observed)!==JSON.stringify([...FILES].sort()))return 'INCONNU';
   const get=(f)=>fs.readFileSync(path.join(snapshotDir,f));
-  const at=(ref,f)=>execFileSync('git',['show',ref+':src/'+f],{cwd:repoDir,encoding:'buffer',maxBuffer:4e6});
+  const at=(ref,f)=>execFileSync('git',['show',ref+':src/'+f],{cwd:repoDir,maxBuffer:4e6});
   const allMatch=ref=>FILES.every(f=>equivalent(get(f),at(ref,f),f));
   // Current main at runtime includes the V0.6 screens. Guard against a future main.
   const client=fs.readFileSync(path.join(repoDir,'src/Client.html'),'utf8');
