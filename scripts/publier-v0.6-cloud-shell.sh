@@ -62,7 +62,29 @@ npm run verify
 echo "==== Contrôle de la cible AVANT toute écriture Apps Script ===="
 BEFORE="$(clasp list-deployments)"
 printf '%s\n' "$BEFORE"
-PREVIOUS_VERSION="$(node scripts/deployment-version-guard-v0.6.cjs before "$DEPLOYMENT" "$BEFORE")"
+# Une nouvelle version @8 est observée : vérifier son contenu AVANT clasp push.
+REMOTE_VERSION="$(node - "$BEFORE" "$DEPLOYMENT" <<'JS'
+const {findTarget}=require('./scripts/deployment-version-guard-v0.6.cjs');
+console.log(findTarget(process.argv[2],process.argv[3]).version);
+JS
+)"
+PROOF=""
+if [[ "$REMOTE_VERSION" == "8" ]]; then
+  echo "==== Snapshot distant @8 : audit LECTURE SEULE obligatoire ===="
+  AUDIT="$(bash scripts/auditer-deploiement-8-sportos.sh)"
+  printf '%s\n' "$AUDIT"
+  if printf '%s\n' "$AUDIT" | grep -Fxq 'SPORTOS_SNAPSHOT_8=V0_6'; then
+    echo "SPORTOS_V0_6_DEJA_PRESENTE=@8 — code identique à V0.6, aucun push nécessaire."
+    exit 0
+  elif printf '%s\n' "$AUDIT" | grep -Fxq 'SPORTOS_SNAPSHOT_8=V0_5'; then
+    PROOF="V0_5"
+    echo "SPORTOS_SNAPSHOT_8_APPROUVE=V0_5"
+  else
+    echo "STOP : contenu de @8 inconnu. Aucune publication sans revue des différences." >&2
+    exit 1
+  fi
+fi
+PREVIOUS_VERSION="$(node scripts/deployment-version-guard-v0.6.cjs before "$DEPLOYMENT" "$BEFORE" "$PROOF")"
 echo "SPORTOS_V0_6_PRECHECK=@$PREVIOUS_VERSION"
 echo "==== État des fichiers du projet existant ===="
 clasp show-file-status
