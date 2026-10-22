@@ -27,7 +27,7 @@ assert.equal(after(list(7),EXPECTED_ID,6),7);
 assert.equal(after(list(8),EXPECTED_ID,7),8);
 assert.equal(after(list(10),EXPECTED_ID,7),10);
 assert.throws(()=>before(list(5)),/inattendue/);
-assert.throws(()=>before(list(8)),/inattendue/);
+assert.throws(()=>before(list(9)),/inattendue/);
 assert.throws(()=>before(list(7,'SportOS v0.6.0')),/V0.6 deja/);
 assert.throws(()=>before(list(6)+'\n- '+EXPECTED_ID+' @6'),/plusieurs exemplaires/);
 assert.throws(()=>before('Found 2 deployments.\n- '+head+' @HEAD\n- '+other+' @2'),/absent/);
