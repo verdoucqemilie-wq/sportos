@@ -3,7 +3,7 @@
 // Last confirmed deployment was @6; @7 is also permitted if V0.5 was deployed meanwhile.
 // Refuse other versions and unexpected IDs, even when clasp omits descriptions.
 const EXPECTED_ID='AKfycbx9CoVk8WioZ2a_IJl4CwBk6Mk23lLEf_9yJY_g-NBJ8Zxzog7TyXaoPAxS02PeOxZYCw';
-const APPROVED_SOURCE_VERSIONS=new Set([6,7]);
+const APPROVED_SOURCE_VERSIONS=new Set([6,7,8]);
 function findTarget(output,id=EXPECTED_ID){
   const deployments=String(output).split(/\r?\n/).map(line=>{
     const m=line.trim().match(/^-\s+(\S+)\s+@(\d+)(?:\s+-\s+(.+))?\s*$/);
@@ -14,12 +14,14 @@ function findTarget(output,id=EXPECTED_ID){
   if(!Number.isSafeInteger(target[0].version))throw Error('STOP : numero de version invalide');
   return target[0];
 }
-function before(output,id=EXPECTED_ID){
+function before(output,id=EXPECTED_ID,verifiedSnapshot=''){
   if(id!==EXPECTED_ID)throw Error('STOP : ID Apps Script cible incorrect');
   const current=findTarget(output,id);
   if(current.description.includes('SportOS v0.6.0'))throw Error('STOP : V0.6 deja indiquee, ne pas publier deux fois');
   if(!APPROVED_SOURCE_VERSIONS.has(current.version))
-    throw Error('STOP : version distante @'+current.version+' inattendue (versions autorisees @6 et @7 uniquement)');
+    throw Error('STOP : version distante @'+current.version+' inattendue (versions autorisees @6, @7 et @8 apres audit uniquement)');
+  if(current.version===8 && verifiedSnapshot!=='V0_5')
+    throw Error('STOP : @8 exige une comparaison immutable confirmant le code V0.5');
   return current.version;
 }
 function unchanged(output,id,version){
@@ -38,7 +40,7 @@ function after(output,id,previous){
 if(require.main===module){
   try{
     const [phase,id,output,version]=process.argv.slice(2);
-    if(phase==='before')console.log(before(output,id));
+    if(phase==='before')console.log(before(output,id,version||''));
     else if(phase==='unchanged')console.log(unchanged(output,id,Number(version)));
     else if(phase==='after')console.log(after(output,id,Number(version)));
     else throw Error('Usage : before|unchanged|after <id> <clasp output> [version]');
