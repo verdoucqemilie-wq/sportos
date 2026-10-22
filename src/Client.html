@@ -365,7 +365,7 @@
     document.addEventListener('keydown',onKey);
     q('#v3-quick-close').focus();
   }
-  function bind(){qAll('#content [data-quick-log]').forEach(b=>b.onclick=openQuickLog);qAll('[data-nav-go]').forEach(b=>b.onclick=()=>navigate(b.dataset.navGo));qAll('[data-open-program]').forEach(b=>b.onclick=()=>{S.programTab=b.dataset.openProgram;navigate('program')});qAll('[data-log]').forEach(b=>b.onclick=()=>openLog(b.dataset.log));qAll('[data-program-tab]').forEach(b=>b.onclick=()=>{S.programTab=b.dataset.programTab;render()});qAll('[data-review]').forEach(b=>b.onclick=openReview);qAll('[data-weight]').forEach(b=>b.onclick=openWeight);const pick=q('#exercise-picker');if(pick)pick.onchange=()=>{S.exerciseSelected=pick.value;render()};}
+  function bind(){qAll('#content [data-quick-log]').forEach(b=>b.onclick=openQuickLog);qAll('[data-nav-go]').forEach(b=>b.onclick=()=>navigate(b.dataset.navGo));qAll('[data-open-program]').forEach(b=>b.onclick=()=>{S.programTab=b.dataset.openProgram;navigate('program')});qAll('[data-log]').forEach(b=>b.onclick=()=>openLog(b.dataset.log));qAll('[data-program-tab]').forEach(b=>b.onclick=()=>{const selected=b.dataset.programTab;S.programTab=selected;render();q('[data-program-tab="'+selected+'"]')?.focus()});qAll('[data-review]').forEach(b=>b.onclick=openReview);qAll('[data-weight]').forEach(b=>b.onclick=openWeight);const pick=q('#exercise-picker');if(pick)pick.onchange=()=>{S.exerciseSelected=pick.value;render()};}
   function showModal(title,inner,onSubmit,opts={}){
   const session=opts.kind==='session';
   const root=q('#modal-root');
