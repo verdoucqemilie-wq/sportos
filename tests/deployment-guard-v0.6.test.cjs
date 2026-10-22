@@ -14,6 +14,11 @@ const list=(version,description='',extra='')=>[
 assert.equal(before(list(6)),6,'ancienne version @6 acceptee');
 assert.equal(before(list(7)),7,'V0.5 @7 sans description acceptee');
 assert.equal(before(list(7,'SportOS v0.5.0 — Home')),7,'V0.5 @7 avec description acceptee');
+assert.throws(()=>before(list(8)),/exige une comparaison/,'@8 sans preuve doit etre refuse');
+assert.throws(()=>before(list(8),EXPECTED_ID,'V0_6'),/exige une comparaison/,'@8 deja V0.6 ne doit pas etre publie');
+assert.equal(before(list(8),EXPECTED_ID,'V0_5'),8,'@8 accepte seulement apres comparaison exacte au code V0.5');
+assert.equal(unchanged(list(8),EXPECTED_ID,8),8);
+assert.equal(after(list(9),EXPECTED_ID,8),9);
 assert.equal(findTarget(list(6)).description,'');
 assert.equal(findTarget(list(7,'SportOS v0.5.0')).version,7);
 assert.equal(unchanged(list(6),EXPECTED_ID,6),6);
@@ -34,4 +39,4 @@ assert.throws(()=>after(list(7),EXPECTED_ID,7),/non augmentee/);
 assert.throws(()=>after(list(7),EXPECTED_ID,5),/non autorisee/);
 assert.throws(()=>after(list(8),other,7),/ID Apps Script/);
 console.log('DEPLOYMENT_VERSION_GUARD_V0_6=PASS');
-console.log('SCENARIOS=22 ; LIVE_SCRIPT_WRITES=0');
+console.log('SCENARIOS=27 ; LIVE_SCRIPT_WRITES=0');
