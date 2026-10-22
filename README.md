@@ -15,7 +15,7 @@ bash scripts/publier-v0.6-cloud-shell.sh
 
 - Le script vérifie le dépôt privé, le manifeste WebApp (`MYSELF`, `USER_DEPLOYING`), la base sportive unique, les nouvelles pages et `npm run verify`.
 - Il cible **exclusivement** le déploiement existant `AKfycbx9CoVk8WioZ2a_IJl4CwBk6Mk23lLEf_9yJY_g-NBJ8Zxzog7TyXaoPAxS02PeOxZYCw`, jamais les autres déploiements.
-- Il accepte `@6` (dernier numéro confirmé par l'utilisatrice) ou `@7` (si V0.5 a été installée entre-temps). Il n’a **pas besoin des descriptions**, parfois omises par clasp ; toute autre version provoque un STOP **avant push**.
+- Il accepte `@6` ou `@7` avec les garde-fous existants. **Version `@8` observée le 22/10/2026 : un audit immuable en lecture seule est obligatoire avant tout push**. L’audit récupère les cinq fichiers de `@8` dans un dossier temporaire et les compare à la V0.5 connue et à la V0.6 du dépôt. Si `@8` = V0.6, le script s'arrête sans republier ; si `@8` = V0.5, il autorise sa mise à jour ; pour tout contenu inconnu, il stoppe avant toute écriture. Les descriptions restent facultatives.
 - Il recontrôle le numéro juste avant le push et avant l'actualisation du déploiement. Aucun nouveau projet, aucun nouveau déploiement, aucune nouvelle URL n'est créé.
 - `clasp push` synchronise du **code**, pas de nouvelles données sportives. Les données réelles restent privées dans le Google Sheet existant. N'enregistrer aucune séance fictive pour vérifier la WebApp.
 
