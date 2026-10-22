@@ -1,19 +1,28 @@
-# SportOS — WebApp personnelle
+# SportOS — WebApp sportive personnelle
 
-**Dernière version du code GitHub : V0.5.0 (21/10/2026).** Typographie de l'accueil, pictogrammes SVG et animations premium validés, PR #4 fusionnée. Le déploiement Apps Script doit encore être synchronisé dans Cloud Shell ; la version actuellement en ligne n'est pas confirmée.
+**Version du code GitHub : V0.6.0 (22/10/2026)** — nouvelle iconographie de l’accueil et interface de retour de séance premium. [PR #5 fusionnée](https://github.com/verdoucqemilie-wq/sportos/pull/5) ; tests navigateur validés. **Publication Apps Script encore à réaliser depuis le compte Google personnel.**
 
-**Publier V0.5 depuis Cloud Shell avec le compte Google personnel :**
+## Mise à jour du déploiement existant vers V0.6
+
+Depuis le **Cloud Shell personnel déjà associé** à SportOS :
 
 ```bash
 cd ~/SportOS_deploiement_unique
 git switch main
 git pull --ff-only origin main
-bash scripts/publier-v0.5-cloud-shell.sh
+bash scripts/publier-v0.6-cloud-shell.sh
 ```
 
-Ce script vérifie les tests, la confidentialité, le Sheet unique, la présence du code V0.5 et l'identifiant du déploiement existant. **Correctif du 21/10/2026** : `clasp list-deployments` peut omettre toute description. La ligne observée dans Cloud Shell est `@6` sans description ; le script autorise **uniquement cet ID exact en @6**, puis confirme une nouvelle version numérique après publication. Tout changement d'ID ou de version avant l'opération stoppe la publication. Il met à jour la même WebApp, sans créer un autre déploiement ni écrire de données sportives.
+- Le script vérifie le dépôt privé, le manifeste WebApp (`MYSELF`, `USER_DEPLOYING`), la base sportive unique, les nouvelles pages et `npm run verify`.
+- Il cible **exclusivement** le déploiement existant `AKfycbx9CoVk8WioZ2a_IJl4CwBk6Mk23lLEf_9yJY_g-NBJ8Zxzog7TyXaoPAxS02PeOxZYCw`, jamais les autres déploiements.
+- Il accepte `@6` (dernier numéro confirmé par l'utilisatrice) ou `@7` (si V0.5 a été installée entre-temps). Il n’a **pas besoin des descriptions**, parfois omises par clasp ; toute autre version provoque un STOP **avant push**.
+- Il recontrôle le numéro juste avant le push et avant l'actualisation du déploiement. Aucun nouveau projet, aucun nouveau déploiement, aucune nouvelle URL n'est créé.
+- `clasp push` synchronise du **code**, pas de nouvelles données sportives. Les données réelles restent privées dans le Google Sheet existant. N'enregistrer aucune séance fictive pour vérifier la WebApp.
 
-**Design** : [Charte SportOS V0.4](docs/brand-guidelines-v0.4.md) · [Polish Accueil V0.5](docs/design-home-v0.5.md) · [Aperçu sans données personnelles](docs/apercu-v0.5.html) · [Tests responsive](tests/adaptive-qa.cjs).
+**Fin attendue :** `SPORTOS_V0_6_DEPLOIEMENT_CIBLE=TERMINE` puis test de l'URL `/exec` habituelle, des icônes, des quatre retours de séance et de l'accès « Moi uniquement ». En cas de STOP, ne pas forcer le push.
+
+Documentation : [Charte SportOS](docs/brand-guidelines-v0.4.md) · [Accueil V0.5](docs/design-home-v0.5.md) · [Design du retour V0.6](docs/design-feedback-v0.6.md) · [Aperçu V0.6](docs/apercu-v0.6.html).
+
 
 ---
 
