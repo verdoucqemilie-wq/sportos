@@ -209,7 +209,7 @@
       <div class="v3-fineprint">DEPUIS LE DÉBUT : ${vm.totals.strength} RENFORCEMENT${vm.totals.strength>1?'S':''} · ${vm.totals.cardio} SORTIE${vm.totals.cardio>1?'S':''} CARDIO. <button type="button" data-nav-go="progress">HISTORIQUE COMPLET ${v3Icon('arrow')}</button></div>
     </div>`;
   }
-  function programV7(){
+  function program(){
   const types=['A','B','Course','Vélo'],type=types.includes(S.programTab)?S.programTab:'A';
   const strength=type==='A'||type==='B',running=type==='Course',cycling=type==='Vélo';
   const all=homeModel(S.data),completed=all.done.includes(type);
