@@ -51,17 +51,28 @@
   function activityInfo(type){if(type==='A')return {icon:'◈',name:'Fessiers & full body',sub:'5 exercices · 35–45 min',cls:''};if(type==='B')return {icon:'✦',name:'Haut du corps & fessiers',sub:'5 exercices · 35–45 min',cls:''};if(type==='Vélo')return {icon:'♢',name:'Sortie vélo',sub:'Reprise 25–40 min',cls:'bike'};return {icon:'↗',name:'Course / marche',sub:'Prochain objectif : 8 × 1 min / 1 min',cls:'run'};}
   function activityRow(type){const x=activityInfo(type),all=currentWeekActivities(),done=all.some(s=>(type==='A'||type==='B')?s.Type===type:s.Type===type);return `<div class="activity"><div class="activity-icon ${x.cls}">${x.icon}</div><div class="activity-info"><strong>${x.name}</strong><p>${x.sub}</p></div><div class="activity-actions">${done?badge('✓ Réalisée'):badge('À faire','gray')}<button class="tiny-link" data-log="${type}">${done?'Ajouter une séance':'Enregistrer ↗'}</button></div></div>`}
   function v3Icon(type){
-  // SportOS Iconography v0.5: 24px grid, uniform 1.8 stroke, SVG with no font dependency.
+  // SportOS v0.6 — family of line icons, common stroke and optical size.
   const shapes={
     A:'<path d="m6.5 6.5 11 11M4.5 8.5l4-4m11 15 4-4M2.5 10.5l8-8m3 19 8-8"/>',
-    B:'<path d="m6.5 6.5 11 11M4.5 8.5l4-4m11 15 4-4M2.5 10.5l8-8m3 19 8-8"/>',
+    B:'<path d="M6 15.5c2.2-1 3-4.5 5.1-5.6L14 12l3-2 3 1.5-2 5-3-1-2.3 4H7L4 16z"/><path d="M11 10 9 6l-3 1M16 9.5l1-3"/>',
     Course:'<circle cx="15.5" cy="4" r="1.6"/><path d="m12 8-3-2.3-3 3m6-1 3 4-2 3m-1-7-3 6 4 3 1 4m-5-7-5 5m10-6 4.5-.5 3 3"/>',
     Vélo:'<circle cx="5" cy="17" r="3.2"/><circle cx="19" cy="17" r="3.2"/><path d="M5 17l5-10 5 10H5m5-10h4m1 0 4 10"/>',
     sparkle:'<path d="m12 2 2.6 7.4L22 12l-7.4 2.6L12 22l-2.6-7.4L2 12l7.4-2.6L12 2Z"/>',
     route:'<circle cx="5" cy="18" r="2"/><circle cx="19" cy="6" r="2"/><path d="M7 18h4a4 4 0 0 0 0-8h2a4 4 0 0 0 4-4"/>',
-    arrow:'<path d="M5 19 19 5M9 5h10v10"/>'
+    arrow:'<path d="M5 19 19 5M9 5h10v10"/>',
+    arrowRight:'<path d="M4 12h16m-6-6 6 6-6 6"/>',
+    clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+    calendar:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4m10-4v4M3 10h18"/>',
+    gauge:'<path d="M5 17a9 9 0 1 1 14 0"/><path d="m12 14 4-5m-7 9h6"/>',
+    check:'<path d="m4 12 5 5 11-11"/>',
+    clipboard:'<rect x="5" y="5" width="14" height="17" rx="2"/><path d="M9 5.5V3h6v2.5M9 12h6m-6 4h4"/>',
+    heart:'<path d="M20.8 8.4c0 5-8.8 11.3-8.8 11.3S3.2 13.4 3.2 8.4a4.5 4.5 0 0 1 8.8-1.3 4.5 4.5 0 0 1 8.8 1.3Z"/>',
+    shield:'<path d="m12 2 8 3.5v6.3c0 5.2-4 8.3-8 10.2-4-1.9-8-5-8-10.2V5.5z"/><path d="M12 7v6m0 3h.01"/>',
+    note:'<path d="M4 5h16v14H4zM8 9h8m-8 4h8m-8 4h5"/>',
+    close:'<path d="M5 5 19 19M19 5 5 19"/>'
   };
-  return '<svg class="so-icon so-icon-'+(Object.prototype.hasOwnProperty.call(shapes,type)?type:'sparkle')+'" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">'+(shapes[type]||shapes.sparkle)+'</svg>';
+  const known=Object.prototype.hasOwnProperty.call(shapes,type)?type:'sparkle';
+  return '<svg class="so-icon so-icon-'+known+'" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">'+shapes[known]+'</svg>';
 }
   function homeModel(data) {
   const validDate = value => {
@@ -113,15 +124,15 @@
     const nextName=first?meta[first].name:'Semaine accomplie';
     const hero=`<section class="v3-feature" aria-labelledby="v3-feature-title">
       <div class="v3-feature-copy">
-        <p class="v3-feature-kicker"><span class="v3-point"></span>${first?'À LA UNE / PROCHAINE SÉANCE PROPOSÉE':'TA SEMAINE / OBJECTIFS RÉALISÉS'}</p>
+        <p class="v3-feature-kicker"><span class="so-home-kicker-icon" aria-hidden="true">${v3Icon(first||'check')}</span>${first?'À LA UNE / PROCHAINE SÉANCE PROPOSÉE':'TA SEMAINE / OBJECTIFS RÉALISÉS'}</p>
         <h2 id="v3-feature-title">${first?'BOUGE.<br>À TA FAÇON.':'BRAVO.<br>ET RESPIRE.'}</h2>
         <p class="v3-feature-intro">${first?'Ton prochain mouvement':'Tu as réalisé les quatre activités proposées'}</p>
-        <div class="v3-feature-workout">${esc(nextName)}${first?'<span>'+esc(meta[first].subtitle)+'</span>':''}</div>
+        <div class="v3-feature-workout"><span class="so-feature-sport-icon" aria-hidden="true">${v3Icon(first||'check')}</span>${esc(nextName)}${first?'<span>'+esc(meta[first].subtitle)+'</span>':''}</div>
         ${first?`<div class="v3-feature-data"><span>${meta[first].duration}</span><span>${meta[first].sub}</span><span>À TON RYTHME</span></div>`:
         '<p class="v3-feature-recovery">Récupérer fait aussi partie de l’entraînement.</p>'}
         <div class="v3-feature-actions">
          ${first?`<button type="button" class="v3-btn-acid" data-open-program="${first}">VOIR MA SÉANCE ${v3Icon('arrow')}</button>
-         <button type="button" class="v3-btn-subtle" data-quick-log>Enregistrer une activité <span aria-hidden="true">↗</span></button>`:
+         <button type="button" class="v3-btn-subtle" data-quick-log>Enregistrer une activité ${v3Icon('arrow')}</button>`:
          `<button type="button" class="v3-btn-acid" ${vm.isAppReview?'data-nav-go="progress"':'data-review="1"'}>${vm.isAppReview?'VOIR MES PROGRÈS':'FAIRE MON BILAN'} ${v3Icon('arrow')}</button>`}
         </div>
         <p class="v3-hero-help">${first?'Une suggestion, jamais une obligation.':'Tu peux poursuivre à ton rythme la semaine prochaine.'}</p>
@@ -136,7 +147,7 @@
       const isDone=vm.done.includes(type),isNext=first===type;
       const status=isDone?'RÉALISÉE':isNext?'PROPOSÉE':'À PLANIFIER';
       return `<button type="button" class="v3-week-row ${isDone?'done':''} ${isNext?'next':''}" data-open-program="${type}" aria-label="${esc(weekLabel[type])} : ${isDone?'réalisée cette semaine':isNext?'proposée':'à planifier'}, voir le programme">
-        <span class="v3-week-icon">${v3Icon(type)}</span>
+        <span class="v3-week-icon so-activity-icon so-activity-${type==='Course'?'run':type==='Vélo'?'bike':type}">${v3Icon(type)}</span>
         <span class="v3-week-row-title">${esc(weekLabel[type])}<small>${isDone?'Un mouvement de plus.':isNext?'Ta prochaine proposition.':'Quand tu le souhaites.'}</small></span>
         <span class="v3-week-status">${isDone?'<span class="so-status-check" aria-hidden="true">✓</span> ':''}${status}</span>
       </button>`;
@@ -147,7 +158,7 @@
       <p class="v3-week-subtitle">${done===4?'Quatre activités réalisées.':done===0?'Tout est encore possible.':done+' activité'+(done>1?'s':'')+' réalisée'+(done>1?'s':'')+' cette semaine.'}</p>
       <div class="v3-week-track" role="progressbar" aria-label="Activités réalisées sur quatre cette semaine" aria-valuemin="0" aria-valuemax="4" aria-valuenow="${done}"><span style="width:${done*25}%"></span></div>
       <div class="v3-week-rows">${weekList}</div>
-      <button type="button" class="v3-link-arrow" data-nav-go="program">TOUS MES PROGRAMMES <span aria-hidden="true">↗</span></button>
+      <button type="button" class="v3-link-arrow" data-nav-go="program">TOUS MES PROGRAMMES ${v3Icon('arrow')}</button>
     </section>`;
     const l=vm.last;
     const isStrength=l&&['A','B'].includes(l.Type);
@@ -158,7 +169,7 @@
     const effortKnown=lastEffort!==''&&lastEffort!==undefined&&lastEffort!==null;
     const dateNice=l?niceDate(l.Date):'';
     const lastPanel=`<section class="v3-last" aria-labelledby="v3-last-title">
-      <div class="v3-panel-top"><span class="v3-label">DERNIER MOUVEMENT</span><span class="v3-panel-bubble" aria-hidden="true">${v3Icon(l?l.Type:'sparkle')}</span></div>
+      <div class="v3-panel-top"><span class="v3-label">DERNIER MOUVEMENT</span><span class="v3-panel-bubble so-activity-icon" aria-hidden="true">${v3Icon(l?l.Type:'sparkle')}</span></div>
       <h2 id="v3-last-title">${l?esc(lastKind):'À écrire.'}</h2>
       <p>${l?'Le '+esc(dateNice):'Ta première séance datée apparaîtra ici.'}</p>
       <div class="v3-last-numbers">
@@ -178,7 +189,7 @@
     let coachLine='Chaque séance nous donnera des repères. Pour l’instant, priorité au confort, à la régularité et à tes sensations.';
     if(r&&Number.isFinite(rpe)&&rpe<=3)coachLine='Ta course du '+niceDate(r.Date)+' t’a semblé facile ('+fmt(rpe)+'/10). On consolide encore 8 × (1 min course / 1 min marche) avant d’augmenter.';
     else if(r&&Number.isFinite(rpe))coachLine='Ta dernière course a été ressentie à '+fmt(rpe)+'/10. La prochaine étape dépendra de ta récupération et de l’absence de douleur.';
-    const coach=`<section class="v3-coach" aria-labelledby="v3-coach-title"><div class="v3-coach-tag">${v3Icon('sparkle')} <span>LE REGARD DU COACH</span></div>
+    const coach=`<section class="v3-coach" aria-labelledby="v3-coach-title"><div class="v3-coach-tag"><span class="so-coach-icon">${v3Icon('sparkle')}</span> <span>LE REGARD DU COACH</span></div>
       <h2 id="v3-coach-title">La suite se construit,<br>pas à pas.</h2>
       <p>${esc(coachLine)}</p>
       ${vm.pain?'<div class="v3-coach-warning">Des douleurs ont été signalées sur certains exercices. Leur progression reste prudente et conditionnée à un mouvement sans douleur.</div>':''}
@@ -258,22 +269,210 @@
     q('#v3-quick-close').focus();
   }
   function bind(){qAll('#content [data-quick-log]').forEach(b=>b.onclick=openQuickLog);qAll('[data-nav-go]').forEach(b=>b.onclick=()=>navigate(b.dataset.navGo));qAll('[data-open-program]').forEach(b=>b.onclick=()=>{S.programTab=b.dataset.openProgram;navigate('program')});qAll('[data-log]').forEach(b=>b.onclick=()=>openLog(b.dataset.log));qAll('[data-program-tab]').forEach(b=>b.onclick=()=>{S.programTab=b.dataset.programTab;render()});qAll('[data-review]').forEach(b=>b.onclick=openReview);qAll('[data-weight]').forEach(b=>b.onclick=openWeight);const pick=q('#exercise-picker');if(pick)pick.onchange=()=>{S.exerciseSelected=pick.value;render()};}
-  function showModal(title,inner,onSubmit){q('#modal-root').innerHTML=`<div class="modal-backdrop" id="modal-backdrop"><div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title"><div class="modal-head"><h2 id="modal-title">${esc(title)}</h2><button class="close" id="modal-close" aria-label="Fermer">×</button></div><form class="modal-content" id="form-modal">${inner}<div class="modal-actions"><button class="btn ghost" type="button" id="modal-cancel">Annuler</button><button class="btn" id="modal-submit" type="submit">Enregistrer</button></div></form></div></div>`;
-    const close=()=>q('#modal-root').innerHTML='';q('#modal-close').onclick=close;q('#modal-cancel').onclick=close;q('#modal-backdrop').onclick=e=>{if(e.target.id==='modal-backdrop')close()};q('#form-modal').onsubmit=async e=>{e.preventDefault();if(S.loading)return;S.loading=true;const b=q('#modal-submit');b.disabled=true;b.textContent='Enregistrement…';try{await onSubmit(new FormData(e.target));close();toast(S.demo?'Enregistré pour cet aperçu (non synchronisé)':'Séance enregistrée dans SportOS ✓');await reload();}catch(err){toast('Erreur : '+err.message);b.disabled=false;b.textContent='Réessayer';}finally{S.loading=false}};}
+  function showModal(title,inner,onSubmit,opts={}){
+  const session=opts.kind==='session';
+  const root=q('#modal-root');
+  const returnFocus=document.activeElement;
+  const sport=opts.type||'A';
+  const sessionIcon=v3Icon(sport);
+  const sessionName=opts.activity||title;
+  const caption=opts.caption||'Tes sensations, sans pression.';
+  const railSteps=opts.steps||['Les repères','Tes sensations','Ton retour'];
+  const heading=session?`
+    <div class="so-session-heading-label">SPORTOS <span aria-hidden="true">/</span> JOURNAL D'ENTRAÎNEMENT</div>
+    <div class="so-session-header-title"><span class="so-session-mobile-icon" aria-hidden="true">${sessionIcon}</span><h2 id="modal-title">${esc(title)}</h2></div>
+    <p id="so-session-description">Renseigne seulement ce que tu as réellement fait. Rien n’est enregistré avant validation.</p>`:
+    `<h2 id="modal-title">${esc(title)}</h2>`;
+  const rail=session?`<aside class="so-session-rail" aria-label="Résumé de la séance">
+    <div class="so-session-rail-brand"><span class="so-session-rail-symbol" aria-hidden="true">${q('.v3-logo .v4-brand-mark')?.outerHTML||v3Icon('sparkle')}</span> SPORTOS <span> / TON JOURNAL</span></div>
+    <div class="so-session-rail-body">
+      <div class="so-session-rail-icon" aria-hidden="true">${sessionIcon}</div>
+      <div class="so-session-rail-label">UN MOUVEMENT APRÈS L'AUTRE</div>
+      <div class="so-session-rail-name">${esc(sessionName)}</div>
+      <p>${esc(caption)}</p>
+      <div class="so-session-rail-steps">${railSteps.map((label,i)=>`<div><span>${String(i+1).padStart(2,'0')}</span> ${esc(label)}</div>`).join('')}</div>
+    </div>
+    <div class="so-session-rail-bottom">${v3Icon('shield')} Ton retour reste dans ton espace privé.</div>
+  </aside>`:'';
+  const footer=`<div class="modal-actions${session?' so-session-actions':''}">
+    ${session?'<p id="so-save-error" class="so-save-error" role="alert" hidden></p>':''}
+    <button class="btn ghost" type="button" id="modal-cancel">Annuler</button>
+    <button class="btn${session?' so-save-cta':''}" id="modal-submit" type="submit">${session?'Enregistrer mon retour':'Enregistrer'}${session?v3Icon('arrowRight'):''}</button>
+  </div>`;
+  root.innerHTML=`<div class="modal-backdrop${session?' so-session-backdrop':''}" id="modal-backdrop"><div class="modal${session?' so-session-page':''}" role="dialog" aria-modal="true" aria-labelledby="modal-title" ${session?'aria-describedby="so-session-description"':''}>
+    ${rail}<div class="${session?'so-session-main':'so-modal-main'}">
+    <div class="modal-head${session?' so-session-head':''}"><div class="so-modal-heading">${heading}</div><button type="button" class="close" id="modal-close" aria-label="Fermer le formulaire">${session?v3Icon('close'):'×'}</button></div>
+    <form class="modal-content${session?' so-session-form':''}" id="form-modal"><div class="${session?'so-session-fields':'so-modal-fields'}">${inner}</div>${footer}</form>
+    </div></div></div>`;
+  let dirty=false,closed=false;
+  const form=q('#form-modal'),dialog=root.querySelector('[role="dialog"]');
+  const updateProgress=()=>{
+    if(!session)return;
+    const item=q('#so-feedback-progress');
+    if(item){
+      const forms=[...form.querySelectorAll('.so-exercise')];
+      const count=forms.filter(el=>[...el.querySelectorAll('input:not([type="hidden"]),select,textarea')].some(input=>input.value.trim()!=='')).length;
+      item.textContent=count+' / '+forms.length+' exercices renseignés';
+      const fill=q('#so-progress-fill');
+      if(fill)fill.style.width=(forms.length?100*count/forms.length:0)+'%';
+    }
+    const input=form.querySelector('input[name="effort"]');
+    if(input)form.querySelectorAll('[data-effort-value]').forEach(b=>b.setAttribute('aria-pressed',String(input.value===b.dataset.effortValue)));
+  };
+  const close=(force=false)=>{
+    if(closed||S.loading)return;
+    if(session&&!force&&dirty&&!window.confirm('Quitter sans enregistrer ton retour de séance ?'))return;
+    closed=true;
+    document.removeEventListener('keydown',keyHandler);
+    root.innerHTML='';
+    if(returnFocus&&typeof returnFocus.focus==='function'&&returnFocus.isConnected)returnFocus.focus();
+  };
+  const keyHandler=e=>{
+    if(e.key==='Escape'){e.preventDefault();close();return}
+    if(e.key==='Tab'){
+      const nodes=[...dialog.querySelectorAll('button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),a[href]')].filter(n=>n.getClientRects().length>0);
+      if(!nodes.length)return;
+      if(e.shiftKey&&document.activeElement===nodes[0]){e.preventDefault();nodes[nodes.length-1].focus()}
+      else if(!e.shiftKey&&document.activeElement===nodes[nodes.length-1]){e.preventDefault();nodes[0].focus()}
+    }
+  };
+  document.addEventListener('keydown',keyHandler);
+  q('#modal-close').onclick=()=>close();
+  q('#modal-cancel').onclick=()=>close();
+  q('#modal-backdrop').onclick=e=>{if(e.target.id==='modal-backdrop')close()};
+  if(session){
+    form.addEventListener('input',()=>{dirty=true;updateProgress()});
+    form.addEventListener('change',()=>{dirty=true;updateProgress()});
+    form.querySelectorAll('[data-effort-value]').forEach(button=>{
+      button.onclick=()=>{
+        const effort=form.querySelector('[name="effort"]');
+        if(!effort)return;
+        effort.value=button.dataset.effortValue;
+        dirty=true;
+        effort.dispatchEvent(new Event('input',{bubbles:true}));
+      };
+    });
+    updateProgress();
+  }
+  q('#modal-close').focus();
+  form.onsubmit=async e=>{
+    e.preventDefault();
+    if(S.loading)return;
+    S.loading=true;
+    const b=q('#modal-submit');
+    b.disabled=true;b.textContent='Enregistrement…';
+    const error=q('#so-save-error');if(error){error.textContent='';error.hidden=true;}
+    try{
+      await onSubmit(new FormData(e.target));
+      dirty=false;
+      S.loading=false;
+      close(true);
+      toast(S.demo?'Retour simulé — aucune écriture dans ton Google Sheet.':'Ton retour de séance a bien été enregistré ✓');
+      await reload();
+    }catch(err){
+      if(error){error.textContent='Impossible d’enregistrer : '+err.message;error.hidden=false;}
+      else toast('Erreur : '+err.message);
+      b.disabled=false;
+      b.innerHTML=session?'Enregistrer mon retour '+v3Icon('arrowRight'):'Réessayer';
+    }finally{S.loading=false;}
+  };
+}
   async function reload(){if(S.demo){render();return}try{S.data=await server('getBootstrap');render()}catch(e){toast('Enregistrement effectué mais actualisation impossible : '+e.message);render()}}
   const field=(label,name,opts={})=>`<div class="field"><label for="f-${esc(name)}">${esc(label)}</label><input class="input" id="f-${esc(name)}" name="${esc(name)}" type="${opts.type||'number'}" ${opts.min!==undefined?'min="'+opts.min+'"':''} ${opts.max!==undefined?'max="'+opts.max+'"':''} ${opts.step?'step="'+opts.step+'"':''} ${opts.placeholder?'placeholder="'+esc(opts.placeholder)+'"':''} ${opts.value!==undefined?'value="'+esc(opts.value)+'"':''} ${opts.required?'required':''}></div>`;
   const select=(label,name,options)=>`<div class="field"><label for="f-${esc(name)}">${esc(label)}</label><select class="input" name="${esc(name)}" id="f-${esc(name)}">${options.map(([v,t])=>`<option value="${esc(v)}">${esc(t)}</option>`).join('')}</select></div>`;
   const longtext=(label,name)=>`<div class="field"><label for="f-${esc(name)}">${esc(label)}</label><textarea class="input" name="${esc(name)}" id="f-${esc(name)}" rows="2" maxlength="500" placeholder="Ton ressenti, si tu le souhaites…"></textarea></div>`;
   function openLog(type){if(type==='A'||type==='B')return strengthForm(type);return cardioForm(type)}
-  function strengthForm(type){const entryId=key();const ex=activeEx(type);const forms=ex.map((x,i)=>`<div class="exercise-form"><h3>${i+1}. ${esc(x.Nom)}</h3><p class="micro" style="margin:0">Prévu : ${esc(x.Séries)} séries · ${x.Rép_min?esc(x.Rép_min)+'–'+esc(x.Rép_max)+' répétitions':esc(x.Temps_s)+' secondes'} · ${esc(x.Charge_kg||'charge selon aisance')}</p><div class="form-grid cols-3">${field('Séries réalisées','sets'+i,{min:0,max:8,step:1,placeholder:String(x.Séries)})}${field('Répétitions','reps'+i,{min:0,max:100,step:1,placeholder:String(x.Rép_max||'—')})}${field('Charge (kg)','weight'+i,{min:0,max:150,step:.5,placeholder:x['Charge_kg indicative']||'0'})}${field('Maintien (sec)','seconds'+i,{min:0,max:1200,step:1,placeholder:x.Temps_s||'—'})}${select('Difficulté','difficulty'+i,[['','Non renseignée'],['Facile','Facile'],['Modéré','Modéré'],['Difficile','Difficile'],['Très difficile','Très difficile']])}${select('Répétitions en réserve','rir'+i,[['','Non renseigné'],['0','0'],['1','1'],['2','2'],['3','3'],['4','4'],['5','5'],['6','6+']])}${select('Douleur','pain'+i,[['','Non renseignée'],['Non','Aucune'],['Oui','Oui']])}</div>${field('Localisation douleur (si besoin)','painWhere'+i,{type:'text',placeholder:'Ex : bas du dos'})}${field('Note (facultatif)','note'+i,{type:'text',placeholder:'Sensations, technique…'})}<input type="hidden" name="id${i}" value="${esc(x.Exercice_ID)}"></div>`).join('');
-    const html=`<p class="small">Renseigne seulement ce que tu as réellement effectué. Les valeurs prévues servent de repère, pas de résultat automatique.</p><div class="form-grid">${field('Date','date',{type:'date',value:S.data.today,required:true})}${field('Durée réelle (min)','duration',{min:0,max:240,step:1,placeholder:'40'})}${field('Effort global /10','effort',{min:0,max:10,step:.5,placeholder:'5'})}${field('Énergie après /10','energyAfter',{min:0,max:10,step:1,placeholder:'7'})}</div>${forms}${longtext('Bilan rapide','note')}`;
-    showModal('Séance '+type+' — mon retour',html,async f=>{
-      const exercises=ex.map((x,i)=>{const read=k=>f.get(k+i)||'';return {id:read('id'),sets:read('sets'),reps:read('reps'),weight:read('weight'),seconds:read('seconds'),difficulty:read('difficulty'),rir:read('rir'),pain:read('pain'),painWhere:read('painWhere'),note:read('note')}}).filter(x=>x.sets!==''||x.reps!==''||x.weight!==''||x.seconds!==''||x.difficulty!==''||x.pain!==''||x.note!=='');
-      if(!exercises.length)throw Error('Renseigne au moins un exercice');
-      await server('saveStrength',{id:entryId,date:f.get('date'),type,duration:f.get('duration'),effort:f.get('effort'),energyAfter:f.get('energyAfter'),note:f.get('note'),exercises});
-    });}
-  function cardioForm(type){const entryId=key();const isRun=type==='Course';const html=`<p class="small">${isRun?'En reprise : privilégie les sensations et les intervalles, pas la vitesse.':'Pour Espiens, suis surtout la durée et le confort de tes sorties.'}</p><div class="form-grid">${field('Date','date',{type:'date',value:S.data.today,required:true})}${field('Durée totale (min)','duration',{min:1,max:1440,step:1,required:true,placeholder:'16'})}${field('Distance (km) · facultatif','distance',{min:0,max:600,step:.01,placeholder:'Si connue'})}${field('Difficulté /10','effort',{min:0,max:10,step:.5,required:true,placeholder:'2,5'})}</div>${isRun?`<div class="well" style="margin-bottom:16px">Prochaine proposition : 8 × (1 min course + 1 min marche), plus marche d'échauffement et retour au calme.</div><div class="form-grid cols-3">${field('Course par bloc (sec)','runSeconds',{min:0,max:3600,step:1,value:60})}${field('Marche par bloc (sec)','walkSeconds',{min:0,max:3600,step:1,value:60})}${field('Nombre de blocs','rounds',{min:0,max:200,step:1,value:8})}</div>`:''}${select('Douleur pendant/après','pain',[['','Non renseignée'],['Non','Non'],['Oui','Oui']])}${longtext('Mes sensations','note')}`;
-    showModal(type==='Course'?'Enregistrer ma course':'Enregistrer ma sortie vélo',html,async f=>{const p={id:entryId,date:f.get('date'),type,duration:f.get('duration'),distance:f.get('distance'),effort:f.get('effort'),runSeconds:isRun?f.get('runSeconds'):'',walkSeconds:isRun?f.get('walkSeconds'):'',rounds:isRun?f.get('rounds'):'',pain:f.get('pain'),note:f.get('note'),planStep:isRun?'RUN-02':'BIKE-01'};if(Number(p.duration)<=0)throw Error('Renseigne la durée');await server('saveCardio',p)});}
+  function soEffortScale(){
+  return `<div class="so-effort-scale" role="group" aria-label="Raccourcis pour l'effort ressenti">
+    ${[[2,'Très facile'],[4,'Facile'],[6,'Modéré'],[8,'Soutenu'],[10,'Très dur']].map(([v,label])=>`<button type="button" data-effort-value="${v}" aria-pressed="false"><strong>${v}</strong><small>${label}</small></button>`).join('')}
+    <p class="so-effort-hint">Tu peux aussi saisir une valeur précise, comme 2,5/10.</p>
+  </div>`;
+}
+  function strengthForm(type){
+  const entryId=key(),ex=activeEx(type);
+  const forms=ex.map((x,i)=>`<details class="exercise-form so-exercise" ${i===0?'open':''}>
+    <summary class="so-exercise-summary">
+      <span class="so-exercise-count">${String(i+1).padStart(2,'0')}</span>
+      <span class="so-exercise-summary-text"><strong>${esc(x.Nom)}</strong><small>Objectif · ${esc(x.Séries)} séries ${x.Rép_min?'/ '+esc(x.Rép_min)+'–'+esc(x.Rép_max)+' répétitions': '/ '+esc(x.Temps_s)+' secondes'}</small></span>
+      <span class="so-exercise-expand" aria-hidden="true">${v3Icon('arrowRight')}</span>
+    </summary>
+    <div class="so-exercise-body">
+      <p class="so-exercise-instruction">Indique uniquement ce que tu as réalisé : les indications du programme ne sont pas préremplies.</p>
+      <div class="form-grid cols-3">
+      ${field('Séries réalisées','sets'+i,{min:0,max:8,step:1,placeholder:String(x.Séries)})}
+      ${field('Répétitions','reps'+i,{min:0,max:100,step:1,placeholder:String(x.Rép_max||'—')})}
+      ${field('Charge (kg)','weight'+i,{min:0,max:150,step:.5,placeholder:x['Charge_kg indicative']||'0'})}
+      ${field('Maintien (sec)','seconds'+i,{min:0,max:1200,step:1,placeholder:x.Temps_s||'—'})}
+      ${select('Difficulté','difficulty'+i,[['','Non renseignée'],['Facile','Facile'],['Modéré','Modéré'],['Difficile','Difficile'],['Très difficile','Très difficile']])}
+      ${select('Répétitions en réserve','rir'+i,[['','Non renseigné'],['0','0'],['1','1'],['2','2'],['3','3'],['4','4'],['5','5'],['6','6+']])}
+      </div>
+      <div class="so-exercise-safety"><div class="so-safety-title">${v3Icon('shield')} Douleur ou gêne ?</div>
+      <div class="form-grid">${select('Douleur','pain'+i,[['','Non renseignée'],['Non','Non'],['Oui','Oui']])}${field('Où ? (si nécessaire)','painWhere'+i,{type:'text',placeholder:'Ex. bas du dos'})}</div></div>
+      ${field('Commentaire personnel','note'+i,{type:'text',placeholder:'Technique, sensations, adaptation…'})}
+    </div><input type="hidden" name="id${i}" value="${esc(x.Exercice_ID)}">
+  </details>`).join('');
+  const html=`<section class="so-feedback-section" aria-labelledby="so-basics">
+    <div class="so-feedback-section-title"><span class="so-section-number">01</span><div><p class="so-overline">TON ACTIVITÉ</p><h3 id="so-basics">Les repères</h3></div>${v3Icon('calendar')}</div>
+    <div class="form-grid">${field('Date','date',{type:'date',value:S.data.today,required:true})}${field('Durée réelle (min)','duration',{min:0,max:240,step:1,placeholder:'Ex. 40'})}</div>
+  </section>
+  <section class="so-feedback-section" aria-labelledby="so-feelings">
+    <div class="so-feedback-section-title"><span class="so-section-number">02</span><div><p class="so-overline">TON RESSENTI</p><h3 id="so-feelings">Comment tu t’es sentie</h3></div>${v3Icon('heart')}</div>
+    <p class="so-section-desc">L’intensité et ton énergie servent à adapter tes prochaines propositions.</p>
+    <div class="form-grid">${field('Effort ressenti /10','effort',{min:0,max:10,step:.5,placeholder:'Ex. 4'})}${field('Énergie après /10','energyAfter',{min:0,max:10,step:1,placeholder:'Ex. 7'})}</div>
+    ${soEffortScale()}
+  </section>
+  <section class="so-feedback-section so-feedback-section-exercises" aria-labelledby="so-exercises">
+    <div class="so-feedback-section-title"><span class="so-section-number">03</span><div><p class="so-overline">LE DÉTAIL</p><h3 id="so-exercises">Tes exercices</h3></div>${v3Icon('clipboard')}</div>
+    <div class="so-progress-row"><span id="so-feedback-progress">0 / ${ex.length} exercices renseignés</span><span>Facultatif par champ</span></div>
+    <div class="so-progress-track" aria-hidden="true"><span id="so-progress-fill"></span></div>
+    ${forms}
+    <div class="so-exercise-info">${v3Icon('shield')} Si un mouvement provoque une douleur, note-la et n’augmente pas sa charge.</div>
+  </section>
+  <section class="so-feedback-section" aria-labelledby="so-recap">
+    <div class="so-feedback-section-title"><span class="so-section-number">04</span><div><p class="so-overline">POUR LA SUITE</p><h3 id="so-recap">Ton mot de la fin</h3></div>${v3Icon('note')}</div>
+    ${longtext('Ton bilan de séance (facultatif)','note')}
+  </section>`;
+  showModal('Retour de séance — Renforcement '+type,html,async f=>{
+    const exercises=ex.map((x,i)=>{const read=k=>f.get(k+i)||'';return {
+      id:read('id'),sets:read('sets'),reps:read('reps'),weight:read('weight'),seconds:read('seconds'),
+      difficulty:read('difficulty'),rir:read('rir'),pain:read('pain'),painWhere:read('painWhere'),note:read('note')
+    }}).filter(x=>x.sets!==''||x.reps!==''||x.weight!==''||x.seconds!==''||x.difficulty!==''||x.pain!==''||x.note!==''||x.rir!==''||x.painWhere!=='');
+    if(!exercises.length)throw Error('Renseigne au moins un exercice pour enregistrer ton renforcement.');
+    await server('saveStrength',{id:entryId,date:f.get('date'),type,duration:f.get('duration'),effort:f.get('effort'),energyAfter:f.get('energyAfter'),note:f.get('note'),exercises});
+  },{kind:'session',type,activity:'Renforcement '+type,caption:type==='A'?'Fessiers & full body':'Haut du corps & fessiers',steps:['Les repères','Tes sensations','Tes exercices','Ton retour']});
+}
+  function cardioForm(type){
+  const entryId=key(),isRun=type==='Course';
+  const html=`<section class="so-feedback-section" aria-labelledby="so-basics">
+    <div class="so-feedback-section-title"><span class="so-section-number">01</span><div><p class="so-overline">TON ACTIVITÉ</p><h3 id="so-basics">Les repères</h3></div>${v3Icon('clock')}</div>
+    <div class="form-grid">${field('Date','date',{type:'date',value:S.data.today,required:true})}${field('Durée totale (min)','duration',{min:1,max:1440,step:1,required:true,placeholder:'Ex. 16'})}${field('Distance (km) · facultatif','distance',{min:0,max:600,step:.01,placeholder:'Si connue'})}</div>
+    ${isRun?'<p class="so-section-desc">Course et marche comptent dans la durée totale.</p>':'<p class="so-section-desc">Pour ton défi Espiens, la durée et le confort sont tes premiers repères.</p>'}
+  </section>
+  <section class="so-feedback-section" aria-labelledby="so-feelings">
+    <div class="so-feedback-section-title"><span class="so-section-number">02</span><div><p class="so-overline">TON RESSENTI</p><h3 id="so-feelings">Comment c’était ?</h3></div>${v3Icon('heart')}</div>
+    ${field('Difficulté ressentie /10','effort',{min:0,max:10,step:.5,required:true,placeholder:'Ex. 2,5'})}
+    ${soEffortScale()}
+    <div class="so-safety-inline">${v3Icon('shield')}${select('Douleur pendant ou après','pain',[['','Non renseignée'],['Non','Non'],['Oui','Oui']])}</div>
+  </section>
+  ${isRun?`<section class="so-feedback-section" aria-labelledby="so-intervals">
+    <div class="so-feedback-section-title"><span class="so-section-number">03</span><div><p class="so-overline">SI TU AS FAIT DES INTERVALLES</p><h3 id="so-intervals">Course / marche</h3></div>${v3Icon('Course')}</div>
+    <p class="so-section-desc">Programme proposé : 8 × (1 min de course / 1 min de marche). Renseigne ce que tu as réellement réalisé, si tu le souhaites.</p>
+    <div class="form-grid cols-3">
+      ${field('Course par bloc (sec)','runSeconds',{min:0,max:3600,step:1,placeholder:'Ex. 60'})}
+      ${field('Marche par bloc (sec)','walkSeconds',{min:0,max:3600,step:1,placeholder:'Ex. 60'})}
+      ${field('Nombre de blocs','rounds',{min:0,max:200,step:1,placeholder:'Ex. 8'})}
+    </div>
+  </section>`:''}
+  <section class="so-feedback-section" aria-labelledby="so-recap">
+    <div class="so-feedback-section-title"><span class="so-section-number">${isRun?'04':'03'}</span><div><p class="so-overline">POUR LA SUITE</p><h3 id="so-recap">Tes sensations</h3></div>${v3Icon('note')}</div>
+    ${longtext('Un détail à retenir (facultatif)','note')}
+  </section>`;
+  showModal(isRun?'Retour de course':'Retour de sortie vélo',html,async f=>{
+    const p={id:entryId,date:f.get('date'),type,duration:f.get('duration'),distance:f.get('distance'),effort:f.get('effort'),runSeconds:isRun?f.get('runSeconds'):'',walkSeconds:isRun?f.get('walkSeconds'):'',rounds:isRun?f.get('rounds'):'',pain:f.get('pain'),note:f.get('note'),planStep:isRun?'RUN-02':'BIKE-01'};
+    if(Number(p.duration)<=0)throw Error('Renseigne la durée.');
+    await server('saveCardio',p);
+  },{kind:'session',type,activity:isRun?'Course & marche':'Sortie vélo',caption:isRun?'Avancer progressivement, sans chercher la vitesse.':'Construire ton endurance pour Espiens.',steps:isRun?['Les repères','Ton ressenti','Course et marche','Ton retour']:['Les repères','Ton ressenti','Ton retour']});
+}
   function openReview(){const html=`<p class="small">Ce bilan sert à comprendre ton ressenti, pas à juger tes résultats.</p><div class="form-grid">${field('Fatigue /10','fatigue',{min:0,max:10,step:1,placeholder:'5'})}${field('Sommeil /10','sleep',{min:0,max:10,step:1,placeholder:'7'})}${field('Satisfaction /10','satisfaction',{min:0,max:10,step:1,placeholder:'8'})}</div>${longtext('Ce qui a bien fonctionné','note')}${longtext('Pour la semaine prochaine','next')}`;showModal('Mon bilan hebdomadaire',html,async f=>server('saveReview',{week:W(),fatigue:f.get('fatigue'),sleep:f.get('sleep'),satisfaction:f.get('satisfaction'),note:f.get('note'),next:f.get('next')}));}
   function openWeight(){const entryId=key();const html=`<p class="small">Mesure complètement facultative. Aucune obligation de te peser.</p>${field('Date de mesure','date',{type:'date',value:S.data.today,required:true})}${field('Poids en kg','weight',{min:20,max:250,step:.1,required:true,placeholder:'53'})}${longtext('Note facultative','note')}`;showModal('Ajouter une mesure',html,async f=>server('saveMeasurement',{id:entryId,date:f.get('date'),weight:f.get('weight'),note:f.get('note')}));}
   qAll('[data-nav]').forEach(b=>b.addEventListener('click',()=>navigate(b.dataset.nav)));
