@@ -91,7 +91,19 @@ try{
    assert(shell.includes('clasp pull >/dev/null'));
    assert(!/^\s*clasp\s+(push|create-deployment|delete-deployment|deploy)\b/m.test(shell));
    assert(shell.includes('DIAGNOSTIC_READONLY=TERMINE'));
+   assert(shell.includes('"DEPLOYE_${VERSION}"'),'Output label must reflect inspected version');
+   assert(shell.includes('clasp pull --versionNumber "$VERSION"'),'Actual version must be fetched');
+   assert(shell.includes('"$LATEST" == "$VERSION"'),'Detect version changes during inspection');
+   assert(!shell.includes('[[ "$VERSION" == "9" ]]'),'Read-only diagnosis must not lock to @9');
+   assert(!shell.includes('"DEPLOYE_9"'),'No hardcoded output labels');
    assert(shell.includes('diagnostic-readonly-v0.7.cjs'));
  },'READONLY_SHELL');
+ const {findTarget,EXPECTED_ID}=require('../scripts/deployment-version-guard-v0.6.cjs');
+ for(const num of [9,11,12]){
+   check(()=>{
+     const out=['Found 3 deployments.','- some-head-id @HEAD','- '+EXPECTED_ID+' @'+num,'- another-id @2'].join('\\n');
+     assert.equal(findTarget(out,EXPECTED_ID).version,num);
+   },'ACCEPT_READONLY_VERSION_'+num);
+ }
  console.log('SPORTOS_DIAGNOSTIC_V0_7=PASS; CASES='+count+'; REMOTE_WRITES=0');
 }finally{fs.rmSync(tmp,{recursive:true,force:true})}
