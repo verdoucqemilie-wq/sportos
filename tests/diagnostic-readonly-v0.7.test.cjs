@@ -29,6 +29,27 @@ try{
      assert(!out.includes('1_GX-1Fnsfq0XSAPoJy9UyHtA9Cca140_TEixjCSNmhQ'));
    },'KNOWN_'+v.label);
  }
+ for(const v of VERSIONS){
+   check(()=>{
+     load(v.ref);
+     fs.renameSync(path.join(tmp,'Code.gs'),path.join(tmp,'Code.js'));
+     const d=diagnose(tmp,repo);
+     assert.equal(d.snapshot,v.label,'Clasp alias must classify as '+v.label);
+     assert.equal(d.extraFiles,0);
+     assert.equal(d.missingFiles,0);
+     assert.equal(d.backendPulledExtension,'JS_PAR_CLASP');
+     assert(d.files.find(x=>x.name==='BACKEND').matching.includes(v.label));
+     fs.renameSync(path.join(tmp,'Code.js'),path.join(tmp,'Code.gs'));
+   },'CLASP_JS_'+v.label);
+ }
+ check(()=>{
+   load(VERSIONS[0].ref);
+   fs.copyFileSync(path.join(tmp,'Code.gs'),path.join(tmp,'Code.js'));
+   const d=diagnose(tmp,repo);
+   assert.equal(d.snapshot,'INCONNU');
+   assert.equal(d.extraFiles,1);
+   fs.rmSync(path.join(tmp,'Code.js'));
+ },'DUPLICATE_BACKEND_REJECTED');
  check(()=>{
    load(VERSIONS[0].ref);
    fs.appendFileSync(path.join(tmp,'Styles.html'),'\n/* UNKNOWN CSS */');
