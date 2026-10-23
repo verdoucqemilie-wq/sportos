@@ -66,7 +66,7 @@ const html=path.join(__dirname,'../docs/apercu-sportos-v0.8.html');
   await page.evaluate(()=>{const d=window.__SPORTOS_FIXTURE__;d.today='2026-10-26';const run=d.cardio.find(x=>x.Type==='Course');run.Douleur='Non';run.Course_sec_bloc='60';run.Marche_sec_bloc='60';run.Nb_blocs='8'});
   await open('A');
   assert.equal(await page.locator('.so8-celebration').count(),0,'Past week celebration does not persist into next week');
-  assert.match(await page.locator('.so8-adaptation').innerText(),/ajusté/i,'Prior logged easy A session triggers cautious improvement');
+  assert.match(await page.locator('.so8-adaptation').innerText(),/ajustements mesurés/i,'Prior logged easy A session triggers cautious improvement');
   assert.match(await page.locator('.sp7-ex').first().innerText(),/13 répétitions/,'One extra rep target');
   await open('B');
   assert.match(await page.locator('.sp7-ex').last().innerText(),/45 secondes/,'Gainage increases by only 5 sec');
