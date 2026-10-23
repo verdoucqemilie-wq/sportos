@@ -27,6 +27,14 @@ try{
  }
  expect(()=>{
    populate(VERSIONS[0].ref);
+   fs.renameSync(path.join(tmp,'Code.gs'),path.join(tmp,'Code.js'));
+   fs.writeFileSync(path.join(tmp,'Another.js'),'// unknown additional script');
+   assert.equal(classify(tmp,root),'INCONNU');
+   fs.rmSync(path.join(tmp,'Another.js'));
+   fs.renameSync(path.join(tmp,'Code.js'),path.join(tmp,'Code.gs'));
+ },'REJECT_EXTRA_JS_EVEN_WITH_VALID_ALIAS');
+ expect(()=>{
+   populate(VERSIONS[0].ref);
    fs.copyFileSync(path.join(tmp,'Code.gs'),path.join(tmp,'Code.js'));
    assert.equal(classify(tmp,root),'INCONNU');
    fs.rmSync(path.join(tmp,'Code.js'));
