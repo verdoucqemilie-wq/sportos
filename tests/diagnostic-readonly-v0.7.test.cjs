@@ -101,7 +101,7 @@ try{
  const {findTarget,EXPECTED_ID}=require('../scripts/deployment-version-guard-v0.6.cjs');
  for(const num of [9,11,12]){
    check(()=>{
-     const out=['Found 3 deployments.','- some-head-id @HEAD','- '+EXPECTED_ID+' @'+num,'- another-id @2'].join('\\n');
+     const out=['Found 3 deployments.','- some-head-id @HEAD','- '+EXPECTED_ID+' @'+num,'- another-id @2'].join('\n');
      assert.equal(findTarget(out,EXPECTED_ID).version,num);
    },'ACCEPT_READONLY_VERSION_'+num);
  }
