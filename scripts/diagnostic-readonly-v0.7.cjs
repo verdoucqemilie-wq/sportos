@@ -4,25 +4,29 @@
 const fs=require('node:fs');
 const path=require('node:path');
 const cp=require('node:child_process');
-const {FILES,VERSIONS,same,classify}=require('./classify-deployed-v0.7.cjs');
+const {FILES,VERSIONS,same,classify,PULLED_SCRIPT_ALIAS}=require('./classify-deployed-v0.7.cjs');
 const LABELS={ 'Code.gs':'BACKEND', 'Index.html':'SHELL', 'Styles.html':'STYLES', 'Client.html':'FRONTEND', 'appsscript.json':'MANIFEST' };
 const NO_MATCH='AUCUNE';
 function diagnose(snapshotDir,repoDir){
   const entries=fs.readdirSync(snapshotDir,{withFileTypes:true});
   const actualNames=entries.filter(x=>x.isFile()&&!x.name.startsWith('.')).map(x=>x.name);
-  const unexpected=actualNames.filter(x=>!FILES.includes(x));
+  // clasp pull defaults to Code.js; treat it as a canonical Code.gs only if exclusive.
+  const backendJs=actualNames.includes(PULLED_SCRIPT_ALIAS)&&!actualNames.includes('Code.gs');
+  const canonicalName=name=>backendJs&&name==='Code.gs'?PULLED_SCRIPT_ALIAS:name;
+  const unexpected=actualNames.filter(x=>!FILES.includes(x)&&!(backendJs&&x===PULLED_SCRIPT_ALIAS));
   const data={
     type:'SPORTOS_DIAGNOSTIC_READONLY_V1',
     snapshot:classify(snapshotDir,repoDir),
     expectedFiles:FILES.length,
     fileCount:actualNames.length,
     extraFiles:unexpected.length,
-    missingFiles:FILES.filter(x=>!actualNames.includes(x)).length,
+    missingFiles:FILES.filter(x=>!actualNames.includes(canonicalName(x))).length,
+    backendPulledExtension:backendJs?'JS_PAR_CLASP':actualNames.includes('Code.gs')?'GS':'ABSENTE',
     files:[],
     privateManifest:'INCONNU'
   };
   for(const name of FILES){
-    const source=path.join(snapshotDir,name);
+    const source=path.join(snapshotDir,canonicalName(name));
     const exists=fs.existsSync(source) && fs.statSync(source).isFile();
     const matching=[];
     if(exists){
@@ -51,6 +55,7 @@ function format(d,label){
     'EXTRA_FILES='+d.extraFiles,
     'MISSING_FILES='+d.missingFiles,
     'OWNER_ONLY_MANIFEST='+d.privateManifest,
+    'BACKEND_LOCAL_EXTENSION='+d.backendPulledExtension,
     ...d.files.map(x=>'MATCH_'+x.name+'='+(x.present?(x.matching.length?x.matching.join(','):NO_MATCH):'ABSENT')),
     'SOURCE_EXPOSEE=NON',
     'APPS_SCRIPT_WRITE=NON',
