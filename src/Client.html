@@ -287,7 +287,8 @@
     </section>`;
     return `<div class="v3-dashboard">
       <header class="v3-intro"><div><p class="v3-label">${esc(dateCaption)} / TON ESPACE</p><h1>${esc(intro)}</h1><p>L’entraînement à ta façon. Une séance après l’autre.</p></div><span class="v4-intro-index" aria-hidden="true">SPORTOS / 01</span></header>
-      <div class="v3-leading">${hero}${week}</div>
+      ${so8CompletionBanner()}
+       <div class="v3-leading">${hero}${week}</div>
       <div class="v3-section-title"><div><p class="v3-label">GARDER LE CAP</p><h2>TON ÉLAN<span aria-hidden="true">${v3Icon('arrow')}</span></h2></div><span>Les petits progrès font les grandes histoires.</span></div>
       <div class="v3-insights">${lastPanel}${challenge}</div>
       ${coach}
@@ -306,7 +307,8 @@
     Vélo:{name:'Vélo',title:'La route se construit.',subtitle:'De premières sorties faciles vers ton défi Espiens.',group:'ENDURANCE',estimate:'DÉPART : SORTIES FACILES',focus:'ESPIENS · MAI 2027',tone:'sage'}
   };
   const current=catalog[type];
-  const ex=strength?activeEx(type):[];
+  const weeklyPlan=so8WeeklyPlan(type);
+   const ex=strength?activeEx(type):[];
   const steps=strength?[]:(S.data.steps||[]).filter(x=>x.Type===type);
   const plan=(S.data.programs||[]).find(x=>x.Séance===type&&(!strength||x.Version==='V1-S2'));
   const goalIds=plan?.Objectifs_ID||(strength?'OBJ-01; OBJ-02; OBJ-04':running?'OBJ-05; OBJ-08':'OBJ-05; OBJ-09');
@@ -325,14 +327,16 @@
   };
   const details=strength?`<div class="sp7-ex-list">
     ${ex.length?ex.map((x,i)=>{
-      const target=x.Rép_min&&x.Rép_max?esc(x.Rép_min)+(x.Rép_min===x.Rép_max?'':'–'+esc(x.Rép_max))+' répétitions':x.Temps_s?esc(x.Temps_s)+' secondes':'selon sensation';
+      const adaptive=weeklyPlan.exercise[x.Exercice_ID];
+       const target=x.Rép_min&&x.Rép_max?esc(x.Rép_min)+(x.Rép_min===x.Rép_max&&!(adaptive&&adaptive.increase)?'':'–'+esc(adaptive?adaptive.target:x.Rép_max))+' répétitions':x.Temps_s?esc(adaptive?adaptive.target:x.Temps_s)+' secondes':'selon sensation';
       const safety=String(x.Sécurité||'');
       const risky=/douleur|retirer|lombaire/i.test(safety)&&/retirer|arrêter|éviter|douleur/i.test(safety);
       return `<details class="sp7-ex" ${i===0?'open':''}>
         <summary class="sp7-ex-heading"><span class="sp7-ex-index">${String(i+1).padStart(2,'0')}</span><span class="sp7-ex-titles"><strong>${esc(x.Nom)}</strong><small>${esc(x.Séries||'—')} séries · ${target}</small></span><span class="sp7-ex-chevron" aria-hidden="true">${v3Icon('arrowRight')}</span></summary>
         <div class="sp7-ex-body">
           <div class="sp7-ex-metrics"><div><span>OBJECTIF DE SÉRIES</span><strong>${esc(x.Séries||'—')}</strong></div><div><span>RÉPÉTITIONS / TENUE</span><strong>${target}</strong></div><div><span>CHARGE INDICATIVE</span><strong>${x['Charge_kg indicative']!==''&&x['Charge_kg indicative']!=null?esc(x['Charge_kg indicative'])+' kg':'À adapter'}</strong></div></div>
-          ${x.Tempo?`<p class="sp7-ex-coach">${v3Icon('gauge')} <span><b>Repère technique :</b> ${esc(x.Tempo)}</span></p>`:''}
+          ${adaptive&&adaptive.increase?`<p class="so8-ex-increase">${v3Icon('sparkle')} <span>${esc(adaptive.explanation)}</span></p>`:''}
+           ${x.Tempo?`<p class="sp7-ex-coach">${v3Icon('gauge')} <span><b>Repère technique :</b> ${esc(x.Tempo)}</span></p>`:''}
           ${safety?`<p class="sp7-ex-safety ${risky?'is-caution':''}">${v3Icon('shield')} <span>${esc(safety)}${risky?' — ne pas forcer si une douleur apparaît.':''}</span></p>`:''}
         </div>
       </details>`;
@@ -349,6 +353,15 @@
     }).join(''):`<p class="sp7-empty">Ton calendrier n’est pas encore renseigné. Les sorties sont à construire progressivement.</p>`}</div>`;
   const sectionTitle=strength?'Tes mouvements':running?'Ta progression course':'Les étapes du défi';
   const sectionLede=strength?`${ex.length} exercices proposés · programme V1-S2. Ouvre un mouvement pour voir les repères.`:running?'Les séances proposées restent adaptables selon tes sensations et ta récupération.':'Les jalons sont indicatifs : l’itinéraire et les durées restent à définir.';
+  const weeklyCard=`<section class="so8-adaptation" aria-labelledby="so8-adapt-title">
+     <span class="so8-adapt-icon" aria-hidden="true">${v3Icon('sparkle')}</span>
+     <div class="so8-adapt-copy"><span class="sp7-overline">COACH / NOUVELLE SEMAINE</span>
+       <h3 id="so8-adapt-title">Ton programme évolue.</h3>
+       <p>${esc(weeklyPlan.reason)}</p>
+       ${weeklyPlan.proposed?`<strong class="so8-adapt-target">${esc(weeklyPlan.proposed)}</strong>`:''}
+       <small>${weeklyPlan.hasPrior?'Basé sur ton retour du '+esc(weeklyPlan.source):'En attente de ta première séance de référence'} · Proposition indicative ; aucune séance passée modifiée.</small>
+     </div>
+   </section>`;
   const coach=strength?'Privilégie la maîtrise du geste et une récupération suffisante. Une charge indicative n’est jamais une consigne de performance.':running?'Répéter la séance précédente est un progrès si elle est bien tolérée. Augmente seulement quand tu te sens prête.':'Commence par des sorties faciles. La distance vers Espiens et les deux journées consécutives seront évaluées à partir de tes sorties réelles.';
   const foot=strength?'Chaque exercice est une proposition, pas une performance à atteindre.':running?'Les intervalles sont des propositions : ton compte rendu décrira uniquement ce que tu as réalisé.':'Aucune distance, durée de trajet ou sortie réalisée n’est supposée.';
   return `<div class="sp7-page">
@@ -357,7 +370,8 @@
       <div class="sp7-head-row"><div><h1>Construis <em>ton élan.</em></h1><p>Deux séances de renforcement, une reprise de la course et un défi vélo. Un programme qui s’adapte à tes sensations.</p></div>
       <div class="sp7-head-stat" aria-label="${all.done.length} activités différentes réalisées cette semaine sur quatre"><strong>${all.done.length}<span>/04</span></strong><small>TYPES D’ACTIVITÉS<br>RÉALISÉS CETTE SEMAINE</small></div></div>
     </header>
-    <nav class="sp7-selector" aria-label="Choisir une activité sportive">${types.map(item).join('')}</nav>
+    ${so8CompletionBanner()}
+     <nav class="sp7-selector" aria-label="Choisir une activité sportive">${types.map(item).join('')}</nav>
     <section class="sp7-hero sp7-hero-${current.tone}" aria-labelledby="sp7-hero-title">
       <div class="sp7-hero-primary">
         <div class="sp7-hero-brow"><span class="sp7-hero-tag">${esc(current.group)}</span><span>${completed?'✓ RÉALISÉE CETTE SEMAINE':'SÉANCE PROPOSÉE'}</span></div>
@@ -373,14 +387,15 @@
       <div class="sp7-hero-panel" aria-label="Repères de la séance">
         <div class="sp7-hero-symbol" aria-hidden="true">${v3Icon(type)}</div>
         <div><span>LE FOCUS</span><strong>${esc(current.focus)}</strong></div>
-        <div><span>LE FORMAT</span><strong>${esc(current.estimate)}</strong></div>
+        <div><span>LE FORMAT</span><strong>${esc(weeklyPlan.proposed||current.estimate)}</strong></div>
         <div><span>DERNIER RETOUR DATÉ</span><strong>${esc(lastLabel)}</strong></div>
       </div>
     </section>
     <div class="sp7-layout">
       <section class="sp7-core" aria-labelledby="sp7-plan-title">
         <div class="sp7-section-heading"><div><span class="sp7-overline">01 / TON PLAN</span><h2 id="sp7-plan-title">${esc(sectionTitle)}<span class="sp7-title-dot">.</span></h2><p>${esc(sectionLede)}</p></div><span class="sp7-count">${strength?`${ex.length} MOUVEMENTS`:`${steps.length} JALONS`}</span></div>
-        ${details}
+        ${weeklyCard}
+         ${details}
         <div class="sp7-notice">${v3Icon('shield')} <span>${esc(foot)}</span></div>
       </section>
       <aside class="sp7-aside" aria-label="Objectifs et accompagnement">
@@ -550,8 +565,11 @@
       dirty=false;
       S.loading=false;
       close(true);
-      toast(S.demo?'Retour simulé — aucune écriture dans ton Google Sheet.':'Ton retour de séance a bien été enregistré ✓');
+      const doneBefore=homeModel(S.data).done.length;
       await reload();
+      const doneAfter=homeModel(S.data).done.length;
+      toast(S.demo?'Retour simulé — aucune écriture dans ton Google Sheet.':session&&doneBefore<4&&doneAfter===4?
+        '🎉 Félicitations ! Tes quatre activités sont enregistrées. Place à la récupération !':'Ton retour de séance a bien été enregistré ✓');
     }catch(err){
       if(error){error.textContent='Impossible d’enregistrer : '+err.message;error.hidden=false;}
       else toast('Erreur : '+err.message);
