@@ -1594,7 +1594,7 @@ window.__SPORTOS_FIXTURE__={"version": "0.1.0", "today": "2026-10-19", "profile"
           ['Facile','Modéré'].includes(row.Difficulté)&&reserve!==''&&reserve!=null&&
           toNum(reserve)>=(timed?10:2)&&actual>=base&&actual>0;
         const cap=timed?Math.min(120,Math.ceil(base*1.5)):Math.min(30,base+6);
-        const target=favorable?Math.min(cap,Math.max(base,actual)+(timed?5:1)):base;
+        const target=favorable?Math.min(cap,Math.max(base,Math.min(actual,base+(timed?10:2)))+(timed?5:1)):base;
         if(target>base)raised++;
         result.exercise[ex.Exercice_ID]={target,increase:target>base,timed,
           explanation:target>base?'Ton retour sans douleur permet de proposer une petite progression.':
@@ -2048,7 +2048,7 @@ window.__SPORTOS_FIXTURE__={"version": "0.1.0", "today": "2026-10-19", "profile"
       <p class="so-exercise-instruction">Indique uniquement ce que tu as réalisé : les indications du programme ne sont pas préremplies.</p>
       <div class="form-grid cols-3">
       ${field('Séries réalisées','sets'+i,{min:0,max:8,step:1,placeholder:String(x.Séries)})}
-      ${field('Répétitions','reps'+i,{min:0,max:100,step:1,placeholder:String(weeklyPlan.exercise[x.Exercice_ID]?.target||x.Rép_max||'—')})}
+      ${String(x.Temps_s||'').trim()&&!String(x.Rép_min||'').trim()?'':field('Répétitions','reps'+i,{min:0,max:100,step:1,placeholder:String(weeklyPlan.exercise[x.Exercice_ID]?.target||x.Rép_max||'—')})}
       ${field('Charge (kg)','weight'+i,{min:0,max:150,step:.5,placeholder:x['Charge_kg indicative']||'0'})}
       ${field('Maintien (sec)','seconds'+i,{min:0,max:1200,step:1,placeholder:weeklyPlan.exercise[x.Exercice_ID]?.target||x.Temps_s||'—'})}
       ${select('Difficulté','difficulty'+i,[['','Non renseignée'],['Facile','Facile'],['Modéré','Modéré'],['Difficile','Difficile'],['Très difficile','Très difficile']])}
