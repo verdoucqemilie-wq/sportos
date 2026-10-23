@@ -6,6 +6,16 @@ const fs=require('node:fs');
 const path=require('node:path');
 const cp=require('node:child_process');
 const FILES=['Code.gs','Index.html','Styles.html','Client.html','appsscript.json'];
+const PULLED_SCRIPT_ALIAS='Code.js';
+function resolvePulledFiles(snapshot){
+  const list=fs.readdirSync(snapshot,{withFileTypes:true}).filter(x=>x.isFile()&&!x.name.startsWith('.')).map(x=>x.name).sort();
+  const hasG= list.includes('Code.gs'),hasJ=list.includes(PULLED_SCRIPT_ALIAS);
+  // clasp defaults to .js on pull. Either is safe, but never both and never unknown files.
+  if(hasG===hasJ)return null;
+  const expected=FILES.map(f=>f==='Code.gs'&&hasJ?PULLED_SCRIPT_ALIAS:f).sort();
+  if(JSON.stringify(list)!==JSON.stringify(expected))return null;
+  return Object.fromEntries(FILES.map(f=>[f,f==='Code.gs'&&hasJ?PULLED_SCRIPT_ALIAS:f]));
+}
 const VERSIONS=[
   {label:'V0_7',ref:'d59bb2b3921590e9a15ede5effa52f321bb7cfd9'},
   {label:'V0_6',ref:'8e92bd7'},
@@ -25,10 +35,9 @@ function same(a,b,file){
   return normalized(a)===normalized(b);
 }
 function classify(snapshot,repo){
-  const observed=fs.readdirSync(snapshot,{withFileTypes:true})
-    .filter(f=>f.isFile()&&!f.name.startsWith('.')).map(f=>f.name).sort();
-  if(JSON.stringify(observed)!==JSON.stringify(FILES.slice().sort()))return 'INCONNU';
-  const fileContents=Object.fromEntries(FILES.map(name=>[name,fs.readFileSync(path.join(snapshot,name))]));
+  const resolved=resolvePulledFiles(snapshot);
+  if(!resolved)return 'INCONNU';
+  const fileContents=Object.fromEntries(FILES.map(name=>[name,fs.readFileSync(path.join(snapshot,resolved[name]))]));
   for(const v of VERSIONS){
     const equal=FILES.every(name=>{
       const expected=cp.execFileSync('git',['show',v.ref+':src/'+name],{cwd:repo,maxBuffer:6e6});
@@ -48,4 +57,4 @@ if(require.main===module){
     process.exitCode=1;
   }
 }
-module.exports={classify,same,FILES,VERSIONS};
+module.exports={classify,same,FILES,VERSIONS,resolvePulledFiles,PULLED_SCRIPT_ALIAS};
