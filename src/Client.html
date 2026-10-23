@@ -209,15 +209,112 @@
       <div class="v3-fineprint">DEPUIS LE DÉBUT : ${vm.totals.strength} RENFORCEMENT${vm.totals.strength>1?'S':''} · ${vm.totals.cardio} SORTIE${vm.totals.cardio>1?'S':''} CARDIO. <button type="button" data-nav-go="progress">HISTORIQUE COMPLET ${v3Icon('arrow')}</button></div>
     </div>`;
   }
-  function program(){const type=S.programTab;const p=type==='A'||type==='B';const ex=p?activeEx(type):[];const stepType=type==='Course'?'Course':'Vélo';const steps=p?[]:S.data.steps.filter(x=>x.Type===stepType);
-    const tabs=['A','B','Course','Vélo'].map(t=>`<button class="program-tab ${type===t?'active':''}" data-program-tab="${t}">${{A:'🍑 Séance A',B:'💪 Séance B',Course:'↗ Course',Vélo:'♢ Vélo'}[t]}</button>`).join('');
-    const titles={A:'Fessiers & full body',B:'Haut du corps & fessiers',Course:'Reprendre la course, doucement',Vélo:'En route vers Espiens !'};
-    const copy={A:'Renforce tes fessiers, tes jambes et ta sangle abdominale.',B:'Travaille tes épaules, tes bras, tes fessiers et ton gainage.',Course:'Ton premier objectif : courir 30 minutes en continu, à allure confortable et sans échéance imposée.',Vélo:'Ton objectif pour mai 2027 : rejoindre Espiens à vélo depuis Toulouse, sur deux jours si nécessaire.'};
-    let body='';
-    if(p)body=`<div class="card"><div class="card-heading"><h2>Les exercices</h2>${badge('Version S2','gray')}</div><div class="detail-list">${ex.map((x,i)=>`<div class="detail-item"><div class="exercise-no">${i+1}</div><div style="flex:1"><div class="exercise-name">${esc(x.Nom)}</div><div class="exercise-meta">${esc(x.Séries)} séries × ${x.Rép_min&&x.Rép_max?esc(x.Rép_min)+'–'+esc(x.Rép_max)+' reps':esc(x.Temps_s)+' sec'} · ${esc(x['Charge_kg indicative']||'charge à adapter')}</div><div class="micro" style="margin-top:6px">${esc(x.Tempo||x.Progression)}</div>${(x.Sécurité||'').toLowerCase().includes('douleur')?`<div class="micro" style="color:#b17b36">⚠ ${esc(x.Sécurité)}</div>`:''}</div></div>`).join('')}</div><button class="btn full" style="margin-top:19px" data-log="${type}">Enregistrer ma séance →</button></div>`;
-    else body=`<div class="card"><div class="card-heading"><h2>${type==='Course'?'Mes étapes de course':'Ma préparation mois par mois'}</h2>${badge(type==='Course'?'1 sortie / semaine':'Défi mai 2027')}</div><div class="steps">${steps.map((s,i)=>`<div class="step ${i===1&&type==='Course'?'current':''}"><div><b><span class="badge-dot"></span>${type==='Course'?'Séance '+esc(s.Séance_no):esc(s['Période / cycle'])}</b><small>${esc(s.Blocs)}</small></div>${badge(type==='Course'?s.Statut:(i===0?'Reprise':'À construire'),s.Statut.includes('Réalisée')?'':'gray')}</div>`).join('')}</div><div class="warning" style="margin-top:16px">${type==='Course'?'Tu progresses seulement si la séance précédente est bien tolérée, avec une bonne récupération.':'Les durées sont des jalons adaptables. Pour Espiens, nous validerons l’itinéraire et la capacité à rouler deux jours consécutifs au printemps.'}</div><button class="btn full" style="margin-top:16px" data-log="${type}">Enregistrer une sortie →</button></div>`;
-    return `${header('Mon programme','Quatre activités, un seul fil conducteur : être plus forte, plus endurante et te sentir bien.','PROGRAMMES PERSONNALISÉS')}<div class="program-tabs">${tabs}</div><div class="grid cols-2"><section><div class="card dark" style="margin-bottom:17px"><span class="pill white">${p?'Renforcement · 35–45 min':type==='Course'?'Endurance · reprise':'Endurance · défi'}</span><h2 class="hero-title" style="font-size:30px">${titles[type]}</h2><p class="muted-on-dark">${copy[type]}</p></div>${body}</section><section><div class="card"><div class="card-heading"><h2>Pourquoi ce programme ?</h2><span class="pill">Mes objectifs</span></div><div class="goal-list">${(p?goalsFor(S.data.programs.find(y=>y.Séance===type&&y.Version==='V1-S2')?.Objectifs_ID):goalsFor(type==='Course'?'OBJ-08; OBJ-05; OBJ-06':'OBJ-09; OBJ-05; OBJ-06')).map(g=>`<div class="goal"><strong>${esc(g['Résultat visé'])}</strong><p>${esc(g.Précision)}</p></div>`).join('')}</div></div><div class="card" style="margin-top:17px"><div class="card-heading"><h2>Les conseils du coach</h2></div><p class="small">${p?'Priorité à la maîtrise des mouvements et à une bonne récupération. Les douleurs lombaires signalées en semaine 1 bloquent la progression des exercices concernés.':type==='Course'?'Répète 8 × 1 minute de course / 1 minute de marche si ta récupération est bonne. L’augmentation est facultative et conditionnelle.':'Commence par une sortie de 25 à 40 minutes à une intensité facile. Le plan se personnalise après les premières vraies sorties.'}</p><div class="well" style="margin-top:14px">Le programme est une proposition : aucune augmentation n’est appliquée automatiquement.</div></div></section></div>`;
-  }
+  function program(){
+  const types=['A','B','Course','Vélo'],type=types.includes(S.programTab)?S.programTab:'A';
+  const strength=type==='A'||type==='B',running=type==='Course',cycling=type==='Vélo';
+  const all=homeModel(S.data),completed=all.done.includes(type);
+  const catalog={
+    A:{name:'Renforcement A',title:'Des bases solides.',subtitle:'Fessiers, jambes, gainage et technique.',group:'RENFORCEMENT',estimate:'35–45 MIN PROPOSÉES',focus:'FESSIERS + FULL BODY',tone:'lime'},
+    B:{name:'Renforcement B',title:'La force en mouvement.',subtitle:'Haut du corps, fessiers et stabilité.',group:'RENFORCEMENT',estimate:'35–45 MIN PROPOSÉES',focus:'HAUT DU CORPS + GAINAGE',tone:'sage'},
+    Course:{name:'Course',title:'Trouver ton souffle.',subtitle:'Une reprise à ton rythme, sans pression de vitesse.',group:'ENDURANCE',estimate:'PROGRESSION ADAPTATIVE',focus:'CAP : 30 MIN EN CONTINU',tone:'lime'},
+    Vélo:{name:'Vélo',title:'La route se construit.',subtitle:'De premières sorties faciles vers ton défi Espiens.',group:'ENDURANCE',estimate:'DÉPART : SORTIES FACILES',focus:'ESPIENS · MAI 2027',tone:'sage'}
+  };
+  const current=catalog[type];
+  const ex=strength?activeEx(type):[];
+  const steps=strength?[]:(S.data.steps||[]).filter(x=>x.Type===type);
+  const plan=(S.data.programs||[]).find(x=>x.Séance===type&&(!strength||x.Version==='V1-S2'));
+  const goalIds=plan?.Objectifs_ID||(strength?'OBJ-01; OBJ-02; OBJ-04':running?'OBJ-05; OBJ-08':'OBJ-05; OBJ-09');
+  const goals=goalsFor(goalIds);
+  const dated=[...(S.data.sessions||[]),...(S.data.cardio||[])].filter(x=>x.Type===type&&x.Statut==='Terminée'&&/^\d{4}-\d{2}-\d{2}$/.test(x.Date||'')).sort((a,b)=>b.Date.localeCompare(a.Date));
+  const last=dated[0]||null;
+  const lastLabel=last?niceDate(last.Date):'Aucune activité datée';
+  const caution=(S.data.logs||[]).some(x=>x.Douleur==='Oui');
+  const item=(t)=>{
+    const data=catalog[t],done=all.done.includes(t),active=t===type;
+    return `<button type="button" class="sp7-switch ${active?'is-active':''}" data-program-tab="${esc(t)}" aria-pressed="${active}" aria-label="${esc(data.name)}${done?', réalisée cette semaine':''}">
+      <span class="sp7-switch-icon" aria-hidden="true">${v3Icon(t)}</span>
+      <span class="sp7-switch-main"><strong>${esc(data.name)}</strong><small>${t==='A'||t==='B'?'FORCE':t==='Course'?'RUN':'RIDE'}</small></span>
+      <span class="sp7-switch-state ${done?'is-done':''}" aria-hidden="true">${done?v3Icon('check'):v3Icon('arrowRight')}</span>
+    </button>`;
+  };
+  const details=strength?`<div class="sp7-ex-list">
+    ${ex.length?ex.map((x,i)=>{
+      const target=x.Rép_min&&x.Rép_max?esc(x.Rép_min)+(x.Rép_min===x.Rép_max?'':'–'+esc(x.Rép_max))+' répétitions':x.Temps_s?esc(x.Temps_s)+' secondes':'selon sensation';
+      const safety=String(x.Sécurité||'');
+      const risky=/douleur|retirer|lombaire/i.test(safety)&&/retirer|arrêter|éviter|douleur/i.test(safety);
+      return `<details class="sp7-ex" ${i===0?'open':''}>
+        <summary class="sp7-ex-heading"><span class="sp7-ex-index">${String(i+1).padStart(2,'0')}</span><span class="sp7-ex-titles"><strong>${esc(x.Nom)}</strong><small>${esc(x.Séries||'—')} séries · ${target}</small></span><span class="sp7-ex-chevron" aria-hidden="true">${v3Icon('arrowRight')}</span></summary>
+        <div class="sp7-ex-body">
+          <div class="sp7-ex-metrics"><div><span>OBJECTIF DE SÉRIES</span><strong>${esc(x.Séries||'—')}</strong></div><div><span>RÉPÉTITIONS / TENUE</span><strong>${target}</strong></div><div><span>CHARGE INDICATIVE</span><strong>${x['Charge_kg indicative']!==''&&x['Charge_kg indicative']!=null?esc(x['Charge_kg indicative'])+' kg':'À adapter'}</strong></div></div>
+          ${x.Tempo?`<p class="sp7-ex-coach">${v3Icon('gauge')} <span><b>Repère technique :</b> ${esc(x.Tempo)}</span></p>`:''}
+          ${safety?`<p class="sp7-ex-safety ${risky?'is-caution':''}">${v3Icon('shield')} <span>${esc(safety)}${risky?' — ne pas forcer si une douleur apparaît.':''}</span></p>`:''}
+        </div>
+      </details>`;
+    }).join(''):`<p class="sp7-empty">Aucun exercice proposé pour cette séance pour le moment.</p>`}
+    </div>`:`
+    <div class="sp7-timeline">${steps.length?steps.map((x,i)=>{
+      const status=String(x.Statut||'Non renseigné');
+      const done=/réalisée|terminée/i.test(status);
+      const label=running?`Séance ${esc(x.Séance_no||String(i+1))}`:esc(x['Période / cycle']||`Étape ${i+1}`);
+      return `<div class="sp7-milestone ${done?'is-complete':''}">
+        <span class="sp7-milestone-track" aria-hidden="true">${done?v3Icon('check'):String(i+1).padStart(2,'0')}</span>
+        <div class="sp7-milestone-content"><div class="sp7-milestone-head"><strong>${label}</strong><span>${esc(status)}</span></div><p>${esc(x.Blocs||'Détails à préciser')}</p></div>
+      </div>`;
+    }).join(''):`<p class="sp7-empty">Ton calendrier n’est pas encore renseigné. Les sorties sont à construire progressivement.</p>`}</div>`;
+  const sectionTitle=strength?'Tes mouvements':running?'Ta progression course':'Les étapes du défi';
+  const sectionLede=strength?`${ex.length} exercices proposés · programme V1-S2. Ouvre un mouvement pour voir les repères.`:running?'Les séances proposées restent adaptables selon tes sensations et ta récupération.':'Les jalons sont indicatifs : l’itinéraire et les durées restent à définir.';
+  const coach=strength?'Privilégie la maîtrise du geste et une récupération suffisante. Une charge indicative n’est jamais une consigne de performance.':running?'Répéter la séance précédente est un progrès si elle est bien tolérée. Augmente seulement quand tu te sens prête.':'Commence par des sorties faciles. La distance vers Espiens et les deux journées consécutives seront évaluées à partir de tes sorties réelles.';
+  const foot=strength?'Chaque exercice est une proposition, pas une performance à atteindre.':running?'Les intervalles sont des propositions : ton compte rendu décrira uniquement ce que tu as réalisé.':'Aucune distance, durée de trajet ou sortie réalisée n’est supposée.';
+  return `<div class="sp7-page">
+    <header class="sp7-head">
+      <div class="sp7-eyebrow"><span class="sp7-dot"></span> TRAINING SYSTEM / PROGRAMME</div>
+      <div class="sp7-head-row"><div><h1>Construis <em>ton élan.</em></h1><p>Deux séances de renforcement, une reprise de la course et un défi vélo. Un programme qui s’adapte à tes sensations.</p></div>
+      <div class="sp7-head-stat" aria-label="${all.done.length} activités différentes réalisées cette semaine sur quatre"><strong>${all.done.length}<span>/04</span></strong><small>TYPES D’ACTIVITÉS<br>RÉALISÉS CETTE SEMAINE</small></div></div>
+    </header>
+    <nav class="sp7-selector" aria-label="Choisir une activité sportive">${types.map(item).join('')}</nav>
+    <section class="sp7-hero sp7-hero-${current.tone}" aria-labelledby="sp7-hero-title">
+      <div class="sp7-hero-primary">
+        <div class="sp7-hero-brow"><span class="sp7-hero-tag">${esc(current.group)}</span><span>${completed?'✓ RÉALISÉE CETTE SEMAINE':'SÉANCE PROPOSÉE'}</span></div>
+        <span class="sp7-hero-sport" aria-hidden="true">${v3Icon(type)}</span>
+        <h2 id="sp7-hero-title">${esc(current.title)}</h2>
+        <p>${esc(current.subtitle)}</p>
+        <div class="sp7-hero-actions">
+          <button type="button" class="sp7-primary" data-log="${esc(type)}">Enregistrer mon retour ${v3Icon('arrowRight')}</button>
+          <button type="button" class="sp7-secondary" data-nav-go="progress">Voir mon évolution ${v3Icon('arrow')}</button>
+        </div>
+        <div class="sp7-hero-disclaimer">Le bouton ouvre ton journal : il ne démarre pas de chronomètre.</div>
+      </div>
+      <div class="sp7-hero-panel" aria-label="Repères de la séance">
+        <div class="sp7-hero-symbol" aria-hidden="true">${v3Icon(type)}</div>
+        <div><span>LE FOCUS</span><strong>${esc(current.focus)}</strong></div>
+        <div><span>LE FORMAT</span><strong>${esc(current.estimate)}</strong></div>
+        <div><span>DERNIER RETOUR DATÉ</span><strong>${esc(lastLabel)}</strong></div>
+      </div>
+    </section>
+    <div class="sp7-layout">
+      <section class="sp7-core" aria-labelledby="sp7-plan-title">
+        <div class="sp7-section-heading"><div><span class="sp7-overline">01 / TON PLAN</span><h2 id="sp7-plan-title">${esc(sectionTitle)}<span class="sp7-title-dot">.</span></h2><p>${esc(sectionLede)}</p></div><span class="sp7-count">${strength?`${ex.length} MOUVEMENTS`:`${steps.length} JALONS`}</span></div>
+        ${details}
+        <div class="sp7-notice">${v3Icon('shield')} <span>${esc(foot)}</span></div>
+      </section>
+      <aside class="sp7-aside" aria-label="Objectifs et accompagnement">
+        <section class="sp7-goal-panel" aria-labelledby="sp7-goal-title">
+          <div class="sp7-aside-eyebrow">${v3Icon('route')} TON HORIZON</div><h3 id="sp7-goal-title">Ce qu’on construit.</h3>
+          <div class="sp7-goals">${goals.length?goals.map((g,i)=>`<div class="sp7-goal"><span>${String(i+1).padStart(2,'0')}</span><div><strong>${esc(g['Résultat visé'])}</strong><p>${esc(g.Précision||'')}</p></div></div>`).join(''):`<p>Des objectifs personnels à préciser dans ton profil.</p>`}</div>
+        </section>
+        <section class="sp7-coach-panel" aria-labelledby="sp7-coach-title">
+          <div class="sp7-aside-eyebrow">${v3Icon('sparkle')} LE REGARD DU COACH</div>
+          <h3 id="sp7-coach-title">Le bon rythme, c’est le tien.</h3><p>${esc(coach)}</p>
+          ${caution&&strength?`<div class="sp7-coach-alert">${v3Icon('shield')} Des douleurs ont été signalées auparavant. Évite de progresser sur un mouvement douloureux.</div>`:''}
+        </section>
+        <section class="sp7-last-panel" aria-label="Dernière activité enregistrée">
+          <span class="sp7-overline">TON DERNIER RETOUR</span><strong>${esc(lastLabel)}</strong><p>${last?'Activité terminée et datée dans ton journal.':'Aucun retour daté pour cette activité.'}</p>
+          <button type="button" data-nav-go="progress">Consulter l’historique ${v3Icon('arrowRight')}</button>
+        </section>
+      </aside>
+    </div>
+  </div>`;
+}
   function recentHistory(){return [...S.data.sessions.filter(x=>x.Statut==='Terminée').map(x=>({date:x.Date,label:'Renforcement '+x.Type,detail:(x['Effort global 1-10']?'Effort '+x['Effort global 1-10']+'/10':'Retour initial'),type:'strength'})),...S.data.cardio.filter(x=>x.Statut==='Terminée').map(x=>({date:x.Date,label:x.Type,detail:(x['Durée min']||'?')+' min · Effort '+(x['Effort 1-10']||'?')+'/10',type:'cardio'}))].sort((a,b)=>(b.date||'').localeCompare(a.date||''));}
   function recommendations(){const current=S.data.logs.filter(x=>x.Seance_ID&&S.data.sessions.some(s=>s.Seance_ID===x.Seance_ID&&s.Date)).slice(-60);let msg=[];
     for(const x of S.data.logs.filter(x=>x.Douleur==='Oui').slice(-4))msg.push({type:'warn',text:'Douleur enregistrée sur '+x.Exercice+'. Progression suspendue pour cet exercice et évaluation conseillée si elle persiste.'});
@@ -268,7 +365,7 @@
     document.addEventListener('keydown',onKey);
     q('#v3-quick-close').focus();
   }
-  function bind(){qAll('#content [data-quick-log]').forEach(b=>b.onclick=openQuickLog);qAll('[data-nav-go]').forEach(b=>b.onclick=()=>navigate(b.dataset.navGo));qAll('[data-open-program]').forEach(b=>b.onclick=()=>{S.programTab=b.dataset.openProgram;navigate('program')});qAll('[data-log]').forEach(b=>b.onclick=()=>openLog(b.dataset.log));qAll('[data-program-tab]').forEach(b=>b.onclick=()=>{S.programTab=b.dataset.programTab;render()});qAll('[data-review]').forEach(b=>b.onclick=openReview);qAll('[data-weight]').forEach(b=>b.onclick=openWeight);const pick=q('#exercise-picker');if(pick)pick.onchange=()=>{S.exerciseSelected=pick.value;render()};}
+  function bind(){qAll('#content [data-quick-log]').forEach(b=>b.onclick=openQuickLog);qAll('[data-nav-go]').forEach(b=>b.onclick=()=>navigate(b.dataset.navGo));qAll('[data-open-program]').forEach(b=>b.onclick=()=>{S.programTab=b.dataset.openProgram;navigate('program')});qAll('[data-log]').forEach(b=>b.onclick=()=>openLog(b.dataset.log));qAll('[data-program-tab]').forEach(b=>b.onclick=()=>{const selected=b.dataset.programTab;S.programTab=selected;render();q('[data-program-tab="'+selected+'"]')?.focus()});qAll('[data-review]').forEach(b=>b.onclick=openReview);qAll('[data-weight]').forEach(b=>b.onclick=openWeight);const pick=q('#exercise-picker');if(pick)pick.onchange=()=>{S.exerciseSelected=pick.value;render()};}
   function showModal(title,inner,onSubmit,opts={}){
   const session=opts.kind==='session';
   const root=q('#modal-root');
