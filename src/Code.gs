@@ -111,6 +111,18 @@ function upsert_(sheet, key, values) {
   return row;
 }
 
+/** Optional V0.8 columns. Never overwrite an existing non-empty header, formula or user value. */
+function optionalColumns_(sheet, firstColumn, titles, needed) {
+  const current = sheet.getRange(1, firstColumn, 1, titles.length).getDisplayValues()[0];
+  const ready = titles.every((title, i) => current[i] === title);
+  if (ready) return true;
+  if (current.some(v => v !== '')) throw Error('Colonnes réservées non conformes : ' + sheet.getName());
+  if (!needed) return false;
+  // The change is limited to previously blank header cells and is done before session writes.
+  sheet.getRange(1, firstColumn, 1, titles.length).setValues([titles]);
+  return true;
+}
+
 function getBootstrap() {
   const profile = objects_('01_Profil');
   const goals = objects_('02_Objectifs');
@@ -146,12 +158,15 @@ function saveStrength(payload) {
   const items = planned.map(ex => {
     const input = provided.find(p => p.id === ex.Exercice_ID);
     if (!input) return null;
+    const isTimed = String(ex.Temps_s || '').trim() !== '' && String(ex.Rép_min || '').trim() === '';
     return {
-      id: ex.Exercice_ID, name: ex.Nom,
+      id: ex.Exercice_ID, name: ex.Nom, isTimed,
       sets: num_(input.sets, 0, 8, true), reps: num_(input.reps, 0, 100, true),
       weight: num_(input.weight, 0, 150, true), seconds: num_(input.seconds, 0, 1200, true),
       difficulty: ['Facile', 'Modéré', 'Difficile', 'Très difficile', ''].includes(input.difficulty) ? input.difficulty : '',
-      rir: num_(input.rir, 0, 10, true), pain: yesNo_(input.pain),
+      rir: isTimed ? '' : num_(input.rir, 0, 10, true),
+      secondsReserve: isTimed ? num_(input.secondsReserve, 0, 120, true) : '',
+      pain: yesNo_(input.pain),
       painWhere: str_(input.painWhere, 120), note: str_(input.note, 300)
     };
   }).filter(Boolean);
@@ -160,9 +175,15 @@ function saveStrength(payload) {
     // Both target schemas validated before the first real write.
     const logs = requireColumns_('05_Exercices_Log', ['Log_ID', 'Seance_ID', 'Exercice_ID', 'Exercice', 'Séries réelles', 'Rép réelles', 'Charge réelle kg', 'Maintien réel s', 'Difficulté', 'RIR', 'Douleur', 'Localisation', 'Note', 'Origine']);
     const sessions = requireColumns_('04_Seances', ['Seance_ID', 'Semaine', 'Date', 'Type', 'Statut', 'Durée prévue min', 'Durée réelle min', 'Effort global 1-10', 'Énergie avant', 'Énergie après', 'Notes', 'Origine']);
+    // New optional timed-hold feedback is stored separately: RIR remains repetitions only.
+    const holdColumn = optionalColumns_(logs, 15, ['Réserve tenue (s)'], items.some(x => x.secondsReserve !== ''));
     // Log IDs are stable. Retries overwrite the same records instead of duplicating them.
-    items.forEach(x => upsert_(logs, id + '_' + x.id, [id + '_' + x.id, id, x.id, x.name,
-      x.sets, x.reps, x.weight, x.seconds, x.difficulty, x.rir, x.pain, x.painWhere, x.note, 'WebApp']));
+    items.forEach(x => {
+      const values = [id + '_' + x.id, id, x.id, x.name,
+        x.sets, x.reps, x.weight, x.seconds, x.difficulty, x.rir, x.pain, x.painWhere, x.note, 'WebApp'];
+      if (holdColumn) values.push(x.secondsReserve);
+      upsert_(logs, id + '_' + x.id, values);
+    });
     const sessionExists = !!findRow_(sessions, id);
     upsert_(sessions, id, [id, weekOf_(date), date, type, 'Terminée', 40, duration,
       effort, num_(payload.energyBefore, 0, 10, true), num_(payload.energyAfter, 0, 10, true),
@@ -178,6 +199,9 @@ function saveCardio(payload) {
   const duration = num_(payload.duration, 1, 1440, false);
   const rpe = num_(payload.effort, 0, 10, false);
   const distance = num_(payload.distance, 0, 600, true);
+  // Strava figures are optional manual observations, not imported or calculated.
+  const elevation = payload.type === 'Vélo' ? num_(payload.elevationGain, 0, 10000, true) : '';
+  const averageSpeed = payload.type === 'Vélo' ? num_(payload.averageSpeed, 0, 150, true) : '';
   const run = payload.type === 'Course';
   const secsRun = run ? num_(payload.runSeconds, 0, 3600, true) : '';
   const secsWalk = run ? num_(payload.walkSeconds, 0, 3600, true) : '';
@@ -190,13 +214,17 @@ function saveCardio(payload) {
   }
   return withLock_(() => {
     const sheet = requireColumns_('06_Cardio', ['Cardio_ID', 'Semaine', 'Date', 'Type', 'Durée min', 'Distance km', 'Effort 1-10', 'Aisance respiratoire', 'Douleur', 'Note', 'Statut', 'Origine', 'ID_externe', 'Statut_import', 'Programme_ID', 'Date_import', 'Course_sec_bloc', 'Marche_sec_bloc', 'Nb_blocs', 'Course_totale_min', 'Marche_totale_min', 'Echauffement_reel_min', 'Retour_calme_reel_min', 'Séance_plan_ID']);
+    const extended = optionalColumns_(sheet, 25,
+      ['Dénivelé positif (m)', 'Vitesse moyenne (km/h)'], elevation !== '' || averageSpeed !== '');
     const existing = !!findRow_(sheet, id);
-    upsert_(sheet, id, [id, weekOf_(date), date, payload.type, duration, distance,
+    const values = [id, weekOf_(date), date, payload.type, duration, distance,
       rpe, str_(payload.breath, 100), yesNo_(payload.pain), str_(payload.note, 500),
       'Terminée', 'WebApp', '', 'Non concerné', run ? 'P-COURSE-2026' : 'P-VELO-ESPIENS-2027',
       today_(), secsRun, secsWalk, rounds, runTotal, walkTotal,
       num_(payload.warmup, 0, 120, true), num_(payload.cooldown, 0, 120, true),
-      str_(payload.planStep, 30)]);
+      str_(payload.planStep, 30)];
+    if (extended) values.push(elevation, averageSpeed);
+    upsert_(sheet, id, values);
     return { ok: true, id, updated: existing };
   });
 }

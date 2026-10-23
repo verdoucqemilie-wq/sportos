@@ -25,9 +25,9 @@
       const existing=S.data.sessions.find(x=>x.Seance_ID===p.id);
       const session={Seance_ID:p.id,Semaine:W(),Date:p.date,Type:p.type,Statut:'Terminée','Durée réelle min':p.duration,'Effort global 1-10':p.effort,Notes:p.note,Origine:'Aperçu'};
       if(existing)Object.assign(existing,session);else S.data.sessions.push(session);
-      p.exercises.forEach(x=>{const id=p.id+'_'+x.id;let r=S.data.logs.find(v=>v.Log_ID===id);const row={Log_ID:id,Seance_ID:p.id,Exercice_ID:x.id,Exercice:S.data.exercises.find(y=>y.Exercice_ID===x.id)?.Nom||x.id,'Séries réelles':x.sets,'Rép réelles':x.reps,'Charge réelle kg':x.weight,'Maintien réel s':x.seconds,Difficulté:x.difficulty,RIR:x.rir,Douleur:x.pain,Localisation:x.painWhere,Note:x.note};if(r)Object.assign(r,row);else S.data.logs.push(row);});
+      p.exercises.forEach(x=>{const id=p.id+'_'+x.id;let r=S.data.logs.find(v=>v.Log_ID===id);const row={Log_ID:id,Seance_ID:p.id,Exercice_ID:x.id,Exercice:S.data.exercises.find(y=>y.Exercice_ID===x.id)?.Nom||x.id,'Séries réelles':x.sets,'Rép réelles':x.reps,'Charge réelle kg':x.weight,'Maintien réel s':x.seconds,Difficulté:x.difficulty,RIR:x.rir,'Réserve tenue (s)':x.secondsReserve||'',Douleur:x.pain,Localisation:x.painWhere,Note:x.note};if(r)Object.assign(r,row);else S.data.logs.push(row);});
     }else if(method==='saveCardio'){
-      let existing=S.data.cardio.find(x=>x.Cardio_ID===p.id);const row={Cardio_ID:p.id,Semaine:W(),Date:p.date,Type:p.type,'Durée min':p.duration,'Distance km':p.distance,'Effort 1-10':p.effort,'Douleur':p.pain,Note:p.note,Statut:'Terminée',Programme_ID:p.type==='Course'?'P-COURSE-2026':'P-VELO-ESPIENS-2027','Course_sec_bloc':p.runSeconds,'Marche_sec_bloc':p.walkSeconds,'Nb_blocs':p.rounds};if(existing)Object.assign(existing,row);else S.data.cardio.push(row);
+      let existing=S.data.cardio.find(x=>x.Cardio_ID===p.id);const row={Cardio_ID:p.id,Semaine:W(),Date:p.date,Type:p.type,'Durée min':p.duration,'Distance km':p.distance,'Effort 1-10':p.effort,'Douleur':p.pain,Note:p.note,Statut:'Terminée',Programme_ID:p.type==='Course'?'P-COURSE-2026':'P-VELO-ESPIENS-2027','Course_sec_bloc':p.runSeconds,'Marche_sec_bloc':p.walkSeconds,'Nb_blocs':p.rounds,'Dénivelé positif (m)':p.elevationGain||'','Vitesse moyenne (km/h)':p.averageSpeed||''};if(existing)Object.assign(existing,row);else S.data.cardio.push(row);
     }else if(method==='saveReview')S.data.reviews.push({Bilan_ID:'BIL-APP-'+p.week,Semaine:p.week,'Fatigue 1-10':p.fatigue,'Sommeil 1-10':p.sleep,'Satisfaction 1-10':p.satisfaction,'Retour libre':p.note,'Semaine suivante':p.next});
     else if(method==='saveMeasurement')S.data.measurements.push({Mesure_ID:p.id,Date_mesure:p.date,Poids_kg:p.weight});
     return {ok:true};
@@ -55,8 +55,8 @@
   const shapes={
     A:'<path d="m6.5 6.5 11 11M4.5 8.5l4-4m11 15 4-4M2.5 10.5l8-8m3 19 8-8"/>',
     B:'<path d="M6 15.5c2.2-1 3-4.5 5.1-5.6L14 12l3-2 3 1.5-2 5-3-1-2.3 4H7L4 16z"/><path d="M11 10 9 6l-3 1M16 9.5l1-3"/>',
-    Course:'<circle cx="15.5" cy="4" r="1.6"/><path d="m12 8-3-2.3-3 3m6-1 3 4-2 3m-1-7-3 6 4 3 1 4m-5-7-5 5m10-6 4.5-.5 3 3"/>',
-    Vélo:'<circle cx="5" cy="17" r="3.2"/><circle cx="19" cy="17" r="3.2"/><path d="M5 17l5-10 5 10H5m5-10h4m1 0 4 10"/>',
+    Course:'<circle cx="14.7" cy="4.4" r="2"/><path d="m12.4 8.2-2.6 4.5 4.5 2.6 1.4 5.4M12.4 8.2l3.5 3.1 4.2.1m-9-2.3-4 1.2-2 3.3m7.3 1.5-3.2 4.3-4.4 1.2"/>',
+    Vélo:'<circle cx="5" cy="17.1" r="3.5"/><circle cx="19" cy="17.1" r="3.5"/><path d="M5 17.1 9.5 9h5L19 17.1H5m4.5-8.1 4.3 8.1M8 6.8h3.3m2.8.1H17l2 3.3m-5.3-3.3-.7 2.1m.8 8.1 2.1 2.2"/>',
     sparkle:'<path d="m12 2 2.6 7.4L22 12l-7.4 2.6L12 22l-2.6-7.4L2 12l7.4-2.6L12 2Z"/>',
     route:'<circle cx="5" cy="18" r="2"/><circle cx="19" cy="6" r="2"/><path d="M7 18h4a4 4 0 0 0 0-8h2a4 4 0 0 0 4-4"/>',
     arrow:'<path d="M5 19 19 5M9 5h10v10"/>',
@@ -109,6 +109,92 @@
     return year+'-W'+String(Math.ceil(((d-jan1)/86400000+1)/7)).padStart(2,'0');
   }
 }
+
+  // V0.8: every Monday, calculate suggestions from actual completed sessions last week.
+  // Never mutate historical logs or the base programme in Google Sheets.
+  function so8WeeklyPlan(type){
+    const model=homeModel(S.data),date=new Date(model.start+'T12:00:00Z');
+    date.setUTCDate(date.getUTCDate()-7);
+    const from=date.toISOString().slice(0,10),to=model.start;
+    const rows=[...(S.data.sessions||[]),...(S.data.cardio||[])]
+      .filter(x=>x&&x.Type===type&&x.Statut==='Terminée'&&x.Date>=from&&x.Date<to)
+      .sort((a,b)=>b.Date.localeCompare(a.Date));
+    const last=rows[0]||null;
+    const result={hasPrior:!!last,source:last?niceDate(last.Date):'',reason:'',proposed:'',exercise:{}};
+    if(!last){result.reason='Pas de séance terminée la semaine précédente : objectifs de départ conservés.';return result;}
+    const fatigueWeek=(S.data.reviews||[]).find(r=>{
+      const d=new Date(from+'T12:00:00Z');d.setUTCDate(d.getUTCDate()+4-(d.getUTCDay()||7));
+      const y=d.getUTCFullYear(),jan=new Date(Date.UTC(y,0,1));
+      return r.Semaine===y+'-W'+String(Math.ceil(((d-jan)/86400000+1)/7)).padStart(2,'0');
+    });
+    const fatigue=fatigueWeek?fatigueWeek['Fatigue 1-10']:'';
+    const sleep=fatigueWeek?fatigueWeek['Sommeil 1-10']:'';
+    const effortRaw=['A','B'].includes(type)?last['Effort global 1-10']:last['Effort 1-10'];
+    const effort=effortRaw===''||effortRaw==null?null:toNum(effortRaw);
+    const recoveryRisk=(fatigue!==''&&fatigue!=null&&toNum(fatigue)>=7)||
+      (sleep!==''&&sleep!=null&&toNum(sleep)<=4)||(effort!==null&&effort>=7);
+    if(type==='A'||type==='B'){
+      const logs=(S.data.logs||[]).filter(x=>x.Seance_ID===last.Seance_ID);
+      let raised=0,pain=false;
+      for(const ex of activeEx(type)){
+        const row=logs.find(x=>x.Exercice_ID===ex.Exercice_ID);
+        const timed=!!String(ex.Temps_s||'').trim()&&!String(ex.Rép_min||'').trim();
+        const base=toNum(timed?ex.Temps_s:ex.Rép_max);
+        const actual=row?toNum(timed?row['Maintien réel s']:row['Rép réelles']):0;
+        const reserve=row?(timed?row['Réserve tenue (s)']:row.RIR):'';
+        const painHere=!!row&&row.Douleur==='Oui';if(painHere)pain=true;
+        const favorable=!recoveryRisk&&row&&row.Douleur==='Non'&&
+          ['Facile','Modéré'].includes(row.Difficulté)&&reserve!==''&&reserve!=null&&
+          toNum(reserve)>=(timed?10:2)&&actual>=base&&actual>0;
+        const cap=timed?Math.min(120,Math.ceil(base*1.5)):Math.min(30,base+6);
+        const target=favorable?Math.min(cap,Math.max(base,Math.min(actual,base+(timed?10:2)))+(timed?5:1)):base;
+        if(target>base)raised++;
+        result.exercise[ex.Exercice_ID]={target,increase:target>base,timed,
+          explanation:target>base?'Ton retour sans douleur permet de proposer une petite progression.':
+            painHere?'Douleur signalée : aucune augmentation.':'Repère de départ conservé.'};
+      }
+      result.proposed=raised?raised+' exercice'+(raised>1?'s':'')+' avec un objectif ajusté.':'Objectifs conservés.';
+      result.reason=pain?'Douleur signalée : aucune progression pour les mouvements concernés.':
+        recoveryRisk?'Effort élevé, fatigue ou sommeil insuffisant : priorité à la récupération.':
+        raised?'Retour favorable la semaine précédente : ajustements mesurés sur les mouvements concernés.':
+        'Données de séance insuffisantes pour augmenter : consolide les gestes.';
+      return result;
+    }
+    if(last.Douleur==='Oui'||recoveryRisk){
+      result.reason=last.Douleur==='Oui'?'Douleur signalée : pas de progression ; adapte la séance.':
+        'Effort ou fatigue élevé : conserver le format précédent.';
+      return result;
+    }
+    if(last.Douleur!=='Non'){
+      result.reason='Douleur non renseignée : aucun changement automatique par précaution.';
+      return result;
+    }
+    if(type==='Course'){
+      const run=toNum(last.Course_sec_bloc),walk=toNum(last.Marche_sec_bloc),rounds=toNum(last.Nb_blocs);
+      if(effort!==null&&effort<=4&&run>=60&&walk>=30&&rounds>=8){
+        const next=Math.min(180,run+10);
+        if(next>run)result.proposed=rounds+' × ('+next+' s course / '+walk+' s marche)';
+        result.reason='Course précédente facile et sans douleur : +10 secondes de course par bloc proposées.';
+      }else result.reason='Garde le format précédent ; progression conditionnée à un retour complet et facile.';
+    }else if(type==='Vélo'){
+      const duration=toNum(last['Durée min']);
+      if(effort!==null&&effort<=4&&duration>=20){
+        result.proposed='Sortie facile : environ '+Math.min(120,duration+5)+' min';
+        result.reason='Sortie précédente confortable : +5 minutes proposées, sans objectif de vitesse.';
+      }else result.reason='Durée précédente conservée : priorité au confort et à la récupération.';
+    }
+    return result;
+  }
+  function so8CompletionBanner(){
+    if(homeModel(S.data).done.length!==4)return '';
+    return '<section class="so8-celebration" role="status" aria-label="Semaine accomplie">'
+      +'<span class="so8-celebration-icon" aria-hidden="true">'+v3Icon('sparkle')+'</span>'
+      +'<div><span class="so8-celebration-kicker">4 SUR 4 / SEMAINE ACCOMPLIE</span>'
+      +'<strong>Félicitations, tu as tenu ton rythme !</strong>'
+      +'<p>Deux renforcements, une course et une sortie vélo enregistrés. La récupération compte aussi : tes prochains objectifs tiendront compte de tes retours.</p></div>'
+      +'<span class="so8-celebration-check" aria-hidden="true">✓</span></section>';
+  }
+
   function home() {
     const vm=homeModel(S.data);
     const done=vm.done.length;
@@ -116,8 +202,8 @@
     const meta={
       A:{name:'Renforcement A',subtitle:'Fessiers & full body',duration:'35–45 MIN',sub:'5 EXERCICES'},
       B:{name:'Renforcement B',subtitle:'Haut du corps & fessiers',duration:'35–45 MIN',sub:'5 EXERCICES'},
-      Course:{name:'Course / marche',subtitle:'Reprendre en douceur',duration:'16 MIN',sub:'8 × 1 MIN / 1 MIN'},
-      Vélo:{name:'Sortie vélo',subtitle:'Construire ton endurance',duration:'25–40 MIN',sub:'REPRISE FACILE'}
+      Course:{name:'Course / marche',subtitle:'Reprendre en douceur',duration:so8WeeklyPlan('Course').proposed?'FORMAT ÉVOLUTIF':'16 MIN',sub:so8WeeklyPlan('Course').proposed||'8 × 1 MIN / 1 MIN'},
+      Vélo:{name:'Sortie vélo',subtitle:'Construire ton endurance',duration:so8WeeklyPlan('Vélo').proposed?'DURÉE ÉVOLUTIVE':'25–40 MIN',sub:so8WeeklyPlan('Vélo').proposed||'REPRISE FACILE'}
     };
     const dateCaption=new Date(vm.today+'T12:00:00Z').toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
     const intro=done===4?'CE QUE TU AS FAIT COMPTE.':done===0?'UN JOUR POUR BOUGER.':'TON ÉLAN NE FAIT QUE COMMENCER.';
@@ -201,7 +287,8 @@
     </section>`;
     return `<div class="v3-dashboard">
       <header class="v3-intro"><div><p class="v3-label">${esc(dateCaption)} / TON ESPACE</p><h1>${esc(intro)}</h1><p>L’entraînement à ta façon. Une séance après l’autre.</p></div><span class="v4-intro-index" aria-hidden="true">SPORTOS / 01</span></header>
-      <div class="v3-leading">${hero}${week}</div>
+      ${so8CompletionBanner()}
+       <div class="v3-leading">${hero}${week}</div>
       <div class="v3-section-title"><div><p class="v3-label">GARDER LE CAP</p><h2>TON ÉLAN<span aria-hidden="true">${v3Icon('arrow')}</span></h2></div><span>Les petits progrès font les grandes histoires.</span></div>
       <div class="v3-insights">${lastPanel}${challenge}</div>
       ${coach}
@@ -220,7 +307,8 @@
     Vélo:{name:'Vélo',title:'La route se construit.',subtitle:'De premières sorties faciles vers ton défi Espiens.',group:'ENDURANCE',estimate:'DÉPART : SORTIES FACILES',focus:'ESPIENS · MAI 2027',tone:'sage'}
   };
   const current=catalog[type];
-  const ex=strength?activeEx(type):[];
+  const weeklyPlan=so8WeeklyPlan(type);
+   const ex=strength?activeEx(type):[];
   const steps=strength?[]:(S.data.steps||[]).filter(x=>x.Type===type);
   const plan=(S.data.programs||[]).find(x=>x.Séance===type&&(!strength||x.Version==='V1-S2'));
   const goalIds=plan?.Objectifs_ID||(strength?'OBJ-01; OBJ-02; OBJ-04':running?'OBJ-05; OBJ-08':'OBJ-05; OBJ-09');
@@ -239,14 +327,16 @@
   };
   const details=strength?`<div class="sp7-ex-list">
     ${ex.length?ex.map((x,i)=>{
-      const target=x.Rép_min&&x.Rép_max?esc(x.Rép_min)+(x.Rép_min===x.Rép_max?'':'–'+esc(x.Rép_max))+' répétitions':x.Temps_s?esc(x.Temps_s)+' secondes':'selon sensation';
+      const adaptive=weeklyPlan.exercise[x.Exercice_ID];
+       const target=x.Rép_min&&x.Rép_max?esc(x.Rép_min)+(x.Rép_min===x.Rép_max&&!(adaptive&&adaptive.increase)?'':'–'+esc(adaptive?adaptive.target:x.Rép_max))+' répétitions':x.Temps_s?esc(adaptive?adaptive.target:x.Temps_s)+' secondes':'selon sensation';
       const safety=String(x.Sécurité||'');
       const risky=/douleur|retirer|lombaire/i.test(safety)&&/retirer|arrêter|éviter|douleur/i.test(safety);
       return `<details class="sp7-ex" ${i===0?'open':''}>
         <summary class="sp7-ex-heading"><span class="sp7-ex-index">${String(i+1).padStart(2,'0')}</span><span class="sp7-ex-titles"><strong>${esc(x.Nom)}</strong><small>${esc(x.Séries||'—')} séries · ${target}</small></span><span class="sp7-ex-chevron" aria-hidden="true">${v3Icon('arrowRight')}</span></summary>
         <div class="sp7-ex-body">
           <div class="sp7-ex-metrics"><div><span>OBJECTIF DE SÉRIES</span><strong>${esc(x.Séries||'—')}</strong></div><div><span>RÉPÉTITIONS / TENUE</span><strong>${target}</strong></div><div><span>CHARGE INDICATIVE</span><strong>${x['Charge_kg indicative']!==''&&x['Charge_kg indicative']!=null?esc(x['Charge_kg indicative'])+' kg':'À adapter'}</strong></div></div>
-          ${x.Tempo?`<p class="sp7-ex-coach">${v3Icon('gauge')} <span><b>Repère technique :</b> ${esc(x.Tempo)}</span></p>`:''}
+          ${adaptive&&adaptive.increase?`<p class="so8-ex-increase">${v3Icon('sparkle')} <span>${esc(adaptive.explanation)}</span></p>`:''}
+           ${x.Tempo?`<p class="sp7-ex-coach">${v3Icon('gauge')} <span><b>Repère technique :</b> ${esc(x.Tempo)}</span></p>`:''}
           ${safety?`<p class="sp7-ex-safety ${risky?'is-caution':''}">${v3Icon('shield')} <span>${esc(safety)}${risky?' — ne pas forcer si une douleur apparaît.':''}</span></p>`:''}
         </div>
       </details>`;
@@ -263,6 +353,15 @@
     }).join(''):`<p class="sp7-empty">Ton calendrier n’est pas encore renseigné. Les sorties sont à construire progressivement.</p>`}</div>`;
   const sectionTitle=strength?'Tes mouvements':running?'Ta progression course':'Les étapes du défi';
   const sectionLede=strength?`${ex.length} exercices proposés · programme V1-S2. Ouvre un mouvement pour voir les repères.`:running?'Les séances proposées restent adaptables selon tes sensations et ta récupération.':'Les jalons sont indicatifs : l’itinéraire et les durées restent à définir.';
+  const weeklyCard=`<section class="so8-adaptation" aria-labelledby="so8-adapt-title">
+     <span class="so8-adapt-icon" aria-hidden="true">${v3Icon('sparkle')}</span>
+     <div class="so8-adapt-copy"><span class="sp7-overline">COACH / NOUVELLE SEMAINE</span>
+       <h3 id="so8-adapt-title">Ton programme évolue.</h3>
+       <p>${esc(weeklyPlan.reason)}</p>
+       ${weeklyPlan.proposed?`<strong class="so8-adapt-target">${esc(weeklyPlan.proposed)}</strong>`:''}
+       <small>${weeklyPlan.hasPrior?'Basé sur ton retour du '+esc(weeklyPlan.source):'En attente de ta première séance de référence'} · Proposition indicative ; aucune séance passée modifiée.</small>
+     </div>
+   </section>`;
   const coach=strength?'Privilégie la maîtrise du geste et une récupération suffisante. Une charge indicative n’est jamais une consigne de performance.':running?'Répéter la séance précédente est un progrès si elle est bien tolérée. Augmente seulement quand tu te sens prête.':'Commence par des sorties faciles. La distance vers Espiens et les deux journées consécutives seront évaluées à partir de tes sorties réelles.';
   const foot=strength?'Chaque exercice est une proposition, pas une performance à atteindre.':running?'Les intervalles sont des propositions : ton compte rendu décrira uniquement ce que tu as réalisé.':'Aucune distance, durée de trajet ou sortie réalisée n’est supposée.';
   return `<div class="sp7-page">
@@ -271,7 +370,8 @@
       <div class="sp7-head-row"><div><h1>Construis <em>ton élan.</em></h1><p>Deux séances de renforcement, une reprise de la course et un défi vélo. Un programme qui s’adapte à tes sensations.</p></div>
       <div class="sp7-head-stat" aria-label="${all.done.length} activités différentes réalisées cette semaine sur quatre"><strong>${all.done.length}<span>/04</span></strong><small>TYPES D’ACTIVITÉS<br>RÉALISÉS CETTE SEMAINE</small></div></div>
     </header>
-    <nav class="sp7-selector" aria-label="Choisir une activité sportive">${types.map(item).join('')}</nav>
+    ${so8CompletionBanner()}
+     <nav class="sp7-selector" aria-label="Choisir une activité sportive">${types.map(item).join('')}</nav>
     <section class="sp7-hero sp7-hero-${current.tone}" aria-labelledby="sp7-hero-title">
       <div class="sp7-hero-primary">
         <div class="sp7-hero-brow"><span class="sp7-hero-tag">${esc(current.group)}</span><span>${completed?'✓ RÉALISÉE CETTE SEMAINE':'SÉANCE PROPOSÉE'}</span></div>
@@ -287,14 +387,15 @@
       <div class="sp7-hero-panel" aria-label="Repères de la séance">
         <div class="sp7-hero-symbol" aria-hidden="true">${v3Icon(type)}</div>
         <div><span>LE FOCUS</span><strong>${esc(current.focus)}</strong></div>
-        <div><span>LE FORMAT</span><strong>${esc(current.estimate)}</strong></div>
+        <div><span>LE FORMAT</span><strong>${esc(weeklyPlan.proposed||current.estimate)}</strong></div>
         <div><span>DERNIER RETOUR DATÉ</span><strong>${esc(lastLabel)}</strong></div>
       </div>
     </section>
     <div class="sp7-layout">
       <section class="sp7-core" aria-labelledby="sp7-plan-title">
         <div class="sp7-section-heading"><div><span class="sp7-overline">01 / TON PLAN</span><h2 id="sp7-plan-title">${esc(sectionTitle)}<span class="sp7-title-dot">.</span></h2><p>${esc(sectionLede)}</p></div><span class="sp7-count">${strength?`${ex.length} MOUVEMENTS`:`${steps.length} JALONS`}</span></div>
-        ${details}
+        ${weeklyCard}
+         ${details}
         <div class="sp7-notice">${v3Icon('shield')} <span>${esc(foot)}</span></div>
       </section>
       <aside class="sp7-aside" aria-label="Objectifs et accompagnement">
@@ -315,7 +416,10 @@
     </div>
   </div>`;
 }
-  function recentHistory(){return [...S.data.sessions.filter(x=>x.Statut==='Terminée').map(x=>({date:x.Date,label:'Renforcement '+x.Type,detail:(x['Effort global 1-10']?'Effort '+x['Effort global 1-10']+'/10':'Retour initial'),type:'strength'})),...S.data.cardio.filter(x=>x.Statut==='Terminée').map(x=>({date:x.Date,label:x.Type,detail:(x['Durée min']||'?')+' min · Effort '+(x['Effort 1-10']||'?')+'/10',type:'cardio'}))].sort((a,b)=>(b.date||'').localeCompare(a.date||''));}
+  function recentHistory(){return [...S.data.sessions.filter(x=>x.Statut==='Terminée').map(x=>({date:x.Date,label:'Renforcement '+x.Type,detail:(x['Effort global 1-10']?'Effort '+x['Effort global 1-10']+'/10':'Retour initial'),type:'strength'})),...S.data.cardio.filter(x=>x.Statut==='Terminée').map(x=>({date:x.Date,label:x.Type,detail:(x['Durée min']||'?')+' min · Effort '+(x['Effort 1-10']||'?')+'/10'+
+  (x.Type==='Vélo'&&x['Dénivelé positif (m)']!==''&&x['Dénivelé positif (m)']!=null?' · '+x['Dénivelé positif (m)']+' m D+':'')+
+  (x.Type==='Vélo'&&x['Vitesse moyenne (km/h)']!==''&&x['Vitesse moyenne (km/h)']!=null?' · '+x['Vitesse moyenne (km/h)']+' km/h':''),
+  type:'cardio'}))].sort((a,b)=>(b.date||'').localeCompare(a.date||''));}
   function recommendations(){const current=S.data.logs.filter(x=>x.Seance_ID&&S.data.sessions.some(s=>s.Seance_ID===x.Seance_ID&&s.Date)).slice(-60);let msg=[];
     for(const x of S.data.logs.filter(x=>x.Douleur==='Oui').slice(-4))msg.push({type:'warn',text:'Douleur enregistrée sur '+x.Exercice+'. Progression suspendue pour cet exercice et évaluation conseillée si elle persiste.'});
     const planned=S.data.exercises.filter(x=>x.Statut==='Proposé — S2');for(const x of planned){const matching=current.filter(y=>y.Exercice_ID===x.Exercice_ID&&y.Douleur!=='Oui'&&y['Rép réelles']);const last=matching.slice(-2);if(last.length===2&&last.every(z=>toNum(z['Rép réelles'])>=toNum(x.Rép_max)&&toNum(z.RIR)>=2&&toNum(z.RIR)<=3&&z.Douleur==='Non'))msg.push({type:'success',text:x.Nom+' : deux séances au haut de la plage, sans douleur et RIR 2–3. Progression légère à envisager, après vérification de la technique.'});}
@@ -336,7 +440,7 @@
     const entries=S.data.logs.filter(x=>x.Exercice_ID===selected&&sessions.has(x.Seance_ID)).map(x=>({...x,date:sessions.get(x.Seance_ID)})).sort((a,b)=>a.date.localeCompare(b.date)).slice(-12);
     const series=entries.map(x=>toNum(x['Rép réelles'])||toNum(x['Maintien réel s'])).filter(n=>n>0);const max=Math.max(...series,1);
     const chart=series.length?`<div class="block-bars" role="img" aria-label="Progression du nombre de répétitions ou secondes sur les dernières séances">${series.map((v,i)=>`<div title="${v} répétitions ou secondes" style="height:${Math.max(8,Math.round(v/max*100))}%"></div>`).join('')}</div><div class="row-between small"><span>Ancien → récent</span><span>${selected==='EX-GAINAGE'?'Secondes':'Répétitions (ou secondes)'}</span></div>`:`<div class="empty">Pas encore de répétitions enregistrées pour cet exercice. Tes prochains retours permettront d'afficher la courbe.</div>`;
-    return `<div class="card"><div class="row-between" style="margin-bottom:18px"><h2 class="section-title">Progression ciblée</h2><label class="small" for="exercise-picker">Exercice</label></div><select id="exercise-picker" class="input" style="margin-bottom:14px">${[...dict].map(([id,name])=>`<option value="${esc(id)}" ${id===selected?'selected':''}>${esc(name)}</option>`).join('')}</select>${chart}<div class="small" style="margin-top:14px">${entries.length?entries.map(x=>`<div style="padding:5px 0;border-bottom:1px solid var(--line)">${niceDate(x.date)} : ${esc(x['Rép réelles']||x['Maintien réel s']||'—')} reps/sec · ${esc(x['Charge réelle kg']||'—')} kg · difficulté ${esc(x.Difficulté||'—')}</div>`).join(''):'Ajoute tes valeurs réelles, ton effort et ta récupération pour suivre ton évolution.'}</div></div>`;
+    return `<div class="card"><div class="row-between" style="margin-bottom:18px"><h2 class="section-title">Progression ciblée</h2><label class="small" for="exercise-picker">Exercice</label></div><select id="exercise-picker" class="input" style="margin-bottom:14px">${[...dict].map(([id,name])=>`<option value="${esc(id)}" ${id===selected?'selected':''}>${esc(name)}</option>`).join('')}</select>${chart}<div class="small" style="margin-top:14px">${entries.length?entries.map(x=>`<div style="padding:5px 0;border-bottom:1px solid var(--line)">${niceDate(x.date)} : ${esc(x['Rép réelles']||x['Maintien réel s']||'—')} ${selected==='EX-GAINAGE'?'secondes':'répétitions'} · ${esc(x['Charge réelle kg']||'—')} kg · difficulté ${esc(x.Difficulté||'—')}</div>`).join(''):'Ajoute tes valeurs réelles, ton effort et ta récupération pour suivre ton évolution.'}</div></div>`;
   }
   function profile(){const kv=Object.fromEntries(S.data.profile.map(x=>[x.Champ,x.Valeur]));const goals=S.data.goals.filter(g=>g.Statut&&(g.Statut.startsWith('Actif')));const measurements=S.data.measurements.filter(x=>x.Poids_kg).slice(-4);return `${header('Mon profil','Ton point de départ, tes objectifs et tes préférences au même endroit.','MON IDENTITÉ SPORTIVE')}<div class="grid cols-2"><section class="card"><div class="row-between"><h2 class="section-title">Mes repères</h2>${badge('Privé')}</div><div class="grid cols-3" style="margin-top:18px"><div class="measure"><small>Âge</small><b>${esc(kv.Age||'—')} <small>ans</small></b></div><div class="measure"><small>Taille</small><b>${kv.Taille?fmt(toNum(kv.Taille)/100):'—'} <small>m</small></b></div><div class="measure"><small>Poids de départ</small><b>${esc(kv['Poids de référence']||'—')} <small>kg</small></b></div></div><div class="kpi-line"><span>Équipement</span><b class="s12">2 haltères de 5 kg + tapis</b></div><div class="kpi-line"><span>Renforcement</span><b class="s12">2 fois / semaine</b></div><div class="kpi-line"><span>Course + vélo</span><b class="s12">1 fois chacun / semaine</b></div><div class="kpi-line"><span>Strava</span>${badge('Non connecté','gray')}</div><button class="btn outline full" data-weight="1" style="margin-top:18px">Ajouter une mesure de poids (facultatif)</button><p class="micro">Ce suivi n’a aucun objectif de perte de poids.</p></section>
       <section class="card"><div class="card-heading"><h2>Mes objectifs personnels</h2></div><div class="goal-list">${goals.map(g=>`<div class="goal"><div class="row-between"><strong>${esc(g.Axe)}</strong>${badge(g.Priorité,g.Priorité==='Bloquante'?'orange':'gray')}</div><p>${esc(g['Résultat visé'])}</p></div>`).join('')}</div></section></div>
@@ -464,8 +568,11 @@
       dirty=false;
       S.loading=false;
       close(true);
-      toast(S.demo?'Retour simulé — aucune écriture dans ton Google Sheet.':'Ton retour de séance a bien été enregistré ✓');
+      const doneBefore=homeModel(S.data).done.length;
       await reload();
+      const doneAfter=homeModel(S.data).done.length;
+      toast(S.demo?'Retour simulé — aucune écriture dans ton Google Sheet.':session&&doneBefore<4&&doneAfter===4?
+        '🎉 Félicitations ! Tes quatre activités sont enregistrées. Place à la récupération !':'Ton retour de séance a bien été enregistré ✓');
     }catch(err){
       if(error){error.textContent='Impossible d’enregistrer : '+err.message;error.hidden=false;}
       else toast('Erreur : '+err.message);
@@ -486,23 +593,24 @@
   </div>`;
 }
   function strengthForm(type){
-  const entryId=key(),ex=activeEx(type);
+  const entryId=key(),ex=activeEx(type),weeklyPlan=so8WeeklyPlan(type);
   const forms=ex.map((x,i)=>`<details class="exercise-form so-exercise" ${i===0?'open':''}>
     <summary class="so-exercise-summary">
       <span class="so-exercise-count">${String(i+1).padStart(2,'0')}</span>
-      <span class="so-exercise-summary-text"><strong>${esc(x.Nom)}</strong><small>Objectif · ${esc(x.Séries)} séries ${x.Rép_min?'/ '+esc(x.Rép_min)+'–'+esc(x.Rép_max)+' répétitions': '/ '+esc(x.Temps_s)+' secondes'}</small></span>
+      <span class="so-exercise-summary-text"><strong>${esc(x.Nom)}</strong><small>Objectif proposé · ${esc(x.Séries)} séries ${x.Rép_min?'/ '+esc(x.Rép_min)+'–'+esc(weeklyPlan.exercise[x.Exercice_ID]?.target||x.Rép_max)+' répétitions': '/ '+esc(weeklyPlan.exercise[x.Exercice_ID]?.target||x.Temps_s)+' secondes'}</small></span>
       <span class="so-exercise-expand" aria-hidden="true">${v3Icon('arrowRight')}</span>
     </summary>
     <div class="so-exercise-body">
       <p class="so-exercise-instruction">Indique uniquement ce que tu as réalisé : les indications du programme ne sont pas préremplies.</p>
       <div class="form-grid cols-3">
       ${field('Séries réalisées','sets'+i,{min:0,max:8,step:1,placeholder:String(x.Séries)})}
-      ${field('Répétitions','reps'+i,{min:0,max:100,step:1,placeholder:String(x.Rép_max||'—')})}
+      ${String(x.Temps_s||'').trim()&&!String(x.Rép_min||'').trim()?'':field('Répétitions','reps'+i,{min:0,max:100,step:1,placeholder:String(weeklyPlan.exercise[x.Exercice_ID]?.target||x.Rép_max||'—')})}
       ${field('Charge (kg)','weight'+i,{min:0,max:150,step:.5,placeholder:x['Charge_kg indicative']||'0'})}
-      ${field('Maintien (sec)','seconds'+i,{min:0,max:1200,step:1,placeholder:x.Temps_s||'—'})}
+      ${field('Maintien (sec)','seconds'+i,{min:0,max:1200,step:1,placeholder:weeklyPlan.exercise[x.Exercice_ID]?.target||x.Temps_s||'—'})}
       ${select('Difficulté','difficulty'+i,[['','Non renseignée'],['Facile','Facile'],['Modéré','Modéré'],['Difficile','Difficile'],['Très difficile','Très difficile']])}
-      ${select('Répétitions en réserve','rir'+i,[['','Non renseigné'],['0','0'],['1','1'],['2','2'],['3','3'],['4','4'],['5','5'],['6','6+']])}
+       ${String(x.Temps_s||'').trim()&&!String(x.Rép_min||'').trim()?field('Secondes encore possibles (estimation)','secondsReserve'+i,{min:0,max:120,step:1,placeholder:'Ex. 10'}):select('Répétitions en réserve (RIR)','rir'+i,[['','Non renseigné'],['0','0'],['1','1'],['2','2'],['3','3'],['4','4'],['5','5'],['6','6+']])}
       </div>
+       ${String(x.Temps_s||'').trim()&&!String(x.Rép_min||'').trim()?'<p class="so8-timed-hint">Pour le gainage, combien de secondes supplémentaires pouvais-tu tenir avec une bonne posture ? Pas de répétitions à compter.</p>':''}
       <div class="so-exercise-safety"><div class="so-safety-title">${v3Icon('shield')} Douleur ou gêne ?</div>
       <div class="form-grid">${select('Douleur','pain'+i,[['','Non renseignée'],['Non','Non'],['Oui','Oui']])}${field('Où ? (si nécessaire)','painWhere'+i,{type:'text',placeholder:'Ex. bas du dos'})}</div></div>
       ${field('Commentaire personnel','note'+i,{type:'text',placeholder:'Technique, sensations, adaptation…'})}
@@ -532,8 +640,8 @@
   showModal('Retour de séance — Renforcement '+type,html,async f=>{
     const exercises=ex.map((x,i)=>{const read=k=>f.get(k+i)||'';return {
       id:read('id'),sets:read('sets'),reps:read('reps'),weight:read('weight'),seconds:read('seconds'),
-      difficulty:read('difficulty'),rir:read('rir'),pain:read('pain'),painWhere:read('painWhere'),note:read('note')
-    }}).filter(x=>x.sets!==''||x.reps!==''||x.weight!==''||x.seconds!==''||x.difficulty!==''||x.pain!==''||x.note!==''||x.rir!==''||x.painWhere!=='');
+       difficulty:read('difficulty'),rir:read('rir'),secondsReserve:read('secondsReserve'),pain:read('pain'),painWhere:read('painWhere'),note:read('note')
+    }}).filter(x=>x.sets!==''||x.reps!==''||x.weight!==''||x.seconds!==''||x.difficulty!==''||x.pain!==''||x.note!==''||x.rir!==''||x.secondsReserve!==''||x.painWhere!=='');
     if(!exercises.length)throw Error('Renseigne au moins un exercice pour enregistrer ton renforcement.');
     await server('saveStrength',{id:entryId,date:f.get('date'),type,duration:f.get('duration'),effort:f.get('effort'),energyAfter:f.get('energyAfter'),note:f.get('note'),exercises});
   },{kind:'session',type,activity:'Renforcement '+type,caption:type==='A'?'Fessiers & full body':'Haut du corps & fessiers',steps:['Les repères','Tes sensations','Tes exercices','Ton retour']});
@@ -543,7 +651,7 @@
   const html=`<section class="so-feedback-section" aria-labelledby="so-basics">
     <div class="so-feedback-section-title"><span class="so-section-number">01</span><div><p class="so-overline">TON ACTIVITÉ</p><h3 id="so-basics">Les repères</h3></div>${v3Icon('clock')}</div>
     <div class="form-grid">${field('Date','date',{type:'date',value:S.data.today,required:true})}${field('Durée totale (min)','duration',{min:1,max:1440,step:1,required:true,placeholder:'Ex. 16'})}${field('Distance (km) · facultatif','distance',{min:0,max:600,step:.01,placeholder:'Si connue'})}</div>
-    ${isRun?'<p class="so-section-desc">Course et marche comptent dans la durée totale.</p>':'<p class="so-section-desc">Pour ton défi Espiens, la durée et le confort sont tes premiers repères.</p>'}
+     ${isRun?'<p class="so-section-desc">Course et marche comptent dans la durée totale.</p>':`<div class="so8-strava-fields"><div class="so8-strava-heading">${v3Icon('Vélo')} <div><strong>Les données de ta sortie</strong><span>À recopier depuis Strava, si disponibles · saisie manuelle</span></div></div><div class="form-grid">${field('Dénivelé positif (m)','elevationGain',{min:0,max:10000,step:1,placeholder:'Ex. 215'})}${field('Vitesse moyenne (km/h)','averageSpeed',{min:0,max:150,step:.01,placeholder:'Ex. 18,6'})}</div><p class="so-section-desc">Ces données facultatives ne sont pas calculées à partir de la distance et la durée.</p></div>`}
   </section>
   <section class="so-feedback-section" aria-labelledby="so-feelings">
     <div class="so-feedback-section-title"><span class="so-section-number">02</span><div><p class="so-overline">TON RESSENTI</p><h3 id="so-feelings">Comment c’était ?</h3></div>${v3Icon('heart')}</div>
@@ -553,7 +661,7 @@
   </section>
   ${isRun?`<section class="so-feedback-section" aria-labelledby="so-intervals">
     <div class="so-feedback-section-title"><span class="so-section-number">03</span><div><p class="so-overline">SI TU AS FAIT DES INTERVALLES</p><h3 id="so-intervals">Course / marche</h3></div>${v3Icon('Course')}</div>
-    <p class="so-section-desc">Programme proposé : 8 × (1 min de course / 1 min de marche). Renseigne ce que tu as réellement réalisé, si tu le souhaites.</p>
+    <p class="so-section-desc">Proposition de cette semaine : ${esc(so8WeeklyPlan(type).proposed||'8 × (1 min course / 1 min marche)')}. Renseigne uniquement ce que tu as réalisé.</p>
     <div class="form-grid cols-3">
       ${field('Course par bloc (sec)','runSeconds',{min:0,max:3600,step:1,placeholder:'Ex. 60'})}
       ${field('Marche par bloc (sec)','walkSeconds',{min:0,max:3600,step:1,placeholder:'Ex. 60'})}
@@ -565,7 +673,7 @@
     ${longtext('Un détail à retenir (facultatif)','note')}
   </section>`;
   showModal(isRun?'Retour de course':'Retour de sortie vélo',html,async f=>{
-    const p={id:entryId,date:f.get('date'),type,duration:f.get('duration'),distance:f.get('distance'),effort:f.get('effort'),runSeconds:isRun?f.get('runSeconds'):'',walkSeconds:isRun?f.get('walkSeconds'):'',rounds:isRun?f.get('rounds'):'',pain:f.get('pain'),note:f.get('note'),planStep:isRun?'RUN-02':'BIKE-01'};
+    const p={id:entryId,date:f.get('date'),type,duration:f.get('duration'),distance:f.get('distance'),effort:f.get('effort'),runSeconds:isRun?f.get('runSeconds'):'',walkSeconds:isRun?f.get('walkSeconds'):'',rounds:isRun?f.get('rounds'):'',pain:f.get('pain'),note:f.get('note'),elevationGain:isRun?'':f.get('elevationGain'),averageSpeed:isRun?'':f.get('averageSpeed'),planStep:isRun?'RUN-02':'BIKE-01'};
     if(Number(p.duration)<=0)throw Error('Renseigne la durée.');
     await server('saveCardio',p);
   },{kind:'session',type,activity:isRun?'Course & marche':'Sortie vélo',caption:isRun?'Avancer progressivement, sans chercher la vitesse.':'Construire ton endurance pour Espiens.',steps:isRun?['Les repères','Ton ressenti','Course et marche','Ton retour']:['Les repères','Ton ressenti','Ton retour']});

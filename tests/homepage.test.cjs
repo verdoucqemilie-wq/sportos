@@ -9,9 +9,11 @@ const cli=fs.readFileSync(root+'/src/Client.html','utf8');
 const idx=fs.readFileSync(root+'/src/Index.html','utf8');
 const css=fs.readFileSync(root+'/src/Styles.html','utf8');
 
-const modelSource=cli.match(/\n  function homeModel\(data\) \{[\s\S]*?(?=\n  function home\(\))/);
+const modelSource=cli.match(/\n  function homeModel\(data\) \{[\s\S]*?(?=\n  \/\/ V0\.8:)/);
 const homeSource=cli.match(/\n  function home\(\) \{[\s\S]*?(?=\n  function program\(\))/);
 const iconSource=cli.match(/\n  function v3Icon\(type\)\s*\{[\s\S]*?(?=\n  function homeModel\(data\))/);
+const adaptiveSource=cli.match(/\n  function so8WeeklyPlan\(type\)\{[\s\S]*?(?=\n  function home\(\))/);
+assert.ok(adaptiveSource,'Fonctions V0.8 absentes');
 for(const [name,s] of [['homeModel',modelSource],['home',homeSource],['v3Icon',iconSource]])
   assert.ok(s,'Fonction '+name+' introuvable');
 const evaluate=(src,ctx)=>vm.runInNewContext('('+src[0].trim()+')',ctx);
@@ -40,7 +42,9 @@ assert.equal(m.pain,true);
 
 function render(data){
   const modelFor=data=>model(data);
-  const ctx={S:{data},homeModel:modelFor,v3Icon:icon,esc,fmt:format,toNum:num,niceDate};
+  const ctx={S:{data},homeModel:modelFor,v3Icon:icon,esc,fmt:format,toNum:num,niceDate,
+    activeEx:()=>[]};
+  vm.runInNewContext(adaptiveSource[0],ctx);
   return evaluate(homeSource,ctx)();
 }
 const current=render(base);
