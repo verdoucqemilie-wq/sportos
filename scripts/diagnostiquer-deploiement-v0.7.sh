@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# SportOS: diagnostic of deployed immutable @9 AND mutable remote HEAD.
+# SportOS: diagnosis of CURRENT immutable deployed version and mutable remote HEAD.
 # Strictly read-only against Google Apps Script. No push, deploy, Sheet reads/writes.
 set -Eeuo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
@@ -30,9 +30,8 @@ const target=findTarget(process.argv[2],process.argv[3]);
 console.log(target.version);
 JS
 )"
-[[ "$VERSION" == "9" ]] || {
-  echo "DIAGNOSTIC_STOP=VERSION_DISTANTE_MODIFIEE"
-  echo "DERNIERE_VERSION_OBSERVEE=@$VERSION"
+[[ "$VERSION" =~ ^[1-9][0-9]*$ ]] || {
+  echo "DIAGNOSTIC_STOP=VERSION_INVALIDE" >&2
   exit 1
 }
 echo "CIBLE_VERIFIEE=@$VERSION"
@@ -51,7 +50,7 @@ JS
 # Both pulls are from the remote, exclusively into temporary directories.
 (cd "$TEMP/published" && clasp pull --versionNumber "$VERSION" >/dev/null)
 echo "==== Version immuable déployée : diagnostic sans contenu source ===="
-node "$ROOT/scripts/diagnostic-readonly-v0.7.cjs" "$TEMP/published/src" "$ROOT" "DEPLOYE_9"
+node "$ROOT/scripts/diagnostic-readonly-v0.7.cjs" "$TEMP/published/src" "$ROOT" "DEPLOYE_${VERSION}"
 (cd "$TEMP/head" && clasp pull >/dev/null)
 echo "==== Projet de travail Apps Script HEAD : diagnostic sans contenu source ===="
 node "$ROOT/scripts/diagnostic-readonly-v0.7.cjs" "$TEMP/head/src" "$ROOT" "HEAD_DISTANT"
