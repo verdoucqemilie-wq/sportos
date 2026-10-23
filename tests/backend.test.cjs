@@ -18,8 +18,9 @@ const map={'01_Profil':fixture.profile,'02_Objectifs':fixture.goals,'11_Programm
 const tables={};for(const [sheet,keys] of Object.entries(names))tables[sheet]=[keys,...map[sheet].map(x=>keys.map(k=>x[k]??''))];
 class MockSheet{
  constructor(name){this.name=name;}getName(){return this.name;}getLastRow(){return tables[this.name].length;}
- getLastColumn(){return names[this.name].length;}
- getRange(row,col,n,w){return {getValues:()=>Array.from({length:n},(_,i)=>Array.from({length:w},(_,j)=>tables[this.name][row-1+i]?.[col-1+j]??'')),getDisplayValues:()=>Array.from({length:n},(_,i)=>Array.from({length:w},(_,j)=>String(tables[this.name][row-1+i]?.[col-1+j]??''))),setValues:(data)=>{assert.equal(data.length,n);for(let i=0;i<n;i++){if(!tables[this.name][row-1+i])tables[this.name][row-1+i]=[];for(let j=0;j<w;j++)tables[this.name][row-1+i][col-1+j]=data[i][j];}}};}
+ getLastColumn(){return Math.max(names[this.name].length,tables[this.name][0].filter(v=>v!==''&&v!==undefined).length);}
+ getRange(row,col,n=1,w=1){const display=()=>Array.from({length:n},(_,i)=>Array.from({length:w},(_,j)=>String(tables[this.name][row-1+i]?.[col-1+j]??'')));
+ return {getValues:()=>Array.from({length:n},(_,i)=>Array.from({length:w},(_,j)=>tables[this.name][row-1+i]?.[col-1+j]??'')),getDisplayValues:display,getDisplayValue:()=>display()[0][0],setValues:(data)=>{assert.equal(data.length,n);for(let i=0;i<n;i++){if(!tables[this.name][row-1+i])tables[this.name][row-1+i]=[];for(let j=0;j<w;j++)tables[this.name][row-1+i][col-1+j]=data[i][j];}}};}
 }
 const ctx={SpreadsheetApp:{openById:()=>({getSheetByName:n=>names[n]?new MockSheet(n):null})},LockService:{getScriptLock:()=>({waitLock:()=>{},releaseLock:()=>{}})},Utilities:{formatDate:(d,tz,f)=>d.toISOString().slice(0,10)},HtmlService:{},Date,console};vm.createContext(ctx);vm.runInContext(fs.readFileSync(path.join(ROOT,'src','Code.gs'),'utf8'),ctx);
 const report=[];function test(label,fn){try{fn();report.push('PASS '+label)}catch(e){report.push('FAIL '+label+': '+e.stack);process.exitCode=1}}
@@ -33,5 +34,30 @@ test('Save strength + update same id without duplicate',()=>{const p={id:'TEST-S
 test('Reject strength unknown exercise',()=>{assert.throws(()=>ctx.saveStrength({id:'TEST-STRENGTH-002',type:'A',date:'2026-10-19',exercises:[{id:'ROGUE'}]}),/non conformes/)});
 test('Save review + idempotent overwrite',()=>{ctx.saveReview({week:'2026-W43',fatigue:3,satisfaction:8,note:'Une bonne semaine'});ctx.saveReview({week:'2026-W43',fatigue:2,satisfaction:9,note:'Meilleure semaine'});assert.equal(tables['07_Bilans'].length,2);assert.equal(tables['07_Bilans'][1][7],2)});
 test('Reject schema drift before writing rows',()=>{const hdr=tables['06_Cardio'][0];const saved=hdr[4];hdr[4]='broken';const before=tables['06_Cardio'].length;assert.throws(()=>ctx.saveCardio({id:'TEST-CARDIO-002',type:'Vélo',date:'2026-10-19',duration:35,effort:3}),/Structure modifiée/);assert.equal(tables['06_Cardio'].length,before);hdr[4]=saved;});
+test('Gainage en secondes en réserve sans RIR : colonne additionnelle protégée',()=>{
+ const p={id:'TEST-STRENGTH-GAIN-01',type:'B',date:'2026-10-19',
+  exercises:[{id:'EX-GAINAGE',sets:2,seconds:40,secondsReserve:12,difficulty:'Modéré',pain:'Non'}]};
+ ctx.saveStrength(p);ctx.saveStrength(p);
+ const logs=tables['05_Exercices_Log'];const row=logs.find(x=>x[0]==='TEST-STRENGTH-GAIN-01_EX-GAINAGE');
+ assert(row);assert.equal(row[9],'');assert.equal(row[14],12);
+ assert.equal(logs[0][14],'Réserve tenue (s)');
+ assert.equal(logs.filter(x=>x[0]==='TEST-STRENGTH-GAIN-01_EX-GAINAGE').length,1);
+});
+test('Vélo depuis Strava : dénivelé, vitesse et rejeu sans doublon',()=>{
+ const p={id:'TEST-BIKE-20261019',type:'Vélo',date:'2026-10-19',duration:42,
+  distance:12.4,effort:3,pain:'Non',elevationGain:'245',averageSpeed:'17,8'};
+ ctx.saveCardio(p);ctx.saveCardio(p);
+ const sheet=tables['06_Cardio'],row=sheet.find(x=>x[0]===p.id);
+ assert(row);assert.equal(row[24],245);assert.equal(row[25],17.8);
+ assert.equal(sheet[0][24],'Dénivelé positif (m)');
+ assert.equal(sheet[0][25],'Vitesse moyenne (km/h)');
+ assert.equal(sheet.filter(x=>x[0]===p.id).length,1);
+});
+test('Refuser métriques vélo hors limites sans aucune écriture',()=>{
+ const before=tables['06_Cardio'].length;
+ assert.throws(()=>ctx.saveCardio({id:'TEST-BIKE-HIGH-01',type:'Vélo',date:'2026-10-19',duration:40,effort:3,elevationGain:-1}),/Valeur/);
+ assert.throws(()=>ctx.saveCardio({id:'TEST-BIKE-HIGH-02',type:'Vélo',date:'2026-10-19',duration:40,effort:3,averageSpeed:200}),/Valeur/);
+ assert.equal(tables['06_Cardio'].length,before);
+});
 test('Save measurement',()=>{ctx.saveMeasurement({id:'TEST-MEASURE-001',date:'2026-10-19',weight:53.1});assert.equal(tables['12_Mesures'].length,3)});
 console.log(report.join('\n'));
