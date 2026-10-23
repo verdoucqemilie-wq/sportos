@@ -109,6 +109,92 @@
     return year+'-W'+String(Math.ceil(((d-jan1)/86400000+1)/7)).padStart(2,'0');
   }
 }
+
+  // V0.8: every Monday, calculate suggestions from actual completed sessions last week.
+  // Never mutate historical logs or the base programme in Google Sheets.
+  function so8WeeklyPlan(type){
+    const model=homeModel(S.data),date=new Date(model.start+'T12:00:00Z');
+    date.setUTCDate(date.getUTCDate()-7);
+    const from=date.toISOString().slice(0,10),to=model.start;
+    const rows=[...(S.data.sessions||[]),...(S.data.cardio||[])]
+      .filter(x=>x&&x.Type===type&&x.Statut==='Terminée'&&x.Date>=from&&x.Date<to)
+      .sort((a,b)=>b.Date.localeCompare(a.Date));
+    const last=rows[0]||null;
+    const result={hasPrior:!!last,source:last?niceDate(last.Date):'',reason:'',proposed:'',exercise:{}};
+    if(!last){result.reason='Pas de séance terminée la semaine précédente : objectifs de départ conservés.';return result;}
+    const fatigueWeek=(S.data.reviews||[]).find(r=>{
+      const d=new Date(from+'T12:00:00Z');d.setUTCDate(d.getUTCDate()+4-(d.getUTCDay()||7));
+      const y=d.getUTCFullYear(),jan=new Date(Date.UTC(y,0,1));
+      return r.Semaine===y+'-W'+String(Math.ceil(((d-jan)/86400000+1)/7)).padStart(2,'0');
+    });
+    const fatigue=fatigueWeek?fatigueWeek['Fatigue 1-10']:'';
+    const sleep=fatigueWeek?fatigueWeek['Sommeil 1-10']:'';
+    const effortRaw=['A','B'].includes(type)?last['Effort global 1-10']:last['Effort 1-10'];
+    const effort=effortRaw===''||effortRaw==null?null:toNum(effortRaw);
+    const recoveryRisk=(fatigue!==''&&fatigue!=null&&toNum(fatigue)>=7)||
+      (sleep!==''&&sleep!=null&&toNum(sleep)<=4)||(effort!==null&&effort>=7);
+    if(type==='A'||type==='B'){
+      const logs=(S.data.logs||[]).filter(x=>x.Seance_ID===last.Seance_ID);
+      let raised=0,pain=false;
+      for(const ex of activeEx(type)){
+        const row=logs.find(x=>x.Exercice_ID===ex.Exercice_ID);
+        const timed=!!String(ex.Temps_s||'').trim()&&!String(ex.Rép_min||'').trim();
+        const base=toNum(timed?ex.Temps_s:ex.Rép_max);
+        const actual=row?toNum(timed?row['Maintien réel s']:row['Rép réelles']):0;
+        const reserve=row?(timed?row['Réserve tenue (s)']:row.RIR):'';
+        const painHere=!!row&&row.Douleur==='Oui';if(painHere)pain=true;
+        const favorable=!recoveryRisk&&row&&row.Douleur==='Non'&&
+          ['Facile','Modéré'].includes(row.Difficulté)&&reserve!==''&&reserve!=null&&
+          toNum(reserve)>=(timed?10:2)&&actual>=base&&actual>0;
+        const cap=timed?Math.min(120,Math.ceil(base*1.5)):Math.min(30,base+6);
+        const target=favorable?Math.min(cap,Math.max(base,actual)+(timed?5:1)):base;
+        if(target>base)raised++;
+        result.exercise[ex.Exercice_ID]={target,increase:target>base,timed,
+          explanation:target>base?'Ton retour sans douleur permet de proposer une petite progression.':
+            painHere?'Douleur signalée : aucune augmentation.':'Repère de départ conservé.'};
+      }
+      result.proposed=raised?raised+' exercice'+(raised>1?'s':'')+' avec un objectif ajusté.':'Objectifs conservés.';
+      result.reason=pain?'Douleur signalée : aucune progression pour les mouvements concernés.':
+        recoveryRisk?'Effort élevé, fatigue ou sommeil insuffisant : priorité à la récupération.':
+        raised?'Retour favorable la semaine précédente : ajustements mesurés sur les mouvements concernés.':
+        'Données de séance insuffisantes pour augmenter : consolide les gestes.';
+      return result;
+    }
+    if(last.Douleur==='Oui'||recoveryRisk){
+      result.reason=last.Douleur==='Oui'?'Douleur signalée : pas de progression ; adapte la séance.':
+        'Effort ou fatigue élevé : conserver le format précédent.';
+      return result;
+    }
+    if(last.Douleur!=='Non'){
+      result.reason='Douleur non renseignée : aucun changement automatique par précaution.';
+      return result;
+    }
+    if(type==='Course'){
+      const run=toNum(last.Course_sec_bloc),walk=toNum(last.Marche_sec_bloc),rounds=toNum(last.Nb_blocs);
+      if(effort!==null&&effort<=4&&run>=60&&walk>=30&&rounds>=8){
+        const next=Math.min(180,run+10);
+        if(next>run)result.proposed=rounds+' × ('+next+' s course / '+walk+' s marche)';
+        result.reason='Course précédente facile et sans douleur : +10 secondes de course par bloc proposées.';
+      }else result.reason='Garde le format précédent ; progression conditionnée à un retour complet et facile.';
+    }else if(type==='Vélo'){
+      const duration=toNum(last['Durée min']);
+      if(effort!==null&&effort<=4&&duration>=20){
+        result.proposed='Sortie facile : environ '+Math.min(120,duration+5)+' min';
+        result.reason='Sortie précédente confortable : +5 minutes proposées, sans objectif de vitesse.';
+      }else result.reason='Durée précédente conservée : priorité au confort et à la récupération.';
+    }
+    return result;
+  }
+  function so8CompletionBanner(){
+    if(homeModel(S.data).done.length!==4)return '';
+    return '<section class="so8-celebration" role="status" aria-label="Semaine accomplie">'
+      +'<span class="so8-celebration-icon" aria-hidden="true">'+v3Icon('sparkle')+'</span>'
+      +'<div><span class="so8-celebration-kicker">4 SUR 4 / SEMAINE ACCOMPLIE</span>'
+      +'<strong>Félicitations, tu as tenu ton rythme !</strong>'
+      +'<p>Deux renforcements, une course et une sortie vélo enregistrés. La récupération compte aussi : tes prochains objectifs tiendront compte de tes retours.</p></div>'
+      +'<span class="so8-celebration-check" aria-hidden="true">✓</span></section>';
+  }
+
   function home() {
     const vm=homeModel(S.data);
     const done=vm.done.length;
