@@ -69,7 +69,8 @@ try{
    assert(shell.includes('clasp pull --versionNumber "$VERSION"'));
    assert(shell.includes('clasp pull >/dev/null'));
    assert(!/^\s*clasp\s+(push|create-deployment|delete-deployment|deploy)\b/m.test(shell));
-   assert(shell.includes('SPORTOS_DIAGNOSTIC'));
+   assert(shell.includes('DIAGNOSTIC_READONLY=TERMINE'));
+   assert(shell.includes('diagnostic-readonly-v0.7.cjs'));
  },'READONLY_SHELL');
  console.log('SPORTOS_DIAGNOSTIC_V0_7=PASS; CASES='+count+'; REMOTE_WRITES=0');
 }finally{fs.rmSync(tmp,{recursive:true,force:true})}
