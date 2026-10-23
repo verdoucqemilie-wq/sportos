@@ -1,0 +1,2137 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#151915">
+  <base target="_top">
+  <style>
+:root{--bg:#f7f8f5;--white:#fff;--ink:#18271e;--muted:#748177;--forest:#123b32;--forest2:#1f5d4d;--lime:#daf2a8;--mint:#e4f0e8;--orange:#f6bd92;--line:#e6ebe5;--pink:#f6eceb;--shadow:0 8px 36px rgba(25,55,40,.055);--radius:19px}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:Inter,"Segoe UI",Arial,sans-serif;color:var(--ink);font-size:14px;line-height:1.5}button,input,select,textarea{font:inherit}button{cursor:pointer}button:disabled{cursor:not-allowed;opacity:.55}button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid #a8d99c;outline-offset:2px}
+#app{display:flex;min-height:100vh}.sidebar{width:236px;flex-shrink:0;background:var(--white);border-right:1px solid var(--line);padding:32px 17px 24px;display:flex;flex-direction:column;position:sticky;top:0;height:100vh}.brand{display:flex;align-items:center;gap:9px;font-size:26px;font-weight:850;letter-spacing:-1.25px;padding:0 14px}.brand-light{font-weight:450}.brand-icon{height:35px;width:35px;display:grid;place-items:center;background:var(--forest);color:var(--lime);border-radius:12px;font-size:25px;line-height:1}.brand-icon.mini{height:31px;width:31px;font-size:21px}.side-overline{font-size:10px;font-weight:750;letter-spacing:2px;color:#a4aca5;margin:58px 15px 16px}.nav{display:flex;flex-direction:column;gap:7px}.nav-link{border:0;border-radius:11px;text-align:left;display:flex;align-items:center;gap:13px;background:transparent;padding:14px;color:#657369;font-weight:660}.nav-link:hover,.nav-link.active{background:#e7f0e5;color:var(--forest)}.nav-symbol{font-weight:800;font-size:22px;width:22px;line-height:1}.sidebar-foot{margin-top:auto;margin-left:15px;font-weight:750}.sidebar-foot small{font-weight:400;color:var(--muted)}.pulse{display:inline-block;height:8px;width:8px;border-radius:50%;background:#69b67e;margin-right:5px}
+.shell{flex:1;min-width:0}.topbar{height:78px;display:flex;align-items:center;justify-content:space-between;padding:0 clamp(22px,4vw,58px);background:rgba(255,255,255,.6);border-bottom:1px solid var(--line)}.breadcrumb{font-weight:750}.breadcrumb span{font-weight:400;color:#95a198;margin-left:12px}.top-actions{display:flex;align-items:center;gap:14px}.date-pill{font-size:12px;color:var(--muted)}.avatar{width:35px;height:35px;border-radius:50%;display:grid;place-items:center;background:#f2ded5;color:#815741;font-weight:750}.mobile-brand{display:none}
+main{max-width:1220px;margin:auto;padding:34px clamp(22px,4vw,58px) 94px;outline:0}.eyebrow{color:#849087;text-transform:uppercase;letter-spacing:2px;font-size:10px;font-weight:850;margin:0 0 11px}.page-title{font-size:clamp(30px,4vw,43px);letter-spacing:-1.8px;line-height:1.15;margin:0 0 9px;font-weight:790}.lede{color:var(--muted);font-size:14px;margin:0 0 28px;max-width:690px}.grid{display:grid;gap:17px}.cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}.cols-4{grid-template-columns:repeat(4,minmax(0,1fr))}.card{border:1px solid var(--line);background:var(--white);border-radius:var(--radius);padding:23px;box-shadow:var(--shadow);min-width:0}.card.dark{background:var(--forest);color:white;border-color:var(--forest);background-image:radial-gradient(ellipse at 100% 2%,rgba(172,220,170,.14),transparent 48%)}.card.dark .subtle{color:#b8d2c6}.hero{display:flex;justify-content:space-between;align-items:center;gap:20px;padding:30px;min-height:250px;overflow:hidden}.hero-title{font-size:clamp(27px,3.5vw,42px);letter-spacing:-1.4px;line-height:1.1;margin:14px 0 12px}.hero-figure{font-size:110px;line-height:1;color:var(--lime);font-weight:900;transform:rotate(-14deg);opacity:.92}.subtle,.small{color:var(--muted)}.small{font-size:12px}.s12{font-size:12px}.muted-on-dark{color:#a9c9b8}.card-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:20px}.card-heading h2,.section-title{font-size:18px;letter-spacing:-.4px;margin:0;font-weight:770}.section-row{display:flex;justify-content:space-between;align-items:center;gap:14px;margin:26px 0 16px}.section-row h2{font-size:21px;letter-spacing:-.5px;margin:0}.micro{font-size:11px;color:var(--muted)}.stat-label{color:var(--muted);font-size:12px}.stat{font-size:35px;font-weight:820;letter-spacing:-1px;margin:12px 0 0}.stat small{font-size:14px;color:var(--muted);font-weight:500}.pills{display:flex;gap:7px;flex-wrap:wrap}.pill{font-size:11px;font-weight:700;padding:6px 11px;background:#edf3ec;border-radius:24px;color:#3b6650;display:inline-flex;align-items:center;gap:5px}.pill.orange{background:#fff0e4;color:#9a5d3b}.pill.gray{background:#f2f3f0;color:#68766b}.pill.white{background:rgba(255,255,255,.14);color:#e1f3e6}.pill.red{background:#fce9e7;color:#a2504a}
+.btn{border:0;border-radius:11px;font-weight:750;padding:11px 17px;background:var(--forest);color:white;display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;transition:transform .12s,background .12s}.btn:hover{background:#245447;transform:translateY(-1px)}.btn.light{background:var(--lime);color:#184035}.btn.light:hover{background:#eefacb}.btn.ghost{background:#edf2ee;color:#244437}.btn.outline{background:white;color:var(--forest);border:1px solid #d4e1d7}.btn.small-btn{padding:8px 11px;font-size:12px}.btn.full{width:100%}.tiny-link{border:0;background:transparent;color:#275f48;font-weight:750;padding:4px 0}.tiny-link:hover{text-decoration:underline}.activity{display:flex;gap:14px;align-items:center;border:1px solid var(--line);border-radius:13px;padding:15px;margin-bottom:10px;background:#fff}.activity:last-child{margin-bottom:0}.activity-icon{width:46px;height:46px;border-radius:13px;background:#e8f3e6;display:grid;place-items:center;font-size:24px;flex-shrink:0}.activity-icon.bike{background:#f5eeea}.activity-icon.run{background:#e6eaf3}.activity-info{min-width:0;flex:1}.activity-info strong{font-size:14px}.activity-info p{font-size:12px;color:var(--muted);margin:3px 0 0}.activity-actions{display:flex;flex-direction:column;align-items:flex-end;gap:8px}.progress-track{height:9px;border-radius:20px;background:#e8efe8;overflow:hidden}.progress-fill{height:100%;border-radius:20px;background:#b3d486}.progress-fill.darkfill{background:var(--forest2)}.block-bars{display:flex;align-items:end;gap:8px;height:107px;padding:10px 1px 0}.block-bars>div{flex:1;background:#a4c6ac;min-height:5px;border-radius:5px 5px 2px 2px}.block-bars>div:last-child{background:#376954}.row-between{display:flex;justify-content:space-between;align-items:center;gap:12px}.hint{font-size:12px;color:var(--muted)}.detail-list{display:flex;flex-direction:column;gap:11px}.detail-item{display:flex;align-items:flex-start;gap:13px;padding:12px 0;border-bottom:1px solid #f0f2ef}.detail-item:last-child{border-bottom:0}.exercise-no{border-radius:9px;background:#ebf2e8;color:var(--forest);height:33px;width:33px;display:grid;place-items:center;font-weight:750;flex-shrink:0}.exercise-name{font-size:14px;font-weight:750}.exercise-meta{font-size:12px;color:var(--muted)}.goal-list{display:flex;flex-direction:column;gap:12px}.goal{padding:13px 14px;background:#f7f9f5;border:1px solid var(--line);border-radius:12px}.goal strong{display:block}.goal p{font-size:12px;margin:5px 0 0;color:var(--muted)}.warning{border-radius:13px;background:#fff4e8;color:#8e613b;padding:14px;font-size:12px;line-height:1.6}.well{background:#f0f7e9;border-radius:12px;padding:15px;font-size:13px;color:#3b684a}
+.program-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:17px}.program-tab{border:1px solid #dfe7df;border-radius:11px;background:white;padding:10px 16px;color:#6b7b70;font-weight:730}.program-tab.active{background:var(--forest);border-color:var(--forest);color:white}.feature{min-height:190px}.feat-icon{font-size:27px;display:block;margin-bottom:15px}.feature h3{margin:0 0 6px;font-size:17px}.feature p{margin:0;color:var(--muted);font-size:13px}.hist-row{padding:15px 0;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:10px}.hist-row:last-child{border-bottom:0}.hist-row strong{display:block}.hist-row small{display:block;color:var(--muted)}.metric{font-size:31px;font-weight:800;letter-spacing:-1px}.measure{padding:18px;background:#f5f7f3;border-radius:12px}.measure small{display:block;color:var(--muted)}.measure b{font-size:23px}.kpi-line{display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid var(--line);padding:13px 0}.kpi-line:last-child{border:0}.steps{display:grid;gap:8px}.step{display:flex;align-items:center;justify-content:space-between;padding:11px;border:1px solid var(--line);border-radius:12px;gap:9px}.step.current{border-color:#6ca78b;background:#f3f9f3}.step b{font-size:12px}.step small{color:var(--muted);display:block}.badge-dot{display:inline-block;height:8px;width:8px;border-radius:50%;background:#9ab5a5;margin-right:7px}
+.mobile-nav{display:none}.empty{padding:24px;text-align:center;color:var(--muted);border:1px dashed #cfdacc;border-radius:12px}.loading{padding:60px;text-align:center;color:var(--muted)}.demo-banner{background:#fff5d9;color:#745c2d;border:1px solid #f5dca3;border-radius:12px;padding:12px 16px;margin-bottom:18px;font-size:12px}.error-banner{background:#fdeceb;color:#9c453f;border:1px solid #f6c7c4;border-radius:12px;padding:16px;margin-bottom:20px}
+.modal-backdrop{position:fixed;inset:0;background:#10261fc7;z-index:100;display:flex;align-items:center;justify-content:center;padding:15px}.modal{background:white;border-radius:20px;width:100%;max-width:680px;max-height:min(92vh,920px);overflow:auto;box-shadow:0 20px 80px #0004}.modal-head{display:flex;align-items:center;justify-content:space-between;padding:23px 25px 13px;position:sticky;top:0;background:white;z-index:2;border-bottom:1px solid var(--line)}.modal-head h2{margin:0;font-size:21px;letter-spacing:-.4px}.close{border:0;background:#f2f4f0;border-radius:50%;font-size:24px;width:34px;height:34px;display:grid;place-items:center}.modal-content{padding:22px 25px 28px}.field{display:flex;flex-direction:column;gap:7px;margin-bottom:15px}.field label{font-weight:740;font-size:12px}.input{background:white;border:1px solid #dce5dc;border-radius:10px;padding:12px;width:100%;color:var(--ink);min-width:0}.input:focus{border-color:#83b28e}.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 12px}.form-grid.cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}.exercise-form{border:1px solid var(--line);border-radius:13px;padding:16px;margin-bottom:13px}.exercise-form h3{margin:0 0 3px;font-size:15px}.exercise-form .form-grid{margin-top:12px}.checkline{display:flex;gap:8px;align-items:center;font-size:12px;color:var(--muted)}.modal-actions{display:flex;justify-content:flex-end;gap:9px;position:sticky;bottom:0;background:white;padding:15px 0 0;border-top:1px solid var(--line)}.danger-text{color:#a3463d;font-size:12px;margin:8px 0}#toast{position:fixed;bottom:30px;right:30px;z-index:200;background:var(--forest);color:white;padding:12px 18px;border-radius:13px;box-shadow:0 8px 24px #0003;max-width:min(90vw,400px);display:none}
+@media(max-width:1000px){.sidebar{width:204px}.cols-4{grid-template-columns:repeat(2,1fr)}.hero-figure{font-size:85px}.hero{min-height:220px}}
+@media(max-width:760px){.sidebar{display:none}.mobile-nav{display:flex;position:fixed;z-index:40;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--line);justify-content:space-around;padding:8px 8px max(9px,env(safe-area-inset-bottom));box-shadow:0 -2px 24px #173b2611}.mobile-nav button{border:0;background:transparent;color:#88978c;display:flex;flex-direction:column;align-items:center;gap:0;font-size:10px;padding:5px;min-width:65px}.mobile-nav button span{font-size:23px;line-height:1.1}.mobile-nav button.active{color:var(--forest);font-weight:800}.mobile-brand{display:flex;align-items:center;gap:6px;letter-spacing:-.5px;font-size:18px}.breadcrumb{display:none}.topbar{height:65px;padding:0 20px}.top-actions{gap:8px}.date-pill{font-size:11px}main{padding:26px 17px 113px}.cols-3,.cols-4{grid-template-columns:repeat(2,minmax(0,1fr))}.cols-2{grid-template-columns:1fr}.card{padding:19px}.hero{padding:22px;min-height:205px}.hero-figure{font-size:65px}.hero-title{font-size:30px}.page-title{font-size:32px}.activity{padding:12px;gap:10px}.activity-actions .pill{font-size:10px}.modal-backdrop{align-items:end;padding:0}.modal{max-height:94vh;border-radius:20px 20px 0 0}.modal-head{padding:17px 19px 13px}.modal-content{padding:18px 19px 28px}.form-grid.cols-3{grid-template-columns:repeat(2,minmax(0,1fr))}.date-pill{display:none}#toast{bottom:83px;left:18px;right:18px;max-width:none}}
+@media(max-width:390px){.cols-3{grid-template-columns:1fr 1fr}.hero-figure{display:none}.hero{min-height:188px}.program-tab{font-size:12px;padding:8px 9px}.activity-actions{align-items:stretch}.pill{padding:5px 8px}}
+@media(prefers-reduced-motion:reduce){.btn{transition:none}}
+
+/* === SportOS Athletic Wellness — accueil v0.2, isolé du reste de l'application === */
+.ath-home{color:var(--ink);padding-bottom:10px}
+.ath-home-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:24px;margin:4px 0 25px}
+.ath-overline{font-size:10px;font-weight:850;letter-spacing:2px;text-transform:uppercase;color:#6e887c;margin:0 0 12px}
+.ath-home-heading h1{font-size:clamp(33px,4vw,53px);line-height:1.04;letter-spacing:-2.2px;font-weight:800;margin:0 0 12px}
+.ath-home-heading p:last-child{font-size:14px;color:#78887e;margin:0;max-width:640px}
+.ath-head-signature{font-size:12px;line-height:.88;letter-spacing:-1.5px;font-weight:900;color:#adc4b7;display:flex;align-items:flex-end;gap:11px;margin-top:6px}
+.ath-head-signature span{font-size:48px;color:#bddc8e;font-weight:400;line-height:.68}
+.ath-main-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(350px,.85fr);gap:19px;align-items:stretch}
+.ath-hero{min-height:390px;border-radius:24px;background:linear-gradient(123deg,#103b32 10%,#17483a 67%,#275b46);color:white;padding:31px;position:relative;overflow:hidden;display:flex;align-items:center;isolation:isolate}
+.ath-hero::after{content:"";position:absolute;inset:auto -20% -55% auto;width:490px;height:490px;border-radius:50%;background:radial-gradient(circle,#c2eb8b24,transparent 65%);z-index:-1}
+.ath-hero-content{z-index:2;max-width:470px;position:relative}
+.ath-light-overline{color:#c8dfbd;font-size:10px;display:inline-flex;gap:8px;align-items:center;margin:0}
+.ath-dot{height:7px;width:7px;border-radius:50%;background:#dbf2a8;display:inline-block;box-shadow:0 0 0 4px #d9f3a820}
+.ath-hero-title{font-size:clamp(34px,3.4vw,48px);line-height:1.07;letter-spacing:-1.9px;font-weight:810;margin:25px 0 18px;max-width:360px}
+.ath-hero-title span{display:block;color:#d6eab5;font-size:clamp(20px,2vw,26px);font-weight:530;letter-spacing:-.7px;margin-top:7px}
+.ath-hero-meta{display:flex;flex-direction:column;gap:8px;color:#d1e1d3;font-size:12px;margin-bottom:29px;max-width:365px}
+.ath-hero-meta span:first-child{display:flex;gap:7px;align-items:center;color:#f0f7e6;font-weight:730}
+.ath-hero-actions{display:flex;gap:15px;flex-wrap:wrap;align-items:center}
+.ath-cta{border:0;border-radius:12px;background:#def3ab;color:#173c31;padding:13px 18px;font-weight:800;display:inline-flex;gap:18px;align-items:center;justify-content:space-between;box-shadow:0 6px 24px #081b141b}
+.ath-cta:hover{background:#eefac9}.ath-quiet-action{border:0;background:none;color:#e4f0df;padding:10px 0;font-weight:650;text-align:left}
+.ath-quiet-action:hover,.ath-text-action:hover,.ath-week-bottom button:hover{text-decoration:underline}
+.ath-hero-disclaimer{font-size:10px;color:#afcabb;margin:16px 0 0}
+.ath-hero-graphic{position:absolute;right:-75px;top:40px;height:310px;width:310px;opacity:.8;pointer-events:none}
+.ath-hero-orbit{position:absolute;inset:0;border:1px solid #c2e9a94f;border-radius:50%;transform:rotate(-25deg) scaleY(.72)}
+.ath-orbit-b{inset:43px;border-color:#d9f4b080;transform:rotate(20deg) scaleY(.7)}
+.ath-hero-initial{font-size:94px;font-weight:800;color:#d5efa4;position:absolute;inset:0;display:grid;place-items:center;text-shadow:0 2px 24px #0c27143b}
+.ath-week-panel{min-height:390px;border:1px solid #e3eae2;background:#fff;border-radius:24px;padding:28px;box-shadow:0 13px 39px rgba(13,53,38,.035)}
+.ath-panel-overline{font-size:10px;letter-spacing:1.75px;font-weight:850;color:#899c90;margin:0 0 8px}
+.ath-panel-head{display:flex;align-items:flex-start;justify-content:space-between;gap:15px}
+.ath-panel-head h2{font-size:22px;line-height:1.2;letter-spacing:-.65px;margin:0}
+.ath-week-count{font-size:12px;white-space:nowrap;color:#8b9f90;background:#eef5eb;border-radius:20px;padding:7px 12px}
+.ath-week-count b{color:#204e3e;font-size:15px}
+.ath-progress-track{height:8px;border-radius:10px;background:#edf2e9;margin:23px 0 11px;overflow:hidden}
+.ath-progress-track span{display:block;height:100%;background:linear-gradient(90deg,#2e7559,#c6e9a0);border-radius:10px;transition:width .35s}
+.ath-week-caption{font-size:12px;color:#7a8d80;min-height:18px;margin:0 0 21px}
+.ath-week-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.ath-week-item{border:1px solid #edf1eb;background:#f8faf6;border-radius:14px;display:grid;grid-template-columns:38px minmax(0,1fr);grid-template-rows:auto auto;align-items:center;text-align:left;gap:0 9px;padding:12px;min-height:77px;color:#2b4536}
+.ath-week-item:hover{border-color:#bbd6b3;background:#f2f8ef}
+.ath-week-item.is-done{background:#edf5e7;border-color:#d6e7cc}
+.ath-week-icon{grid-row:span 2;width:36px;height:36px;background:#e7f0e5;border-radius:11px;display:grid;place-items:center;color:#3c755c}
+.ath-week-item.is-done .ath-week-icon{background:#d5ead1;color:#246548}
+.ath-week-name{font-size:12px;font-weight:800;white-space:nowrap}
+.ath-week-state{font-size:10px;color:#8a9b90}
+.ath-week-item.is-done .ath-week-state{color:#477758;font-weight:800}
+.ath-week-bottom{border-top:1px solid #eef1ed;margin-top:20px;padding-top:16px;display:flex;justify-content:space-between;gap:14px;align-items:center;color:#93a096;font-size:11px}
+.ath-week-bottom button,.ath-text-action{border:0;background:transparent;color:#215a44;font-weight:800;font-size:12px;padding:3px 0;text-align:left}
+.ath-section-line{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;margin:34px 0 15px}
+.ath-section-line h2{font-size:24px;letter-spacing:-.8px;margin:0}
+.ath-section-line>span{color:#8d9d91;font-size:12px}
+.ath-insights{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:17px}
+.ath-insight-card{min-width:0;min-height:265px;border-radius:21px;padding:25px;background:white;border:1px solid #e6ede5;display:flex;flex-direction:column;box-shadow:0 10px 29px #1c4a2910}
+.ath-insight-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px;font-size:10px;font-weight:800;letter-spacing:1.45px;color:#7f9187}
+.ath-insight-icon{display:grid;place-items:center;background:#e4f0e7;color:#2c684c;border-radius:13px;height:43px;width:43px;flex-shrink:0}
+.ath-big-number{font-size:clamp(33px,3vw,46px);letter-spacing:-1.8px;line-height:1.06}
+.ath-big-word{font-size:clamp(35px,3vw,46px);letter-spacing:-2.2px;line-height:1.1}
+.ath-big-word span{color:#7aa97d}
+.ath-insight-heading{font-size:27px;line-height:1.15;letter-spacing:-.8px}
+.ath-insight-card>p{font-size:12px;color:#7c8c80;margin:10px 0 16px;line-height:1.55}
+.ath-insight-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;padding-top:13px;border-top:1px solid #edf0eb;font-size:11px;color:#8d9c90;margin-top:auto}
+.ath-insight-foot b{font-size:14px;color:#1d4c3c;white-space:nowrap}
+.ath-text-action{margin-top:19px}
+.ath-bike-card{background:#f2f6ed}
+.ath-bike-card .ath-insight-icon{background:#e0e8d5}
+.ath-coach-card{background:#fcf9f1}
+.ath-coach-card .ath-insight-icon{background:#f1e8d6;color:#866c42}
+.ath-star-icon{font-size:30px}
+.ath-coach-card h3{font-size:22px;line-height:1.2;letter-spacing:-.55px;margin:0 0 8px}
+.ath-coach-card>p{font-size:13px;color:#4e5e50;margin-bottom:12px}
+.ath-coach-caution{color:#89775a;font-size:11px;line-height:1.55;margin-top:auto;padding-top:13px;border-top:1px solid #ede7db}
+.ath-home-footer{margin:24px 0 0;border-radius:21px;background:#e9f0e7;padding:23px 26px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.ath-home-footer>div{display:flex;align-items:center;gap:15px}
+.ath-home-footer h2{font-size:16px;letter-spacing:-.3px;margin:0 0 4px}
+.ath-home-footer p{font-size:12px;color:#718477;margin:0;max-width:600px}
+.ath-footer-icon{font-size:27px;background:#d6e5d3}
+.ath-footer-button{background:#164334;color:white;border:0;border-radius:11px;padding:12px 16px;flex-shrink:0;font-weight:770}
+.ath-footer-button:hover{background:#275b47}
+.ath-history-note{font-size:11px;color:#93a098;margin:18px 0 0}
+.ath-home button:focus-visible{outline:3px solid #a2ca82;outline-offset:3px}
+@media(max-width:1120px){.ath-main-grid{grid-template-columns:minmax(0,1fr)}.ath-week-panel{min-height:auto}.ath-hero{min-height:330px}.ath-insights{grid-template-columns:repeat(2,minmax(0,1fr))}.ath-coach-card{grid-column:1/-1;min-height:185px}}
+@media(max-width:760px){.ath-home-heading{margin:0 0 19px}.ath-home-heading h1{font-size:36px;letter-spacing:-1.5px}.ath-head-signature{display:none}.ath-main-grid{gap:12px}.ath-hero{min-height:330px;padding:26px 23px;border-radius:20px}.ath-hero-title{font-size:39px;margin:20px 0 15px}.ath-hero-title span{font-size:22px}.ath-hero-graphic{right:-145px;opacity:.4}.ath-hero-meta{max-width:300px}.ath-week-panel{padding:21px;border-radius:20px}.ath-week-caption{margin-bottom:16px}.ath-section-line{margin:28px 0 14px}.ath-section-line>span{display:none}.ath-insights{grid-template-columns:1fr;gap:11px}.ath-insight-card{min-height:220px;padding:22px}.ath-coach-card{grid-column:auto}.ath-home-footer{align-items:stretch;flex-direction:column;padding:21px}.ath-footer-button{width:100%}}
+@media(max-width:390px){.ath-home-heading h1{font-size:32px}.ath-hero{padding:23px 18px}.ath-hero-actions{gap:8px}.ath-hero-title{font-size:34px}.ath-quiet-action{font-size:12px}.ath-week-panel{padding:17px}.ath-week-item{padding:9px;grid-template-columns:30px minmax(0,1fr);gap:0 7px}.ath-week-icon{height:29px;width:29px}.ath-week-icon svg{width:18px}.ath-week-name{font-size:11px}.ath-week-state{font-size:9px}}
+@media(prefers-reduced-motion:reduce){.ath-progress-track span{transition:none}}
+
+
+/* ==== SportOS v0.3 | Athletic Editorial Design System =====================
+   Scope: shell + home. Other pages retain their current content and controls.
+   No third-party assets, fonts, APIs or trackers. ======================== */
+:root{
+  --v3-ink:#151915;--v3-forest:#153c30;--v3-bone:#f5f4ef;
+  --v3-paper:#fff;--v3-acid:#d4f17b;--v3-sage:#e4ebe1;
+  --v3-sand:#ede6db;--v3-muted:#58635d;--v3-line:#dee3dc;
+  --v3-ff:"Arial Narrow","Franklin Gothic Medium","Segoe UI",Arial,sans-serif
+}
+body.sport-v3{background:var(--v3-bone);color:var(--v3-ink);font-family:Inter,"Segoe UI",Arial,sans-serif}
+body.sport-v3 #app{min-height:100vh}
+body.sport-v3 button,body.sport-v3 input,body.sport-v3 textarea{font:inherit}
+body.sport-v3 button:focus-visible,body.sport-v3 a:focus-visible{outline:3px solid #659e65;outline-offset:3px}
+.v3-skip{position:fixed;top:-100px;left:12px;z-index:999;padding:10px 16px;background:var(--v3-acid);color:var(--v3-ink);font-weight:800;border-radius:8px}
+.v3-skip:focus{top:12px}
+.v3-sidebar{width:244px;flex:0 0 244px;position:sticky;top:0;max-height:100vh;min-height:620px;background:#19221c;color:white;display:flex;flex-direction:column;z-index:35}
+.v3-sidebar-head{height:100px;padding:28px 24px 14px;flex-shrink:0}
+.v3-logo{border:0;background:none;color:white;display:flex;gap:13px;align-items:center;padding:0;text-align:left}
+.v3-logo:hover .v3-wordmark{color:var(--v3-acid)}
+.v3-symbol{width:39px;height:39px;border-radius:12px;background:var(--v3-acid);color:#1e3426;display:grid;place-items:center;font-size:34px;font-weight:500;line-height:1}
+.v3-wordmark{font-size:26px;font-weight:850;letter-spacing:-1.4px;line-height:1}
+.v3-wordmark>span{font-weight:420}
+.v3-wordmark small{display:block;font-family:inherit;font-size:8px;letter-spacing:2.3px;color:#aabcad;font-weight:730;margin-top:8px}
+.v3-sidebar-inner{padding:21px 14px;flex:1;overflow-y:auto;scrollbar-width:thin}
+.v3-sidebar-label{font-size:10px;letter-spacing:2.2px;font-weight:800;color:#a7b6a5;margin:0 12px 16px}
+.v3-side-nav{display:flex;flex-direction:column;gap:7px}
+.v3-nav-link{border:0;background:none;color:#c4d1c5;border-radius:11px;padding:13px 15px;display:flex;gap:13px;align-items:center;text-align:left;min-height:48px;font-size:14px;font-weight:650;transition:background .18s,color .18s}
+.v3-nav-link svg{width:20px;height:20px;flex-shrink:0}
+.v3-nav-link:hover{color:#fff;background:#ffffff14}
+.v3-nav-link.active{background:var(--v3-acid);color:#1a2a1f;font-weight:850}
+.v3-sidebar-action{border-top:1px solid #ffffff1f;margin-top:30px;padding-top:26px}
+.v3-side-cta{min-height:46px;width:100%;background:white;border:0;border-radius:10px;display:flex;align-items:center;justify-content:center;gap:10px;padding:9px;color:#19261c;font-weight:800;font-size:12px}
+.v3-side-cta>span{font-size:22px;font-weight:450;line-height:1}
+.v3-side-cta:hover{background:var(--v3-acid)}
+.v3-side-minor{margin-top:9px;display:flex;gap:12px;align-items:center;background:transparent;color:#c6d6c6;border:0;min-height:40px;width:100%;font-size:12px;padding:8px 10px;text-align:left}
+.v3-side-minor:hover{color:var(--v3-acid)}
+.v3-side-bottom{padding:10px 15px 22px}
+.v3-side-challenge{background:#2a3b2f;border:1px solid #415346;border-radius:13px;padding:16px 15px;color:white}
+.v3-side-challenge>p{font-size:9px;letter-spacing:1.7px;color:#d4e3c0;margin:0 0 9px;font-weight:750}
+.v3-side-challenge-title{font-size:27px;letter-spacing:-1.2px;font-weight:900;line-height:1}
+.v3-side-challenge-title span{color:var(--v3-acid);margin-left:4px;font-size:20px}
+.v3-side-challenge>span{font-size:11px;color:#ccdacb;display:block;line-height:1.5;margin-top:9px}
+.v3-side-challenge button{border:0;background:transparent;color:var(--v3-acid);font-size:11px;font-weight:800;padding:12px 0 0;text-align:left}
+.v3-side-challenge button:hover{text-decoration:underline}
+.v3-private-note{font-size:10px;letter-spacing:.25px;color:#acbdaf;margin:17px 5px 0}
+.v3-private-note>span{color:#bfe381;margin-right:7px}
+.v3-shell{min-width:0;flex:1}
+.v3-topbar{height:78px;position:sticky;top:0;z-index:30;background:rgba(245,244,239,.96);backdrop-filter:blur(16px);border-bottom:1px solid #dee3dc;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:0 clamp(25px,4vw,61px)}
+.v3-top-left{display:flex;align-items:center;gap:12px;min-width:0}
+.v3-top-context>span{font-size:10px;letter-spacing:1.9px;color:#858e86;font-weight:790;display:block;margin-bottom:3px}
+.v3-top-context>span>span:first-child{color:#bbbfb8;padding:0 5px}
+.v3-top-context strong{font-size:13px;font-weight:720;color:#303b32;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.v3-top-actions{display:flex;align-items:center;gap:14px;flex-shrink:0}
+.v3-date{font-size:12px;color:#667369;text-transform:capitalize;margin-right:4px}
+.v3-top-cta{min-height:43px;border:0;background:var(--v3-ink);color:white;border-radius:9px;padding:10px 16px;font-size:12px;font-weight:800;display:flex;align-items:center;gap:10px}
+.v3-top-cta:hover{background:var(--v3-forest)}
+.v3-top-cta>span:first-child{font-size:23px;font-weight:350;line-height:1}
+.v3-top-profile{width:44px;height:44px;display:grid;place-items:center;border-radius:50%;border:1px solid #d4d8d0;background:#e6e9df;color:#244536}
+.v3-top-profile svg{width:19px;height:19px}
+.v3-top-profile:hover{background:#d4ebc5}
+.v3-mobile-symbol{display:none}
+body.sport-v3 #content{max-width:1510px;margin:0 auto;padding:35px clamp(25px,4vw,61px) 75px;min-width:0}
+.v3-mobile-nav{display:none}
+.v3-dashboard{width:100%;min-width:0}
+.v3-label{font-size:10px;letter-spacing:2px;font-weight:850;color:#607666;margin:0;line-height:1.5;text-transform:uppercase}
+.v3-intro{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin:13px 0 27px}
+.v3-intro h1{font-family:var(--v3-ff);font-weight:900;font-stretch:condensed;letter-spacing:-2.8px;line-height:.99;font-size:clamp(38px,4.4vw,70px);margin:12px 0 13px;max-width:1010px}
+.v3-intro p:last-child{color:#5d6960;font-size:14px;line-height:1.5;margin:0}
+.v3-intro-stamp{font-size:42px;line-height:1;letter-spacing:-9px;font-weight:800;white-space:nowrap;color:#afcda3;transform:rotate(-8deg);margin:22px 20px 0 0}
+.v3-intro-stamp span{font-size:26px;vertical-align:middle}
+.v3-leading{display:grid;grid-template-columns:minmax(0,1.28fr) minmax(330px,.72fr);gap:16px;align-items:stretch}
+.v3-feature{background:linear-gradient(111deg,#131915 0%,#21372b 77%,#305041 100%);border-radius:18px;color:white;min-height:456px;position:relative;overflow:hidden;padding:36px 35px;display:flex;align-items:center;isolation:isolate}
+.v3-feature-copy{position:relative;z-index:3;width:100%;max-width:530px}
+.v3-feature-kicker{display:flex;gap:10px;align-items:center;color:#d5eca7;font-size:10px;letter-spacing:1.8px;font-weight:830;margin:0 0 22px}
+.v3-point{height:6px;width:6px;border-radius:50%;background:var(--v3-acid);box-shadow:0 0 0 4px #d4f17b18}
+.v3-feature h2{font-family:var(--v3-ff);font-size:clamp(51px,5.4vw,88px);line-height:.86;letter-spacing:-3.8px;margin:0 0 30px;font-weight:900;max-width:490px}
+.v3-feature-intro{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:#b6d2ad;margin:0 0 5px}
+.v3-feature-workout{font-size:24px;letter-spacing:-.5px;font-weight:800;line-height:1.1;max-width:430px}
+.v3-feature-workout span{display:block;font-weight:450;font-size:15px;color:#cddcc9;letter-spacing:0;margin-top:6px}
+.v3-feature-data{display:flex;flex-wrap:wrap;gap:0;margin:18px 0 25px;max-width:520px}
+.v3-feature-data span{border-right:1px solid #c5ddba66;padding-right:12px;margin-right:12px;color:#d1e5c4;font-size:10px;font-weight:800;letter-spacing:.7px;line-height:1.5}
+.v3-feature-data span:last-child{border:0;margin:0}
+.v3-feature-actions{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.v3-btn-acid{min-height:49px;background:var(--v3-acid);color:#171f17;border:0;border-radius:7px;padding:13px 16px 13px 20px;display:flex;align-items:center;gap:22px;justify-content:space-between;letter-spacing:.4px;font-size:11px;font-weight:880}
+.v3-btn-acid svg{width:18px;height:18px}
+.v3-btn-acid:hover{background:#e9faa9}
+.v3-btn-subtle{border:0;background:transparent;color:white;font-size:12px;font-weight:700;padding:13px 0}
+.v3-btn-subtle:hover{text-decoration:underline}
+.v3-hero-help{font-size:11px;color:#bdcdbb;margin:18px 0 0}
+.v3-feature-recovery{margin:16px 0 25px;color:#d2dbc9}
+.v3-feature-art{position:absolute;top:0;right:0;width:58%;height:100%;pointer-events:none;overflow:hidden;color:#a6d194;z-index:1;opacity:.85}
+.v3-art-stripe{position:absolute;width:38%;height:145%;background:linear-gradient(180deg,#96b78970,#bad89416);transform:rotate(21deg);top:-18%;right:7%;filter:blur(.5px)}
+.v3-art-word{font-family:var(--v3-ff);font-size:clamp(105px,12vw,190px);font-weight:900;line-height:.8;letter-spacing:-12px;position:absolute;right:-15%;top:17%;writing-mode:vertical-rl;text-orientation:mixed;transform:rotate(180deg);color:#bce77e16}
+.v3-art-index{position:absolute;right:16px;bottom:25px;color:#e0eec0a0;font-size:9px;letter-spacing:2px;text-align:right;font-weight:800}
+.v3-feature-art svg{position:absolute;inset:0;width:100%;height:100%;opacity:.5}
+.v3-week-panel{min-width:0;border:1px solid #dde3db;background:white;padding:27px 24px 22px;border-radius:18px;min-height:456px;display:flex;flex-direction:column}
+.v3-week-head{display:flex;align-items:end;justify-content:space-between;gap:10px;margin:8px 0 8px}
+.v3-week-head h2{font-family:var(--v3-ff);font-size:clamp(29px,3vw,43px);font-weight:890;letter-spacing:-1.6px;margin:0;line-height:1.08}
+.v3-week-head h2 span{color:#7caf4f}
+.v3-week-head>strong{font-size:42px;line-height:.93;letter-spacing:-2px;font-weight:900;white-space:nowrap}
+.v3-week-head>strong small{font-size:17px;color:#9aa79e;letter-spacing:-.4px}
+.v3-week-subtitle{font-size:12px;color:#75857a;margin:5px 0 15px}
+.v3-week-track{height:7px;border-radius:10px;background:#edf2e8;overflow:hidden;margin-bottom:17px}
+.v3-week-track span{display:block;height:100%;background:#85ad58;border-radius:10px;transition:width .2s}
+.v3-week-rows{display:flex;flex-direction:column;gap:0}
+.v3-week-row{display:flex;align-items:center;gap:11px;border:0;border-bottom:1px solid #e8ebe6;background:transparent;padding:10px 0;min-height:56px;text-align:left;color:#1e2c21;width:100%}
+.v3-week-row:last-child{border-bottom:0}
+.v3-week-row:hover{background:#f5f9f0}
+.v3-week-icon{flex-shrink:0;height:34px;width:34px;background:#edf3ec;border-radius:9px;display:grid;place-items:center;color:#4f785b}
+.v3-week-icon svg{width:19px;height:19px}
+.v3-week-row.done .v3-week-icon{background:#dcedc5;color:#3d724e}
+.v3-week-row-title{font-weight:770;font-size:13px;min-width:0;flex:1;line-height:1.2}
+.v3-week-row-title small{display:block;margin-top:4px;font-size:10px;color:#828f84;font-weight:470}
+.v3-week-status{font-size:9px;letter-spacing:.7px;font-weight:840;white-space:nowrap;color:#8d958e}
+.v3-week-row.done .v3-week-status{color:#3c7544}
+.v3-week-row.next .v3-week-status{color:#306746}
+.v3-link-arrow{background:transparent;border:0;padding:7px 0;color:#204a31;font-size:11px;font-weight:850;text-align:left;letter-spacing:.6px}
+.v3-link-arrow:hover{text-decoration:underline}
+.v3-week-panel>.v3-link-arrow{margin-top:auto;padding-top:18px}
+.v3-section-title{display:flex;justify-content:space-between;align-items:end;gap:20px;margin:43px 0 18px}
+.v3-section-title h2{font-family:var(--v3-ff);font-size:clamp(31px,3.3vw,47px);letter-spacing:-1.5px;line-height:1;margin:10px 0 0}
+.v3-section-title h2 span{color:#7dac58;font-size:.7em;margin-left:14px}
+.v3-section-title>span{font-size:12px;color:#899389}
+.v3-insights{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:16px}
+.v3-last,.v3-challenge{padding:30px;border-radius:17px;min-height:287px;display:flex;flex-direction:column}
+.v3-last{background:#fff;border:1px solid #e1e6dd}
+.v3-panel-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.v3-panel-bubble{height:44px;width:44px;display:grid;place-items:center;background:#eaf0e6;color:#467b54;border-radius:50%}
+.v3-last h2{font-family:var(--v3-ff);font-size:clamp(35px,4vw,55px);line-height:.98;letter-spacing:-1.9px;margin:7px 0 7px}
+.v3-last>p{font-size:13px;color:#6a756b;margin:0 0 20px}
+.v3-last-numbers{display:flex;gap:24px;border-top:1px solid #e3e8df;padding:16px 0 10px}
+.v3-last-numbers div{display:flex;flex-direction:column;gap:2px;min-width:90px}
+.v3-last-numbers strong{font-size:35px;letter-spacing:-1.4px;line-height:1}
+.v3-last-numbers span{font-size:10px;letter-spacing:1px;color:#78897c;font-weight:750}
+.v3-last>.v3-link-arrow{margin-top:auto}
+.v3-challenge{background:#dfebe1;position:relative;overflow:hidden}
+.v3-challenge::after{content:"";width:210px;height:210px;position:absolute;border:1px solid #a4c2ab;border-radius:50%;right:-93px;top:75px;pointer-events:none}
+.v3-challenge-top{display:flex;align-items:center;justify-content:space-between;gap:12px;color:#678269;font-size:11px;font-weight:800}
+.v3-challenge h2{font-family:var(--v3-ff);font-size:clamp(45px,5vw,75px);line-height:1;letter-spacing:-3.5px;font-weight:900;margin:30px 0 8px;z-index:1}
+.v3-challenge h2 span{color:#7fa64f}
+.v3-challenge>p{color:#4f6956;font-size:13px;max-width:280px;position:relative;z-index:1;line-height:1.6}
+.v3-challenge-foot{border-top:1px solid #bdd2c0;padding-top:15px;margin-top:auto;display:flex;justify-content:space-between;align-items:flex-end;gap:10px;z-index:1}
+.v3-challenge-foot>span{font-size:10px;color:#608068}
+.v3-challenge-foot>span strong{display:block;color:#233f2d;font-size:12px}
+.v3-challenge-foot button{border:0;background:none;color:#1b4c30;font-size:10px;font-weight:850;text-align:right;white-space:nowrap}
+.v3-challenge-foot button:hover{text-decoration:underline}
+.v3-coach{margin-top:17px;background:#eae3d7;border-radius:17px;padding:28px 31px;display:grid;grid-template-columns:minmax(0,.75fr) minmax(0,1.25fr);gap:12px 36px;align-items:center}
+.v3-coach-tag{display:flex;gap:9px;align-items:center;font-size:10px;letter-spacing:2px;font-weight:850;color:#6a715a}
+.v3-coach-tag svg{height:19px;width:19px;color:#628163}
+.v3-coach h2{font-family:var(--v3-ff);font-size:clamp(27px,2.5vw,37px);line-height:1.05;letter-spacing:-1px;margin:0;grid-column:1}
+.v3-coach>p{grid-row:1/span 2;grid-column:2;margin:0;color:#455146;line-height:1.65;font-size:14px}
+.v3-coach-warning{grid-column:2;font-size:12px;color:#794d30;background:#f6f1e8;border-left:3px solid #b88851;padding:10px 12px;line-height:1.55}
+.v3-coach .v3-link-arrow{grid-column:1;grid-row:3;align-self:end}
+.v3-checkin{margin-top:17px;background:#1b3025;color:white;border-radius:17px;padding:28px 31px;display:flex;align-items:center;justify-content:space-between;gap:23px}
+.v3-checkin .v3-label{color:#b8d18f}
+.v3-checkin h2{font-family:var(--v3-ff);font-size:clamp(26px,2.8vw,37px);line-height:1;letter-spacing:-.8px;margin:10px 0 8px}
+.v3-checkin p{font-size:12px;color:#d3e0ce;margin:0}
+.v3-checkin-cta{min-height:48px;background:var(--v3-acid);color:#1d2a1d;border:0;border-radius:7px;padding:12px 18px;white-space:nowrap;font-size:11px;font-weight:850}
+.v3-checkin-cta:hover{background:#ebfbb4}
+.v3-checkin-done{font-size:12px;color:#dbf3b5;font-weight:780}
+.v3-fineprint{font-size:10px;letter-spacing:1px;color:#6a756a;margin:19px 0}
+.v3-fineprint button{background:none;border:0;padding:0;color:#25583a;letter-spacing:inherit;font-size:inherit;font-weight:850;text-decoration:underline}
+.v3-quick-overlay{position:fixed;inset:0;z-index:150;display:grid;place-items:center;background:#101b14bb;padding:16px}
+.v3-quick-sheet{background:var(--v3-bone);border-radius:19px;width:min(550px,100%);max-height:90dvh;overflow:auto;box-shadow:0 20px 80px #111d1538;padding:28px}
+.v3-quick-heading{display:flex;justify-content:space-between;align-items:start;gap:15px}
+.v3-quick-heading h2{font-family:var(--v3-ff);font-size:32px;letter-spacing:-.9px;line-height:1.05;margin:10px 0 9px}
+.v3-quick-heading p:last-child{font-size:12px;color:#596c60;margin:0 0 14px}
+.v3-quick-close{border:0;background:#dfe8db;color:#213c2b;width:44px;height:44px;border-radius:50%;font-size:26px;flex-shrink:0}
+.v3-quick-options{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:11px}
+.v3-quick-options button{min-height:104px;display:flex;flex-direction:column;align-items:flex-start;text-align:left;gap:5px;position:relative;padding:18px;border:1px solid #dbe4d7;background:white;color:#1b3524;border-radius:11px}
+.v3-quick-options button:hover{background:#e6f2d9;border-color:#9fbb9c}
+.v3-quick-options svg{height:24px;width:24px;margin-bottom:5px;color:#3e7351}
+.v3-quick-options b{font-size:12px;letter-spacing:.4px}
+.v3-quick-options small{display:block;font-size:11px;color:#66766b;margin-top:3px}
+.v3-quick-go{position:absolute;right:16px;top:14px;font-size:18px}
+@media(max-width:1220px){
+  .v3-sidebar{width:205px;flex-basis:205px}
+  .v3-sidebar-head{padding:25px 15px 13px}
+  .v3-wordmark{font-size:24px}
+  .v3-feature{padding:29px 28px}
+  .v3-feature h2{font-size:clamp(51px,5vw,70px)}
+  .v3-leading{grid-template-columns:minmax(0,1fr) minmax(300px,.78fr)}
+  .v3-feature-data span{font-size:9px}
+}
+@media(min-width:761px) and (max-width:1050px){
+  .v3-sidebar{width:77px;flex-basis:77px;min-height:0}
+  .v3-sidebar-head{padding:20px 17px;height:78px}
+  .v3-logo{width:40px}
+  .v3-wordmark,.v3-sidebar-label,.v3-nav-link span,.v3-sidebar-action,.v3-side-bottom{display:none}
+  .v3-sidebar-inner{padding:12px 11px}
+  .v3-nav-link{width:54px;height:54px;min-height:54px;padding:0;justify-content:center}
+  .v3-side-nav{gap:6px}
+  .v3-side-nav .v3-nav-link{font-size:0}
+  .v3-leading{grid-template-columns:1fr}
+  .v3-feature{min-height:390px}
+}
+@media(max-width:760px){
+  .v3-sidebar{display:none}
+  .v3-topbar{height:62px;padding:0 17px}
+  .v3-top-context>span{font-size:9px;letter-spacing:1.3px}
+  .v3-top-context strong{font-size:11px}
+  .v3-mobile-symbol{display:grid;place-items:center;width:32px;height:32px;color:#14291b;background:var(--v3-acid);border-radius:10px;font-size:28px}
+  .v3-date,.v3-top-profile{display:none}
+  .v3-top-cta{padding:7px;width:44px;height:44px;justify-content:center;border-radius:10px}
+  .v3-top-cta-text{display:none}
+  .v3-top-cta>span:first-child{font-size:27px}
+  .v3-mobile-nav{display:flex;position:fixed;bottom:0;left:0;right:0;justify-content:space-around;align-items:stretch;background:#19221cf7;color:white;z-index:80;min-height:69px;padding:7px 7px calc(9px + env(safe-area-inset-bottom))}
+  .v3-mobile-nav button{flex:1;min-width:0;min-height:51px;border:0;border-radius:9px;color:#b2c4b5;background:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:10px;font-weight:650;padding:4px}
+  .v3-mobile-nav button svg{height:20px;width:20px}
+  .v3-mobile-nav button.active{background:#344939;color:var(--v3-acid)}
+  body.sport-v3 #content{padding:22px 17px calc(99px + env(safe-area-inset-bottom))}
+  .v3-intro{margin:3px 0 18px}
+  .v3-intro h1{font-size:clamp(34px,8vw,47px);letter-spacing:-1.6px;margin:9px 0}
+  .v3-intro p:last-child{font-size:12px}
+  .v3-intro-stamp{display:none}
+  .v3-leading{grid-template-columns:1fr;gap:12px}
+  .v3-feature{border-radius:14px;min-height:407px;padding:25px 23px}
+  .v3-feature h2{font-size:clamp(50px,12.5vw,65px);letter-spacing:-2px;margin:0 0 24px}
+  .v3-feature-art{opacity:.48;right:-24%;width:78%}
+  .v3-feature-copy{max-width:100%}
+  .v3-feature-workout{font-size:22px}
+  .v3-feature-data{gap:6px 0}
+  .v3-feature-actions{align-items:flex-start;flex-direction:column;gap:6px}
+  .v3-btn-subtle{min-height:44px}
+  .v3-week-panel{padding:22px 19px;border-radius:14px;min-height:0}
+  .v3-week-head h2{font-size:33px}
+  .v3-week-row{min-height:61px}
+  .v3-section-title{margin:31px 0 15px}
+  .v3-section-title>span{display:none}
+  .v3-insights{grid-template-columns:1fr;gap:12px}
+  .v3-last,.v3-challenge{padding:24px 22px;min-height:269px;border-radius:14px}
+  .v3-challenge h2{font-size:64px}
+  .v3-coach{grid-template-columns:1fr;gap:13px;margin-top:12px;padding:25px 22px;border-radius:14px}
+  .v3-coach h2,.v3-coach>p,.v3-coach-warning,.v3-coach .v3-link-arrow{grid-row:auto;grid-column:1}
+  .v3-coach h2{font-size:31px}
+  .v3-checkin{margin-top:12px;padding:23px 22px;align-items:stretch;flex-direction:column;border-radius:14px}
+  body.sport-v4 .v3-checkin-cta{width:100%}
+  .v3-quick-overlay{align-items:end;padding:0}
+  .v3-quick-sheet{width:100%;max-height:92dvh;border-radius:18px 18px 0 0;padding:23px 19px calc(26px + env(safe-area-inset-bottom))}
+  #toast{bottom:94px}
+}
+@media(max-width:370px){
+  .v3-intro h1{font-size:33px}
+  .v3-feature{padding:22px 18px}
+  .v3-feature h2{font-size:48px}
+  .v3-feature-kicker{font-size:9px;letter-spacing:1px}
+  .v3-week-status{font-size:8px}
+  .v3-challenge-foot{flex-direction:column;align-items:start}
+  .v3-quick-options{grid-template-columns:1fr}
+  .v3-quick-options button{min-height:84px}
+}
+@media(prefers-reduced-motion:reduce){.v3-week-track span,.v3-nav-link{transition:none}}
+
+
+/* === SPORTOS V0.4 / DESIGN TOKENS + ADAPTIVE REFLOW ===
+   Supersedes V0.3 shell/home dimensions without altering program logic. === */
+:root{
+  --brand-ink:#151915;--brand-forest:#153C30;--brand-bone:#F5F4EF;
+  --brand-paper:#FFFFFF;--brand-acid:#D4F17B;--brand-sage:#E4EBE1;
+  --brand-sand:#EDE6DB;--brand-muted:#58635D;--brand-line:#DEE3DC;
+  --brand-caution:#87412D;--brand-display:Arial,Helvetica,sans-serif;
+  --brand-body:Arial,Helvetica,sans-serif;
+  --brand-radius-sm:9px;--brand-radius-card:16px;
+  --brand-motion:160ms
+}
+body.sport-v4{font-family:var(--brand-body);background:var(--brand-bone);color:var(--brand-ink)}
+body.sport-v4 h1,body.sport-v4 h2,body.sport-v4 h3{font-family:var(--brand-display);font-stretch:normal}
+body.sport-v4 .v3-sidebar{
+  position:sticky;top:0;align-self:flex-start;
+  height:100dvh;max-height:none;min-height:0;
+  overflow-y:auto;overflow-x:hidden;
+  overscroll-behavior:contain;scrollbar-width:none;
+  width:clamp(218px,15.2vw,245px);flex-basis:clamp(218px,15.2vw,245px);
+  background:var(--brand-ink);border-right:1px solid #ffffff1b
+}
+body.sport-v4 .v3-sidebar::-webkit-scrollbar{width:0;height:0}
+body.sport-v4 .v3-sidebar-head{height:76px;padding:18px 18px 10px}
+body.sport-v4 .v3-logo{gap:10px;min-height:42px}
+body.sport-v4 .v4-brand-mark{width:40px;height:40px;flex:none;display:block}
+body.sport-v4 .v4-mobile-brand-mark{display:none}
+body.sport-v4 .v3-wordmark{font:800 25px/1 var(--brand-display);letter-spacing:-.035em;color:var(--brand-paper)}
+body.sport-v4 .v3-wordmark>span{color:var(--brand-acid);font-weight:750}
+body.sport-v4 .v3-wordmark small{font:700 8px/1.2 var(--brand-body);letter-spacing:.12em;color:#cad5c6;margin-top:5px}
+body.sport-v4 .v3-sidebar-inner{
+  padding:17px 13px 7px;flex:0 0 auto;
+  overflow:visible;min-height:0;
+}
+body.sport-v4 .v3-sidebar-label{font-size:11px;letter-spacing:.1em;margin:0 10px 10px;color:#c9d7cc}
+body.sport-v4 .v3-side-nav{gap:4px}
+body.sport-v4 .v3-nav-link{min-height:45px;padding:10px 12px;font-size:14px;gap:11px;transition:background var(--brand-motion) ease,color var(--brand-motion) ease}
+body.sport-v4 .v3-nav-link svg{width:21px;height:21px}
+body.sport-v4 .v3-sidebar-action{border-top:1px solid #ffffff26;margin-top:18px;padding-top:18px}
+body.sport-v4 .v3-side-cta{min-height:44px;font-size:12px}
+body.sport-v4 .v3-side-minor{min-height:39px;margin-top:4px;padding:6px 9px}
+body.sport-v4 .v3-side-bottom{padding:11px 13px 13px;margin-top:auto;flex:0 0 auto}
+body.sport-v4 .v3-side-challenge{padding:13px 13px;border-radius:12px}
+body.sport-v4 .v3-side-challenge>p{font-size:10px;letter-spacing:.08em;margin-bottom:8px}
+body.sport-v4 .v3-side-challenge-title{font-size:25px}
+body.sport-v4 .v3-side-challenge>span{font-size:11px;margin-top:7px}
+body.sport-v4 .v3-side-challenge button{min-height:32px;font-size:12px;padding-top:7px}
+body.sport-v4 .v3-private-note{margin:10px 5px 0}
+body.sport-v4 .v3-topbar{height:70px;padding-inline:clamp(20px,3.2vw,52px)}
+body.sport-v4 .v3-top-cta,body.sport-v4 .v3-top-profile{min-height:44px;min-width:44px}
+body.sport-v4 .v3-top-context>span{font-size:11px;letter-spacing:.09em}
+body.sport-v4 .v3-top-context strong{font-size:13px}
+body.sport-v4 .v3-date{font-size:12px;color:var(--brand-muted)}
+body.sport-v4 #content{
+  padding:clamp(18px,2.3vw,34px) clamp(20px,3.2vw,52px) 72px;
+  max-width:1600px;
+  container-type:inline-size;
+  container-name:sportmain;
+}
+body.sport-v4 .v3-intro{margin:0 0 clamp(16px,2.1vw,25px);gap:10px;align-items:center}
+body.sport-v4 .v3-intro h1{
+  font-family:var(--brand-display);font-weight:900;
+  font-size:clamp(34px,3.15vw,62px);letter-spacing:-.03em;
+  line-height:1.01;max-width:1050px;margin:9px 0 9px;
+  text-wrap:balance
+}
+body.sport-v4 .v3-intro>div{min-width:0}
+body.sport-v4 .v3-intro>div>p:last-child{font-size:14px}
+body.sport-v4 .v3-intro-stamp{display:none}
+body.sport-v4 .v4-intro-index{
+  display:block;flex:none;align-self:start;
+  font-size:11px;letter-spacing:.13em;font-weight:800;
+  color:#67836a;text-transform:uppercase;margin-top:10px
+}
+body.sport-v4 .v3-label{font-size:11px;letter-spacing:.09em;color:#486b50}
+body.sport-v4 .v3-leading{grid-template-columns:minmax(0,1.24fr) minmax(350px,.76fr);gap:14px;align-items:stretch}
+body.sport-v4 .v3-feature{
+  min-height:clamp(390px,52vh,455px);
+  padding:clamp(23px,2.2vw,32px);
+  border-radius:var(--brand-radius-card);
+}
+body.sport-v4 .v3-feature-copy{max-width:560px;min-width:0}
+body.sport-v4 .v3-feature-kicker{font-size:11px;letter-spacing:.08em;margin-bottom:clamp(13px,1.4vw,20px)}
+body.sport-v4 .v3-feature h2{
+  font-family:var(--brand-display);font-size:clamp(50px,4.0vw,73px);
+  font-weight:900;letter-spacing:-.028em;line-height:.96;
+  margin:0 0 clamp(15px,1.5vw,23px);max-width:520px
+}
+body.sport-v4 .v3-feature-intro{font-size:12px;letter-spacing:.04em;margin-bottom:5px}
+body.sport-v4 .v3-feature-workout{font-size:clamp(21px,1.7vw,25px)}
+body.sport-v4 .v3-feature-workout span{font-size:14px}
+body.sport-v4 .v3-feature-data{margin:12px 0 16px}
+body.sport-v4 .v3-feature-data span{font-size:11px;letter-spacing:.025em}
+body.sport-v4 .v3-feature-actions{gap:11px}
+body.sport-v4 .v3-btn-acid{min-height:47px}
+body.sport-v4 .v3-btn-subtle{min-height:44px}
+body.sport-v4 .v3-hero-help{font-size:11px;margin:10px 0 0}
+body.sport-v4 .v3-feature-art{opacity:.55;width:48%}
+body.sport-v4 .v3-art-word{opacity:.55;letter-spacing:-.045em}
+body.sport-v4 .v3-week-panel{min-height:auto;padding:clamp(19px,2vw,25px);border-radius:var(--brand-radius-card)}
+body.sport-v4 .v3-week-head h2{font-family:var(--brand-display);font-size:clamp(29px,2.5vw,41px)}
+body.sport-v4 .v3-week-head>strong{font-size:38px}
+body.sport-v4 .v3-week-row{min-height:53px;padding:8px 0}
+body.sport-v4 .v3-week-status{font-size:10px;letter-spacing:.04em}
+body.sport-v4 .v3-section-title{margin:clamp(30px,3vw,39px) 0 17px}
+body.sport-v4 .v3-section-title h2{font-family:var(--brand-display);font-size:clamp(31px,3vw,45px);letter-spacing:-.025em}
+body.sport-v4 .v3-last h2,body.sport-v4 .v3-challenge h2{font-family:var(--brand-display);letter-spacing:-.028em}
+body.sport-v4 .v3-coach h2,body.sport-v4 .v3-checkin h2{font-family:var(--brand-display);letter-spacing:-.02em}
+body.sport-v4 .v3-btn-acid:hover,body.sport-v4 .v3-top-cta:hover,body.sport-v4 .v3-side-cta:hover{transform:none}
+body.sport-v4 :is(.v3-week-row,.v3-nav-link,.v3-btn-acid,.v3-btn-subtle,.v3-top-cta,.v3-side-cta,.v3-link-arrow,.v3-top-profile):focus-visible{
+  outline:3px solid #79b36e;outline-offset:3px
+}
+body.sport-v4 :is(.v3-btn-acid,.v3-btn-subtle,.v3-week-row,.v3-nav-link,.v3-top-cta,.v3-side-cta,.v3-top-profile){transition:background-color var(--brand-motion) ease,color var(--brand-motion) ease}
+@container sportmain (max-width:1040px){
+  body.sport-v4 .v3-leading{grid-template-columns:minmax(0,1fr)}
+  body.sport-v4 .v3-feature{min-height:370px}
+  body.sport-v4 .v3-feature-copy{max-width:680px}
+  body.sport-v4 .v3-feature h2{font-size:clamp(47px,6vw,68px)}
+  body.sport-v4 .v3-week-panel{min-height:0}
+}
+@container sportmain (max-width:725px){
+  body.sport-v4 .v3-insights{grid-template-columns:1fr}
+  body.sport-v4 .v3-coach{grid-template-columns:1fr}
+  body.sport-v4 .v3-coach h2,body.sport-v4 .v3-coach>p,body.sport-v4 .v3-coach-warning,body.sport-v4 .v3-coach .v3-link-arrow{grid-column:1;grid-row:auto}
+  body.sport-v4 .v3-checkin{flex-direction:column;align-items:stretch}
+  .v3-checkin-cta{width:100%}
+}
+/* Standard laptop: shorter sidebar content and tighter first-screen rhythm */
+@media(min-width:1060px) and (max-height:850px){
+  body.sport-v4 .v3-sidebar-head{height:70px;padding-top:15px}
+  body.sport-v4 .v3-sidebar-inner{padding-top:12px}
+  body.sport-v4 .v3-side-nav{gap:2px}
+  body.sport-v4 .v3-nav-link{min-height:42px}
+  body.sport-v4 .v3-sidebar-action{margin-top:13px;padding-top:13px}
+  body.sport-v4 .v3-side-bottom{padding-top:6px;padding-bottom:9px}
+  body.sport-v4 .v3-feature{min-height:385px}
+  body.sport-v4 .v3-intro h1{font-size:clamp(35px,3vw,56px)}
+  body.sport-v4 .v3-feature h2{font-size:clamp(48px,3.5vw,65px)}
+}
+@media(min-width:768px) and (max-width:1059px){
+  body.sport-v4 .v3-sidebar{width:76px;flex-basis:76px}
+  body.sport-v4 .v3-sidebar-head{height:75px;padding:16px 17px}
+  body.sport-v4 .v3-sidebar-inner{padding:9px 11px}
+  body.sport-v4 .v3-wordmark,body.sport-v4 .v3-sidebar-label,body.sport-v4 .v3-nav-link span,
+  body.sport-v4 .v3-sidebar-action,body.sport-v4 .v3-side-bottom{display:none}
+  body.sport-v4 .v3-nav-link{width:54px;min-height:54px;padding:0;justify-content:center}
+  body.sport-v4 .v3-leading{grid-template-columns:1fr}
+  body.sport-v4 .v3-feature h2{font-size:clamp(51px,5vw,67px)}
+  body.sport-v4 .v3-logo{width:42px}
+}
+@media(max-width:767px){
+  body.sport-v4 .v3-sidebar{display:none}
+  body.sport-v4 .v3-leading{grid-template-columns:minmax(0,1fr)}
+  body.sport-v4 .v3-insights{grid-template-columns:minmax(0,1fr)}
+  body.sport-v4 .v3-mobile-nav{display:flex;position:fixed;bottom:0;left:0;right:0;justify-content:space-around;align-items:stretch;background:#19221cf7;color:white;z-index:80;min-height:69px;padding:7px 7px calc(9px + env(safe-area-inset-bottom))}
+  body.sport-v4 .v3-mobile-nav button{flex:1;min-width:0;min-height:51px;border:0;border-radius:9px;color:#b2c4b5;background:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:10px;font-weight:650;padding:4px}
+  body.sport-v4 .v3-mobile-nav button.active{background:#344939;color:var(--brand-acid)}
+  body.sport-v4 .v3-mobile-nav button svg{height:20px;width:20px}
+  body.sport-v4 .v3-top-cta{padding:7px;width:44px;height:44px;justify-content:center;border-radius:10px}
+  body.sport-v4 .v3-top-cta-text{display:none}
+  body.sport-v4 .v3-top-cta>span:first-child{font-size:27px}
+  body.sport-v4 .v3-topbar{height:60px;padding-inline:16px}
+  body.sport-v4 .v4-mobile-brand-mark{display:block;height:33px;width:33px}
+  body.sport-v4 .v3-date,body.sport-v4 .v3-top-profile{display:none}
+  body.sport-v4 .v3-top-context>span{font-size:10px;letter-spacing:.06em}
+  body.sport-v4 .v3-top-context strong{font-size:11px}
+  body.sport-v4 #content{padding:19px 16px calc(95px + env(safe-area-inset-bottom))}
+  body.sport-v4 .v3-intro{margin-bottom:18px}
+  body.sport-v4 .v3-intro h1{font-size:clamp(33px,8.7vw,44px);letter-spacing:-.027em;line-height:1.05}
+  body.sport-v4 .v3-intro>div>p:last-child{font-size:13px}
+  body.sport-v4 .v4-intro-index{display:none}
+  body.sport-v4 .v3-feature{padding:24px 20px;min-height:0}
+  body.sport-v4 .v3-feature h2{font-size:clamp(44px,12vw,61px);line-height:.95;letter-spacing:-.027em;max-width:100%;margin-bottom:18px}
+  body.sport-v4 .v3-feature-art{opacity:.27;right:-20%;width:80%}
+  body.sport-v4 .v3-feature-data{gap:0;margin:14px 0 14px}
+  body.sport-v4 .v3-feature-data span{font-size:10px}
+  body.sport-v4 .v3-feature-actions{align-items:stretch}
+  body.sport-v4 .v3-btn-acid{width:100%;justify-content:space-between}
+  body.sport-v4 .v3-btn-subtle{padding:9px 0}
+  body.sport-v4 .v3-week-panel{padding:20px 17px}
+  body.sport-v4 .v3-week-head h2{font-size:32px}
+  body.sport-v4 .v3-week-row{min-height:57px}
+  body.sport-v4 .v3-last,body.sport-v4 .v3-challenge{padding:22px 19px}
+  body.sport-v4 .v3-mobile-nav{z-index:80}
+  body.sport-v4 .v3-mobile-nav button{min-height:48px}
+  body.sport-v4 .v3-quick-sheet{max-height:92dvh}
+}
+@media(max-width:360px){
+  body.sport-v4 .v3-feature h2{font-size:40px}
+  body.sport-v4 .v3-feature{padding:21px 17px}
+  body.sport-v4 .v3-intro h1{font-size:32px}
+  body.sport-v4 .v3-week-status{font-size:9px}
+  body.sport-v4 .v3-week-row-title{font-size:12px}
+  body.sport-v4 .v3-challenge h2{font-size:56px}
+}
+@media(max-height:650px) and (min-width:768px){
+  body.sport-v4 .v3-sidebar{scrollbar-width:thin}
+  body.sport-v4 .v3-sidebar::-webkit-scrollbar{width:4px}
+}
+@media(prefers-reduced-motion:reduce){
+  body.sport-v4 :is(.v3-btn-acid,.v3-btn-subtle,.v3-week-row,.v3-nav-link,.v3-top-cta,.v3-side-cta,.v3-top-profile){transition:none}
+}
+
+
+/* === SPORTOS V0.5 | TYPE / ICONOGRAPHY / MOTION (HOME ONLY) ==============
+   One display family, consistent weights, intentional levels, no idle movement.
+   CSS-only animations; no external fonts, images or runtime libraries. */
+:root{
+  --so-home-font:Arial,Helvetica,sans-serif;
+  --so-home-title-weight:800;
+  --so-motion-fast:170ms;
+  --so-motion-base:420ms;
+  --so-ease-out:cubic-bezier(.2,.8,.2,1)
+}
+body.sport-v4 .v3-dashboard{
+  font-family:var(--so-home-font);
+}
+body.sport-v4 .v3-dashboard :is(h1,h2,h3){
+  font-family:var(--so-home-font);
+  font-synthesis:weight;
+  font-stretch:normal;
+  font-weight:var(--so-home-title-weight);
+  letter-spacing:-.035em;
+  text-wrap:balance;
+}
+body.sport-v4 .v3-dashboard .v3-section-title h2{
+  font-size:clamp(29px,2.55vw,41px);
+  line-height:1.08;
+}
+body.sport-v4 .v3-dashboard .v3-last h2,
+body.sport-v4 .v3-dashboard .v3-challenge h2{
+  /* Both compact editorial card headlines intentionally share a single level */
+  font-size:clamp(37px,3.6vw,54px);
+  font-weight:800;
+  line-height:1.07;
+  letter-spacing:-.035em;
+  margin-block:12px 9px;
+  overflow-wrap:break-word;
+}
+body.sport-v4 .v3-dashboard .v3-last>p{margin-bottom:19px}
+body.sport-v4 .v3-dashboard .v3-challenge h2{
+  margin-top:clamp(24px,2.7vw,33px);
+  text-transform:none;
+  position:relative;
+}
+body.sport-v4 .v3-dashboard .v3-challenge h2 span{
+  color:#668b56;
+}
+body.sport-v4 .v3-dashboard .v3-coach h2{
+  font-size:clamp(29px,2.4vw,37px);
+  font-weight:800;
+  letter-spacing:-.033em;
+  line-height:1.15;
+}
+body.sport-v4 .v3-dashboard .v3-checkin h2{
+  font-weight:800;
+  line-height:1.12;
+}
+body.sport-v4 .v3-dashboard .v3-feature h2{
+  font-weight:800;
+  letter-spacing:-.038em;
+}
+body.sport-v4 .v3-dashboard .v3-label,
+body.sport-v4 .v3-dashboard .v3-coach-tag,
+body.sport-v4 .v3-dashboard .v3-panel-top,
+body.sport-v4 .v3-dashboard .v3-challenge-top{
+  font-family:var(--so-home-font);
+  font-weight:700;
+  letter-spacing:.09em;
+}
+body.sport-v4 .v3-dashboard .v3-last-numbers strong{
+  font-family:var(--so-home-font);
+  font-variant-numeric:tabular-nums;
+  font-weight:800;
+}
+body.sport-v4 .v3-dashboard .v3-challenge-label{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+}
+body.sport-v4 .v3-dashboard .v3-challenge-label .so-icon{
+  width:18px;height:18px;
+  color:#315c3c;
+}
+body.sport-v4 .v3-dashboard .so-icon{
+  display:inline-block;
+  flex:none;
+  vertical-align:middle;
+  stroke-width:1.8;
+  overflow:visible;
+}
+body.sport-v4 .v3-dashboard .v3-panel-bubble{
+  width:48px;height:48px;
+  background:#e5eee4;
+  color:#2f7050;
+}
+body.sport-v4 .v3-dashboard .v3-panel-bubble .so-icon{
+  width:23px;height:23px;
+}
+body.sport-v4 .v3-dashboard .v3-week-icon .so-icon{
+  width:20px;height:20px;
+}
+body.sport-v4 .v3-dashboard .v3-coach-tag .so-icon{
+  width:21px;height:21px;
+  color:#395e41;
+}
+body.sport-v4 .v3-dashboard .v3-section-title h2>span{
+  margin-left:11px;
+  display:inline-flex;align-items:center;
+  transform:none;
+  color:#6a9654;
+}
+body.sport-v4 .v3-dashboard .v3-section-title .so-icon{
+  width:25px;height:25px;stroke-width:2.1;
+}
+body.sport-v4 .v3-dashboard .v3-link-arrow,
+body.sport-v4 .v3-dashboard .v3-challenge-foot button,
+body.sport-v4 .v3-dashboard .v3-checkin-cta{
+  display:inline-flex;align-items:center;gap:8px;
+  min-height:44px;
+  justify-content:flex-start;
+  white-space:normal;
+}
+body.sport-v4 .v3-dashboard :is(.v3-link-arrow,.v3-challenge-foot button,.v3-checkin-cta) .so-icon{
+  width:15px;height:15px;
+  transition:transform var(--so-motion-fast) ease;
+}
+body.sport-v4 .v3-dashboard :is(.v3-link-arrow,.v3-challenge-foot button,.v3-checkin-cta):hover .so-icon,
+body.sport-v4 .v3-dashboard :is(.v3-link-arrow,.v3-challenge-foot button,.v3-checkin-cta):focus-visible .so-icon{
+  transform:translate(2px,-2px);
+}
+body.sport-v4 .v3-dashboard .v3-week-row{
+  transition:background-color var(--so-motion-fast) ease,border-color var(--so-motion-fast) ease;
+}
+body.sport-v4 .v3-dashboard .v3-week-icon{
+  transition:background-color var(--so-motion-fast) ease,color var(--so-motion-fast) ease;
+}
+body.sport-v4 .v3-dashboard .v3-week-row:hover .v3-week-icon,
+body.sport-v4 .v3-dashboard .v3-week-row:focus-visible .v3-week-icon{
+  background:#d7e8cb;
+  color:#315e40;
+}
+body.sport-v4 .v3-dashboard .so-status-check{
+  color:#2f7645;
+  font-weight:800;
+}
+body.sport-v4 .v3-dashboard .v3-btn-acid,
+body.sport-v4 .v3-dashboard .v3-checkin-cta{
+  transition:background-color var(--so-motion-fast) ease,box-shadow var(--so-motion-fast) ease;
+}
+body.sport-v4 .v3-dashboard :is(.v3-btn-acid,.v3-checkin-cta):hover{
+  box-shadow:0 5px 18px rgba(21,25,21,.13);
+}
+body.sport-v4 .v3-dashboard :is(.v3-btn-acid,.v3-checkin-cta):active{
+  box-shadow:none;
+}
+/* Gentle entrance: no never-ending effects or hover lifts on non-clickable cards. */
+@keyframes so-home-reveal {
+  from{opacity:0;transform:translateY(10px)}
+  to{opacity:1;transform:translateY(0)}
+}
+@keyframes so-home-fill {
+  from{transform:scaleX(0)}
+  to{transform:scaleX(1)}
+}
+@keyframes so-home-path {
+  from{stroke-dashoffset:900;opacity:.12}
+  to{stroke-dashoffset:0;opacity:.55}
+}
+body.sport-v4 .v3-dashboard .v3-intro,
+body.sport-v4 .v3-dashboard .v3-feature,
+body.sport-v4 .v3-dashboard .v3-week-panel,
+body.sport-v4 .v3-dashboard .v3-section-title,
+body.sport-v4 .v3-dashboard .v3-last,
+body.sport-v4 .v3-dashboard .v3-challenge,
+body.sport-v4 .v3-dashboard .v3-coach,
+body.sport-v4 .v3-dashboard .v3-checkin {
+  animation:so-home-reveal var(--so-motion-base) var(--so-ease-out) both;
+}
+body.sport-v4 .v3-dashboard .v3-feature{animation-delay:65ms}
+body.sport-v4 .v3-dashboard .v3-week-panel{animation-delay:110ms}
+body.sport-v4 .v3-dashboard .v3-section-title{animation-delay:135ms}
+body.sport-v4 .v3-dashboard .v3-last{animation-delay:165ms}
+body.sport-v4 .v3-dashboard .v3-challenge{animation-delay:195ms}
+body.sport-v4 .v3-dashboard .v3-coach{animation-delay:220ms}
+body.sport-v4 .v3-dashboard .v3-checkin{animation-delay:245ms}
+body.sport-v4 .v3-dashboard .v3-week-track span{
+  transform-origin:left center;
+  animation:so-home-fill 760ms cubic-bezier(.17,.67,.24,1) 140ms both;
+}
+body.sport-v4 .v3-dashboard .v3-feature-art svg path{
+  stroke-dasharray:900;
+  animation:so-home-path 1050ms var(--so-ease-out) 210ms both;
+}
+@media(max-width:767px){
+  body.sport-v4 .v3-dashboard .v3-last h2,
+  body.sport-v4 .v3-dashboard .v3-challenge h2{
+    font-size:clamp(37px,10vw,48px);
+  }
+  body.sport-v4 .v3-dashboard .v3-coach h2{
+    font-size:clamp(28px,8vw,34px);
+  }
+  body.sport-v4 .v3-dashboard .v3-section-title h2{
+    font-size:clamp(30px,8vw,37px);
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  body.sport-v4 .v3-dashboard *,
+  body.sport-v4 .v3-dashboard *::before,
+  body.sport-v4 .v3-dashboard *::after{
+    animation:none !important;
+    transition:none !important;
+    scroll-behavior:auto !important;
+  }
+  body.sport-v4 .v3-dashboard .v3-week-track span{transform:none}
+  body.sport-v4 .v3-dashboard .v3-feature-art svg path{stroke-dashoffset:0}
+}
+
+
+/* === SPORTOS V0.6 / HOME ICONS + SESSION FEEDBACK WORKSPACE =============
+   Scoped to V0.6 home refinements and workout feedback only.
+   Same Arial / Helvetica / brand tokens; no new data fields or dependencies. */
+body.sport-v4 .v3-dashboard .so-home-kicker-icon{
+  width:26px;height:26px;border:1px solid rgba(212,241,123,.26);
+  background:rgba(212,241,123,.10);
+  color:#D4F17B;border-radius:8px;display:inline-grid;place-items:center;
+  flex:none;
+}
+body.sport-v4 .v3-dashboard .so-home-kicker-icon .so-icon{width:16px;height:16px}
+body.sport-v4 .v3-dashboard .so-feature-sport-icon{
+  width:28px;height:28px;
+  display:inline-grid;place-items:center;
+  vertical-align:middle;margin:0 9px 3px 0;
+  background:#d4f17b1c;border:1px solid #d4f17b52;
+  color:#D4F17B;border-radius:8px;
+  font-size:inherit;letter-spacing:normal;
+}
+body.sport-v4 .v3-dashboard .so-feature-sport-icon .so-icon{width:18px;height:18px}
+body.sport-v4 .v3-dashboard .v3-feature-workout>span:not(.so-feature-sport-icon){display:block}
+body.sport-v4 .v3-dashboard .so-activity-icon.so-activity-B{background:#edeadd;color:#876e3a}
+body.sport-v4 .v3-dashboard .so-activity-icon.so-activity-run{background:#e1efda;color:#2e8056}
+body.sport-v4 .v3-dashboard .so-activity-icon.so-activity-bike{background:#e7ebdd;color:#55724e}
+body.sport-v4 .v3-dashboard .v3-coach .so-coach-icon{
+  width:32px;height:32px;display:inline-grid;place-items:center;
+  border-radius:9px;background:#dcd4c4;color:#415b43;flex:none;
+}
+body.sport-v4 .v3-dashboard .v3-coach .so-coach-icon .so-icon{width:19px;height:19px}
+body.sport-v4 .v3-dashboard .v3-btn-subtle .so-icon{width:16px;height:16px;vertical-align:middle}
+body.sport-v4 .v3-dashboard .v3-feature-kicker{align-items:center;gap:9px}
+body.sport-v4 .v3-dashboard .v3-week-row .so-icon{stroke-width:1.9}
+body.sport-v4 .v3-dashboard .v3-week-row:hover .so-icon,
+body.sport-v4 .v3-dashboard .v3-week-row:focus-visible .so-icon{color:#244d38}
+/* Full-screen-like journal: a focused flow, NOT a dashboard card modal. */
+body.sport-v4 .so-session-backdrop{
+  z-index:190;
+  background:rgba(10,20,15,.75);
+  padding:clamp(9px,2vw,25px);
+  backdrop-filter:blur(7px);
+}
+body.sport-v4 .so-session-page{
+  width:min(1180px,100%);
+  max-width:1180px;
+  height:min(900px,calc(100dvh - 32px));
+  max-height:calc(100dvh - 20px);
+  min-height:0;
+  display:grid;
+  grid-template-columns:minmax(260px,.79fr) minmax(0,1.55fr);
+  overflow:hidden;
+  border-radius:20px;
+  background:#f5f4ef;
+  border:1px solid #e1e7de;
+  box-shadow:0 25px 90px #080e0a6b;
+  font-family:Arial,Helvetica,sans-serif;
+}
+body.sport-v4 .so-session-page *{box-sizing:border-box}
+body.sport-v4 .so-session-rail{
+  min-width:0;
+  padding:clamp(24px,2.4vw,36px);
+  color:#fff;
+  background:radial-gradient(ellipse at 100% 77%,#355d43 0,transparent 45%),linear-gradient(154deg,#17231c,#1b3c2c);
+  display:flex;
+  flex-direction:column;
+  overflow-y:auto;
+}
+body.sport-v4 .so-session-rail-brand{
+  display:flex;align-items:center;gap:9px;
+  font-size:12px;font-weight:850;letter-spacing:.07em;
+  color:#d4f17b;
+}
+body.sport-v4 .so-session-rail-brand>span:last-child{font-size:10px;color:#d1dbc9;letter-spacing:.08em}
+body.sport-v4 .so-session-rail-symbol{
+  display:inline-grid;place-items:center;
+  height:32px;width:32px;background:#d4f17b;
+  color:#172c1c;border-radius:9px;
+}
+body.sport-v4 .so-session-rail-symbol{background:transparent}
+body.sport-v4 .so-session-rail-symbol svg{width:32px;height:32px}
+body.sport-v4 .so-session-rail-body{margin:auto 0}
+body.sport-v4 .so-session-rail-icon{
+  width:78px;height:78px;
+  display:grid;place-items:center;
+  background:#d4f17b;color:#1a3222;border-radius:21px;
+  margin-bottom:33px;
+}
+body.sport-v4 .so-session-rail-icon svg{width:37px;height:37px;stroke-width:1.65}
+body.sport-v4 .so-session-rail-label{
+  font-size:11px;line-height:1.5;letter-spacing:.11em;
+  color:#c8dea7;font-weight:800;
+}
+body.sport-v4 .so-session-rail-name{
+  font-size:clamp(32px,2.75vw,48px);
+  font-weight:850;letter-spacing:-.045em;line-height:1.02;
+  max-width:285px;overflow-wrap:break-word;margin:13px 0 16px;
+}
+body.sport-v4 .so-session-rail-body>p{
+  color:#cbd7c9;line-height:1.6;font-size:14px;max-width:280px;
+}
+body.sport-v4 .so-session-rail-steps{
+  border-top:1px solid #b9d2b93d;
+  margin-top:37px;padding-top:17px;display:grid;gap:15px;
+}
+body.sport-v4 .so-session-rail-steps>div{display:flex;gap:14px;align-items:center;font-size:13px;color:#e4eee3}
+body.sport-v4 .so-session-rail-steps span{font-size:11px;color:#d4f17b;font-weight:850}
+body.sport-v4 .so-session-rail-bottom{
+  display:flex;align-items:center;gap:10px;margin-top:24px;
+  color:#d4e1d2;font-size:11px;
+}
+body.sport-v4 .so-session-rail-bottom svg{width:17px;height:17px}
+body.sport-v4 .so-session-main{
+  display:flex;flex-direction:column;
+  height:100%;min-height:0;min-width:0;overflow:hidden;
+}
+body.sport-v4 .so-session-head{
+  flex:0 0 auto;
+  position:relative;top:auto;
+  background:#f5f4ef;
+  padding:clamp(20px,2.3vw,31px) clamp(23px,3vw,42px) 20px;
+  border-bottom:1px solid #e1e4dd;align-items:flex-start;
+  gap:12px;
+}
+body.sport-v4 .so-session-heading-label{
+  font-size:10px;font-weight:850;letter-spacing:.13em;color:#507158;
+  margin-bottom:8px;
+}
+body.sport-v4 .so-session-heading-label span{color:#acb9ab;margin-inline:4px}
+body.sport-v4 .so-session-header-title{display:flex;align-items:center;gap:10px}
+body.sport-v4 .so-session-head #modal-title{
+  font-family:Arial,Helvetica,sans-serif;
+  font-size:clamp(26px,2.5vw,35px);
+  font-weight:850;letter-spacing:-.035em;
+  line-height:1.07;color:#151915;
+  margin:0;
+}
+body.sport-v4 #so-session-description{
+  margin:12px 0 0;color:#667569;font-size:12px;line-height:1.6;
+  max-width:560px;
+}
+body.sport-v4 .so-session-mobile-icon{display:none}
+body.sport-v4 .so-session-head #modal-close{
+  width:44px;height:44px;min-width:44px;flex:none;
+  border-radius:50%;background:#e4e9df;
+  color:#294434;display:grid;place-items:center;
+}
+body.sport-v4 .so-session-head #modal-close:hover{background:#d6e6cd}
+body.sport-v4 .so-session-head #modal-close svg{width:18px;height:18px}
+body.sport-v4 .so-session-form{
+  flex:1;min-height:0;
+  overflow:hidden;display:flex;flex-direction:column;
+  padding:0;
+}
+body.sport-v4 .so-session-fields{
+  flex:1;min-height:0;
+  overflow-y:auto;overscroll-behavior:contain;
+  padding:0 clamp(23px,3vw,42px) 25px;
+  scrollbar-width:thin;
+}
+body.sport-v4 .so-feedback-section{
+  padding:30px 0;
+  border-bottom:1px solid #dce2d9;
+}
+body.sport-v4 .so-feedback-section:last-child{border:0}
+body.sport-v4 .so-feedback-section-title{
+  display:flex;align-items:center;gap:14px;
+  margin:0 0 18px;
+}
+body.sport-v4 .so-feedback-section-title>.so-icon{
+  width:24px;height:24px;
+  color:#456949;margin-left:auto;
+}
+body.sport-v4 .so-section-number{
+  width:38px;height:38px;min-width:38px;
+  display:grid;place-items:center;border-radius:11px;
+  background:#e3ebdf;color:#325a42;
+  font-size:12px;font-weight:900;font-variant-numeric:tabular-nums;
+}
+body.sport-v4 .so-overline{
+  font-size:10px;font-weight:820;letter-spacing:.12em;color:#61796a;
+  margin:0 0 5px;
+}
+body.sport-v4 .so-feedback-section-title h3{
+  font:850 22px/1.2 Arial,Helvetica,sans-serif;
+  letter-spacing:-.03em;margin:0;color:#17211a;
+}
+body.sport-v4 .so-section-desc{
+  font-size:12px;line-height:1.65;color:#5a6c60;
+  margin:0 0 17px;
+}
+body.sport-v4 .so-session-page .form-grid{
+  gap:0 14px;
+}
+body.sport-v4 .so-session-page .field label{
+  font-size:12px;line-height:1.4;color:#35473a;font-weight:750;
+}
+body.sport-v4 .so-session-page .input{
+  border-radius:9px;background:white;
+  border:1px solid #cdd9ce;
+  min-height:47px;font-size:14px;
+  color:#14291c;
+  padding:12px 13px;
+}
+body.sport-v4 .so-session-page textarea.input{min-height:100px;resize:vertical}
+body.sport-v4 .so-session-page :is(.input,button,summary):focus-visible{
+  outline:3px solid #8bbb70;outline-offset:3px;
+}
+body.sport-v4 .so-effort-scale{
+  display:grid;grid-template-columns:repeat(5,minmax(0,1fr));
+  gap:7px;margin:4px 0 0;
+}
+body.sport-v4 .so-effort-scale button{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:9px 5px;min-height:64px;
+  background:white;border:1px solid #d6dfd2;border-radius:10px;
+  color:#496352;cursor:pointer;
+  transition:background-color .15s,border-color .15s;
+}
+body.sport-v4 .so-effort-scale button strong{font-size:20px;font-weight:800;line-height:1.3;color:#213a29}
+body.sport-v4 .so-effort-scale button small{font-size:9px;line-height:1.4}
+body.sport-v4 .so-effort-scale button:hover,
+body.sport-v4 .so-effort-scale button[aria-pressed=true]{background:#d4f17b;border-color:#b2d15e}
+body.sport-v4 .so-effort-hint{
+  grid-column:1/-1;font-size:11px;color:#5e705f;margin:5px 0 0;
+}
+body.sport-v4 .so-safety-inline{
+  background:#e7ede2;border-radius:12px;
+  padding:12px 14px;margin-top:20px;
+  display:flex;align-items:center;gap:14px;
+}
+body.sport-v4 .so-safety-inline>.so-icon{color:#57714e;width:23px;height:23px;flex:none}
+body.sport-v4 .so-safety-inline .field{margin:0;flex:1}
+body.sport-v4 .so-session-page .so-progress-row{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  margin-bottom:8px;font-size:11px;color:#566b59;
+}
+body.sport-v4 .so-progress-track{
+  height:5px;border-radius:10px;overflow:hidden;background:#dfe8dc;
+  margin-bottom:16px;
+}
+body.sport-v4 #so-progress-fill{
+  display:block;width:0;height:100%;background:#689955;
+  transition:width .18s ease;
+}
+body.sport-v4 .so-session-page .so-exercise{
+  padding:0;margin-bottom:10px;
+  border:1px solid #d7ded3;
+  background:#fff;
+  border-radius:12px;overflow:hidden;
+}
+body.sport-v4 .so-exercise summary{list-style:none;cursor:pointer}
+body.sport-v4 .so-exercise summary::-webkit-details-marker{display:none}
+body.sport-v4 .so-exercise-summary{
+  display:flex;align-items:center;gap:12px;
+  padding:16px;min-height:70px;
+}
+body.sport-v4 .so-exercise[open]>.so-exercise-summary{background:#edf3e8}
+body.sport-v4 .so-exercise-count{
+  height:36px;width:36px;min-width:36px;
+  display:grid;place-items:center;
+  border:1px solid #c5d8c0;border-radius:10px;
+  color:#406b4a;font-size:12px;font-weight:850;
+}
+body.sport-v4 .so-exercise-summary-text{flex:1;min-width:0}
+body.sport-v4 .so-exercise-summary-text strong{
+  display:block;font-size:14px;color:#1f2c21;font-weight:800;
+}
+body.sport-v4 .so-exercise-summary-text small{
+  display:block;color:#68766a;margin-top:5px;font-size:11px;line-height:1.5;
+}
+body.sport-v4 .so-exercise-expand{
+  display:grid;place-items:center;width:26px;height:26px;color:#456d4f;
+  transition:transform .17s;
+}
+body.sport-v4 .so-exercise-expand .so-icon{width:19px;height:19px}
+body.sport-v4 .so-exercise[open] .so-exercise-expand{transform:rotate(90deg)}
+body.sport-v4 .so-exercise-body{padding:17px 17px 8px}
+body.sport-v4 .so-exercise-instruction{
+  color:#647368;font-size:11px;line-height:1.6;margin:0 0 16px;
+}
+body.sport-v4 .so-exercise-safety{
+  background:#f3f3ed;border-radius:10px;
+  margin:8px 0 16px;padding:15px 14px 2px;
+}
+body.sport-v4 .so-safety-title{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:790;margin-bottom:12px}
+body.sport-v4 .so-safety-title svg{width:18px;height:18px;color:#6a724a}
+body.sport-v4 .so-exercise-info{
+  display:flex;align-items:flex-start;gap:9px;
+  font-size:11px;line-height:1.7;color:#6b533d;
+  margin-top:12px;
+}
+body.sport-v4 .so-exercise-info .so-icon{width:18px;height:18px;flex:none}
+body.sport-v4 .so-session-actions{
+  flex:0 0 auto;position:relative;bottom:auto;
+  background:#fff;border-top:1px solid #dce4d9;
+  display:flex;gap:10px;align-items:center;justify-content:flex-end;
+  padding:15px clamp(23px,3vw,42px) calc(16px + env(safe-area-inset-bottom));
+  box-shadow:0 -8px 22px rgba(21,25,21,.03);
+  flex-wrap:wrap;
+}
+body.sport-v4 .so-session-actions .btn{min-height:47px;border-radius:9px}
+body.sport-v4 .so-session-actions .ghost{background:#edf1ea;color:#2d4534}
+body.sport-v4 .so-session-actions .so-save-cta{
+  background:#151915;color:#fff;
+  border:0;display:inline-flex;align-items:center;
+  gap:14px;padding:12px 19px;font-weight:850;
+}
+body.sport-v4 .so-session-actions .so-save-cta:hover{background:#153c30}
+body.sport-v4 .so-session-actions .so-save-cta .so-icon{width:17px;height:17px}
+body.sport-v4 .so-session-actions .so-save-cta:disabled{opacity:.64;cursor:wait}
+body.sport-v4 .so-session-actions .so-save-error{
+  flex:0 0 100%;color:#87412d;font-size:12px;
+  line-height:1.5;margin:0 0 4px;
+}
+body.sport-v4 .so-session-actions .so-save-error[hidden]{display:none}
+@media(max-width:900px){
+  body.sport-v4 .so-session-page{grid-template-columns:240px minmax(0,1fr)}
+  body.sport-v4 .so-session-rail{padding:24px 18px}
+  body.sport-v4 .so-session-rail-icon{height:60px;width:60px}
+  body.sport-v4 .so-session-rail-icon svg{height:29px;width:29px}
+  body.sport-v4 .so-session-rail-name{font-size:35px}
+  body.sport-v4 .so-session-fields{padding-inline:23px}
+}
+@media(max-width:700px){
+  body.sport-v4 .so-session-backdrop{
+    display:block;padding:0;background:#f5f4ef;backdrop-filter:none;
+  }
+  body.sport-v4 .so-session-page{
+    height:100dvh;max-height:100dvh;width:100%;max-width:100%;
+    display:block;border-radius:0;border:0;box-shadow:none;
+  }
+  body.sport-v4 .so-session-rail{display:none}
+  body.sport-v4 .so-session-main{height:100dvh}
+  body.sport-v4 .so-session-head{padding:20px 18px 17px}
+  body.sport-v4 .so-session-header-title{gap:12px;align-items:center}
+  body.sport-v4 .so-session-mobile-icon{
+    width:39px;height:39px;min-width:39px;
+    background:#d4f17b;color:#1d3823;display:grid;
+    place-items:center;border-radius:11px;
+  }
+  body.sport-v4 .so-session-mobile-icon svg{width:23px;height:23px}
+  body.sport-v4 .so-session-head #modal-title{font-size:clamp(22px,5.5vw,27px)}
+  body.sport-v4 #so-session-description{font-size:11px;margin-top:9px}
+  body.sport-v4 .so-session-fields{padding:0 17px 25px}
+  body.sport-v4 .so-feedback-section{padding:24px 0}
+  body.sport-v4 .so-feedback-section-title h3{font-size:21px}
+  body.sport-v4 .so-session-actions{padding:12px 17px calc(12px + env(safe-area-inset-bottom))}
+  body.sport-v4 .so-session-actions .so-save-cta{flex:1;justify-content:center}
+  body.sport-v4 .so-session-page .form-grid.cols-3{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:390px){
+  body.sport-v4 .so-session-page .form-grid{grid-template-columns:1fr}
+  body.sport-v4 .so-session-page .form-grid.cols-3{grid-template-columns:1fr}
+  body.sport-v4 .so-effort-scale{grid-template-columns:repeat(5,minmax(0,1fr));gap:4px}
+  body.sport-v4 .so-effort-scale button{padding:8px 2px}
+  body.sport-v4 .so-effort-scale button small{font-size:8px}
+  body.sport-v4 .so-session-actions .btn.ghost{min-width:83px}
+}
+@media(prefers-reduced-motion:reduce){
+  body.sport-v4 .so-session-page *,
+  body.sport-v4 .so-session-page *::before,
+  body.sport-v4 .so-session-page *::after{
+    transition:none!important;animation:none!important;
+  }
+}
+
+
+/* ===== SPORTOS V0.7 — PROGRAMME, ATHLETIC EDITORIAL =====
+   Scoped exclusively to the program screen. No external assets or fonts. */
+body.sport-v4 .sp7-page{
+  --sp7-dark:#151915;--sp7-green:#153c30;--sp7-lime:#d4f17b;
+  --sp7-bone:#f5f4ef;--sp7-line:#dfe4dc;--sp7-muted:#58635d;
+  font-family:Arial,Helvetica,sans-serif;color:var(--sp7-dark);
+  width:100%;min-width:0;
+}
+body.sport-v4 .sp7-page *{box-sizing:border-box}
+body.sport-v4 .sp7-page :is(h1,h2,h3){font-family:Arial,Helvetica,sans-serif;font-stretch:normal;letter-spacing:-.035em;font-weight:800}
+body.sport-v4 .sp7-page .so-icon{display:inline-block;width:22px;height:22px;flex:none;vertical-align:middle;stroke-width:1.8}
+body.sport-v4 .sp7-head{margin-bottom:clamp(23px,2.4vw,34px)}
+body.sport-v4 .sp7-eyebrow{display:flex;align-items:center;gap:9px;font-size:11px;font-weight:800;letter-spacing:.125em;color:#366b4b}
+body.sport-v4 .sp7-dot{width:8px;height:8px;border-radius:50%;background:#76a85f;display:inline-block;box-shadow:0 0 0 4px #dcead0}
+body.sport-v4 .sp7-head-row{display:flex;align-items:end;justify-content:space-between;gap:28px;margin-top:19px}
+body.sport-v4 .sp7-head-row>div:first-child{min-width:0;flex:1}
+body.sport-v4 .sp7-head h1{font-size:clamp(41px,4.4vw,75px);line-height:1.0;letter-spacing:-.048em;margin:0 0 13px;max-width:850px}
+body.sport-v4 .sp7-head h1 em{font-style:normal;color:#468055}
+body.sport-v4 .sp7-head-row p{margin:0;max-width:680px;color:#5b6b60;font-size:14px;line-height:1.65}
+body.sport-v4 .sp7-head-stat{display:flex;gap:14px;align-items:center;padding:15px 0 4px 24px;border-left:1px solid #d9ded6;flex:none}
+body.sport-v4 .sp7-head-stat strong{font-size:clamp(41px,3.6vw,59px);line-height:1;letter-spacing:-.05em;font-weight:850;font-variant-numeric:tabular-nums}
+body.sport-v4 .sp7-head-stat strong span{font-size:.44em;color:#91a594;letter-spacing:-.04em}
+body.sport-v4 .sp7-head-stat small{font-size:10px;line-height:1.55;letter-spacing:.08em;font-weight:750;color:#6a7c6d}
+body.sport-v4 .sp7-selector{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:0 0 17px}
+body.sport-v4 .sp7-switch{display:flex;align-items:center;min-width:0;min-height:76px;gap:12px;padding:12px 13px;border:1px solid #dce3d9;border-radius:13px;background:#fff;color:#25362a;text-align:left;cursor:pointer;transition:border-color .17s ease,background-color .17s ease,color .17s ease}
+body.sport-v4 .sp7-switch:hover{border-color:#91b08a;background:#f4f8ed}
+body.sport-v4 .sp7-switch.is-active{background:#213b2c;color:#fff;border-color:#213b2c}
+body.sport-v4 .sp7-switch-icon{width:45px;height:45px;display:grid;place-items:center;border-radius:11px;background:#e6ede0;color:#35674a;flex:none}
+body.sport-v4 .sp7-switch-icon .so-icon{width:25px;height:25px}
+body.sport-v4 .sp7-switch.is-active .sp7-switch-icon{background:#d4f17b;color:#18301d}
+body.sport-v4 .sp7-switch-main{display:flex;flex-direction:column;gap:6px;min-width:0;flex:1}
+body.sport-v4 .sp7-switch-main strong{font-size:14px;line-height:1.15;font-weight:800;white-space:normal}
+body.sport-v4 .sp7-switch-main small{font-size:10px;letter-spacing:.09em;font-weight:750;color:#738676}
+body.sport-v4 .sp7-switch.is-active .sp7-switch-main small{color:#c1d9be}
+body.sport-v4 .sp7-switch-state{display:grid;place-items:center;flex:none;width:20px;height:20px;color:#7a9a7c}
+body.sport-v4 .sp7-switch-state .so-icon{width:16px;height:16px}
+body.sport-v4 .sp7-switch-state.is-done{background:#d4f17b;color:#1b3824;border-radius:50%}
+body.sport-v4 .sp7-switch.is-active .sp7-switch-state:not(.is-done){color:#d4f17b}
+body.sport-v4 .sp7-page :is(button,summary):focus-visible{outline:3px solid #83b568;outline-offset:3px}
+body.sport-v4 .sp7-hero{
+  display:grid;grid-template-columns:minmax(0,1.5fr) minmax(260px,.74fr);
+  background:#153c30;color:white;border-radius:18px;overflow:hidden;
+  min-width:0;isolation:isolate;
+}
+body.sport-v4 .sp7-hero-primary{padding:clamp(25px,2.9vw,45px);position:relative;min-width:0;z-index:1}
+body.sport-v4 .sp7-hero-brow{display:flex;align-items:center;gap:12px;flex-wrap:wrap;font-size:10px;letter-spacing:.09em;font-weight:750;color:#c3d9bd}
+body.sport-v4 .sp7-hero-tag{color:#172b1b;background:#d4f17b;padding:8px 10px;border-radius:5px;font-size:10px}
+body.sport-v4 .sp7-hero-sport{position:absolute;right:20px;top:55px;opacity:.12;pointer-events:none}
+body.sport-v4 .sp7-hero-sport .so-icon{width:155px;height:155px;stroke-width:.9}
+body.sport-v4 .sp7-hero h2{font-size:clamp(46px,4.25vw,74px);line-height:.99;color:white;max-width:660px;letter-spacing:-.046em;margin:clamp(32px,4.2vw,55px) 0 14px;position:relative;z-index:1;text-wrap:balance}
+body.sport-v4 .sp7-hero-primary>p{font-size:15px;line-height:1.65;max-width:485px;margin:0;color:#c9daca;position:relative;z-index:1}
+body.sport-v4 .sp7-hero-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:31px}
+body.sport-v4 .sp7-hero-actions button{border:0;font-family:inherit;font-size:13px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;gap:12px;min-height:47px;border-radius:9px;cursor:pointer;white-space:normal;text-align:center;transition:background-color .17s ease,color .17s ease,box-shadow .17s ease}
+body.sport-v4 .sp7-primary{background:#d4f17b;color:#15271a;padding:12px 18px}
+body.sport-v4 .sp7-primary:hover{background:#e3ffa4;box-shadow:0 4px 16px #14281b45}
+body.sport-v4 .sp7-secondary{background:#ffffff12;color:#fff;padding:12px 16px;border:1px solid #ffffff47!important}
+body.sport-v4 .sp7-secondary:hover{background:#ffffff2b}
+body.sport-v4 .sp7-hero-actions .so-icon{width:17px;height:17px}
+body.sport-v4 .sp7-hero-disclaimer{margin-top:13px;color:#b4cdb9;font-size:11px;line-height:1.5}
+body.sport-v4 .sp7-hero-panel{display:flex;flex-direction:column;justify-content:end;gap:0;min-width:0;padding:28px clamp(23px,2.4vw,38px);background:#204a37;position:relative;overflow:hidden;border-left:1px solid #ffffff29}
+body.sport-v4 .sp7-hero-panel:before{content:"";position:absolute;width:280px;height:280px;border:1px solid #accfa036;border-radius:50%;right:-95px;top:-120px;box-shadow:0 0 0 39px #accfa015,0 0 0 79px #accfa00b;pointer-events:none}
+body.sport-v4 .sp7-hero-symbol{position:relative;z-index:1;color:#d4f17b;margin:auto 0 30px;align-self:start;background:#ffffff14;border:1px solid #c1d8b341;padding:20px;border-radius:20px}
+body.sport-v4 .sp7-hero-symbol .so-icon{width:58px;height:58px;stroke-width:1.4}
+body.sport-v4 .sp7-hero-panel>div:not(.sp7-hero-symbol){position:relative;z-index:1;padding:16px 0;border-top:1px solid #ffffff28;display:flex;flex-direction:column;gap:8px}
+body.sport-v4 .sp7-hero-panel>div>span{font-size:10px;color:#c3d9bf;font-weight:750;letter-spacing:.115em}
+body.sport-v4 .sp7-hero-panel>div>strong{font-size:15px;line-height:1.3;color:white;font-weight:750}
+body.sport-v4 .sp7-layout{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(270px,.78fr);align-items:start;gap:clamp(17px,2.2vw,28px);margin-top:clamp(32px,3vw,42px)}
+body.sport-v4 .sp7-core,body.sport-v4 .sp7-aside{min-width:0}
+body.sport-v4 .sp7-section-heading{display:flex;align-items:end;justify-content:space-between;gap:15px;margin-bottom:21px}
+body.sport-v4 .sp7-overline{display:block;font-size:10px;font-weight:800;color:#55765c;letter-spacing:.13em}
+body.sport-v4 .sp7-section-heading h2{font-size:clamp(29px,2.9vw,43px);line-height:1.05;margin:7px 0 11px}
+body.sport-v4 .sp7-title-dot{color:#6e9b63}
+body.sport-v4 .sp7-section-heading p{font-size:13px;max-width:560px;line-height:1.6;color:#607264;margin:0}
+body.sport-v4 .sp7-count{font-size:10px;font-weight:750;letter-spacing:.09em;color:#587258;background:#e4ecdd;border-radius:6px;padding:9px 11px;white-space:nowrap;margin-bottom:4px}
+body.sport-v4 .sp7-ex-list{display:grid;gap:10px}
+body.sport-v4 .sp7-ex{background:white;border:1px solid #dae4d8;border-radius:13px;overflow:hidden;min-width:0}
+body.sport-v4 .sp7-ex[open]{border-color:#bfcebc}
+body.sport-v4 .sp7-ex-heading{display:flex;align-items:center;gap:16px;padding:17px 19px;min-height:79px;list-style:none;cursor:pointer}
+body.sport-v4 .sp7-ex-heading::-webkit-details-marker{display:none}
+body.sport-v4 .sp7-ex[open] .sp7-ex-heading{background:#eff3e9}
+body.sport-v4 .sp7-ex-index{width:42px;height:42px;flex:none;display:grid;place-items:center;background:#e9f0e4;color:#496d54;border-radius:10px;font-size:12px;font-weight:800}
+body.sport-v4 .sp7-ex[open] .sp7-ex-index{background:#d4f17b;color:#1e402b}
+body.sport-v4 .sp7-ex-titles{display:flex;flex-direction:column;min-width:0;flex:1;gap:6px}
+body.sport-v4 .sp7-ex-titles strong{font-size:15px;font-weight:800;color:#17291e}
+body.sport-v4 .sp7-ex-titles small{font-size:12px;color:#637568}
+body.sport-v4 .sp7-ex-chevron{display:grid;place-items:center;flex:none;color:#4e7659;transition:transform .18s ease}
+body.sport-v4 .sp7-ex-chevron .so-icon{width:20px;height:20px}
+body.sport-v4 .sp7-ex[open] .sp7-ex-chevron{transform:rotate(90deg)}
+body.sport-v4 .sp7-ex-body{padding:19px 20px 21px;border-top:1px solid #e0e7dc}
+body.sport-v4 .sp7-ex-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+body.sport-v4 .sp7-ex-metrics>div{background:#f3f6f0;border-radius:9px;padding:12px;display:flex;flex-direction:column;gap:7px;min-width:0}
+body.sport-v4 .sp7-ex-metrics span{font-size:9px;letter-spacing:.06em;font-weight:780;color:#637663}
+body.sport-v4 .sp7-ex-metrics strong{font-size:13px;line-height:1.4;color:#1d3b29;font-weight:800}
+body.sport-v4 .sp7-ex-coach,body.sport-v4 .sp7-ex-safety{display:flex;align-items:start;gap:10px;margin:17px 0 0;font-size:12px;line-height:1.6;color:#526852}
+body.sport-v4 .sp7-ex-coach .so-icon,body.sport-v4 .sp7-ex-safety .so-icon{width:18px;height:18px;margin-top:1px}
+body.sport-v4 .sp7-ex-safety.is-caution{background:#f7eee1;padding:11px 13px;border-radius:9px;color:#795335}
+body.sport-v4 .sp7-notice{display:flex;align-items:start;gap:11px;color:#597057;font-size:12px;line-height:1.7;margin-top:19px;background:#e7eee2;border-radius:10px;padding:14px 16px}
+body.sport-v4 .sp7-notice .so-icon{width:19px;height:19px}
+body.sport-v4 .sp7-aside{display:flex;flex-direction:column;gap:14px}
+body.sport-v4 .sp7-goal-panel{background:#e5ece0;border-radius:15px;padding:clamp(20px,2vw,27px)}
+body.sport-v4 .sp7-aside-eyebrow{display:flex;align-items:center;gap:8px;color:#46674b;font-size:10px;font-weight:800;letter-spacing:.1em}
+body.sport-v4 .sp7-aside-eyebrow .so-icon{width:18px;height:18px}
+body.sport-v4 .sp7-aside h3{font-size:clamp(27px,2.2vw,34px);line-height:1.12;margin:17px 0 22px;color:#1c3728}
+body.sport-v4 .sp7-goals{display:grid;gap:0}
+body.sport-v4 .sp7-goal{display:flex;gap:13px;padding:14px 0;border-top:1px solid #cbdac9}
+body.sport-v4 .sp7-goal>span{font-size:11px;color:#68886b;font-weight:850;margin-top:2px}
+body.sport-v4 .sp7-goal strong{font-size:14px;line-height:1.4;display:block;color:#264733}
+body.sport-v4 .sp7-goal p{font-size:12px;line-height:1.65;color:#5c705f;margin:6px 0 0}
+body.sport-v4 .sp7-coach-panel{background:#eee7dd;padding:clamp(20px,2vw,27px);border-radius:15px}
+body.sport-v4 .sp7-coach-panel .sp7-aside-eyebrow{color:#81634b}
+body.sport-v4 .sp7-coach-panel h3{font-size:clamp(24px,2vw,31px);margin:20px 0 15px;color:#3b382d}
+body.sport-v4 .sp7-coach-panel>p{font-size:13px;line-height:1.7;color:#685b4f;margin:0}
+body.sport-v4 .sp7-coach-alert{display:flex;gap:10px;color:#825333;font-size:12px;line-height:1.6;border-top:1px solid #d7ccbd;padding-top:15px;margin-top:16px}
+body.sport-v4 .sp7-coach-alert .so-icon{width:19px;height:19px}
+body.sport-v4 .sp7-last-panel{background:white;border:1px solid #dfe5dc;border-radius:15px;padding:23px}
+body.sport-v4 .sp7-last-panel strong{font-size:24px;letter-spacing:-.028em;display:block;margin-top:14px}
+body.sport-v4 .sp7-last-panel p{font-size:12px;color:#657468;margin:10px 0 15px;line-height:1.6}
+body.sport-v4 .sp7-last-panel button{border:0;background:none;padding:10px 0;color:#315b3c;display:inline-flex;align-items:center;gap:9px;font-size:12px;font-weight:800;cursor:pointer;min-height:44px}
+body.sport-v4 .sp7-last-panel button .so-icon{width:16px;height:16px}
+body.sport-v4 .sp7-last-panel button:hover{text-decoration:underline}
+body.sport-v4 .sp7-empty{padding:21px;background:white;border:1px solid #e1e7de;border-radius:12px;color:#526954;font-size:13px}
+body.sport-v4 .sp7-timeline{display:grid;gap:0;background:white;border:1px solid #dce4d9;border-radius:13px;padding:7px 20px}
+body.sport-v4 .sp7-milestone{display:flex;gap:16px;padding:19px 0;min-width:0}
+body.sport-v4 .sp7-milestone+.sp7-milestone{border-top:1px solid #e7ece3}
+body.sport-v4 .sp7-milestone-track{height:40px;width:40px;min-width:40px;display:grid;place-items:center;background:#edf2e8;color:#55725b;font-size:12px;font-weight:850;border-radius:12px}
+body.sport-v4 .sp7-milestone.is-complete .sp7-milestone-track{background:#d4f17b;color:#1d3f2b}
+body.sport-v4 .sp7-milestone-track .so-icon{width:19px;height:19px}
+body.sport-v4 .sp7-milestone-content{flex:1;min-width:0}
+body.sport-v4 .sp7-milestone-head{display:flex;align-items:start;justify-content:space-between;gap:12px}
+body.sport-v4 .sp7-milestone-head strong{font-size:14px;color:#25412e;line-height:1.35}
+body.sport-v4 .sp7-milestone-head>span{font-size:10px;font-weight:750;color:#66816a;text-align:right;line-height:1.45;max-width:125px}
+body.sport-v4 .sp7-milestone-content p{font-size:12px;line-height:1.6;color:#5d705f;margin:8px 0 0}
+@container sportmain (max-width:1070px){
+  body.sport-v4 .sp7-page .sp7-head h1{font-size:clamp(40px,5vw,64px)}
+  body.sport-v4 .sp7-page .sp7-hero{grid-template-columns:minmax(0,1fr) minmax(210px,.55fr)}
+  body.sport-v4 .sp7-page .sp7-hero h2{font-size:clamp(43px,5vw,60px)}
+  body.sport-v4 .sp7-page .sp7-layout{grid-template-columns:minmax(0,1fr)}
+  body.sport-v4 .sp7-page .sp7-aside{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+  body.sport-v4 .sp7-page .sp7-last-panel{grid-column:1/-1}
+}
+@container sportmain (max-width:760px){
+  body.sport-v4 .sp7-page .sp7-selector{grid-template-columns:repeat(2,minmax(0,1fr))}
+  body.sport-v4 .sp7-page .sp7-head-stat{padding-left:14px}
+  body.sport-v4 .sp7-page .sp7-head h1{font-size:clamp(37px,6vw,49px)}
+  body.sport-v4 .sp7-page .sp7-hero{grid-template-columns:minmax(0,1fr)}
+  body.sport-v4 .sp7-page .sp7-hero-panel{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;border-left:0;border-top:1px solid #ffffff29;padding:18px 23px}
+  body.sport-v4 .sp7-page .sp7-hero-panel>div:not(.sp7-hero-symbol){border-top:0;padding:4px 0}
+  body.sport-v4 .sp7-page .sp7-hero-symbol{display:none}
+  body.sport-v4 .sp7-page .sp7-hero h2{margin-top:32px}
+  body.sport-v4 .sp7-page .sp7-aside{grid-template-columns:minmax(0,1fr)}
+}
+@container sportmain (max-width:470px){
+  body.sport-v4 .sp7-page .sp7-head-row{align-items:start;gap:12px;flex-direction:column}
+  body.sport-v4 .sp7-page .sp7-head h1{font-size:clamp(34px,9.2vw,45px)}
+  body.sport-v4 .sp7-page .sp7-head-row p{font-size:13px}
+  body.sport-v4 .sp7-page .sp7-head-stat{border-left:0;border-top:1px solid #d9ded6;padding:12px 0 0;align-self:stretch}
+  body.sport-v4 .sp7-page .sp7-head-stat strong{font-size:39px}
+  body.sport-v4 .sp7-page .sp7-selector{gap:7px}
+  body.sport-v4 .sp7-page .sp7-switch{padding:10px 9px;min-height:67px;gap:8px}
+  body.sport-v4 .sp7-page .sp7-switch-icon{width:36px;height:36px}
+  body.sport-v4 .sp7-page .sp7-switch-icon .so-icon{width:22px;height:22px}
+  body.sport-v4 .sp7-page .sp7-switch-main strong{font-size:12px}
+  body.sport-v4 .sp7-page .sp7-switch-main small{font-size:9px}
+  body.sport-v4 .sp7-page .sp7-switch-state{width:14px}
+  body.sport-v4 .sp7-page .sp7-switch-state .so-icon{width:14px;height:14px}
+  body.sport-v4 .sp7-page .sp7-hero-primary{padding:25px 20px}
+  body.sport-v4 .sp7-page .sp7-hero h2{font-size:clamp(39px,10vw,49px)}
+  body.sport-v4 .sp7-page .sp7-hero-primary>p{font-size:13px}
+  body.sport-v4 .sp7-page .sp7-hero-actions{align-items:stretch;flex-direction:column}
+  body.sport-v4 .sp7-page .sp7-hero-actions button{width:100%;justify-content:space-between}
+  body.sport-v4 .sp7-page .sp7-hero-panel{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:10px}
+  body.sport-v4 .sp7-page .sp7-hero-panel>div:nth-child(4){grid-column:1/-1}
+  body.sport-v4 .sp7-page .sp7-section-heading{display:block}
+  body.sport-v4 .sp7-page .sp7-count{display:inline-block;margin-top:11px}
+  body.sport-v4 .sp7-page .sp7-ex-heading{padding:13px 12px;gap:10px}
+  body.sport-v4 .sp7-page .sp7-ex-index{width:33px;height:33px}
+  body.sport-v4 .sp7-page .sp7-ex-titles strong{font-size:13px}
+  body.sport-v4 .sp7-page .sp7-ex-titles small{font-size:11px}
+  body.sport-v4 .sp7-page .sp7-ex-body{padding:14px}
+  body.sport-v4 .sp7-page .sp7-ex-metrics{grid-template-columns:minmax(0,1fr)}
+  body.sport-v4 .sp7-page .sp7-milestone-head{flex-direction:column;gap:3px}
+  body.sport-v4 .sp7-page .sp7-milestone-head>span{text-align:left;max-width:none}
+}
+@media (prefers-reduced-motion:reduce){
+  body.sport-v4 .sp7-page *,body.sport-v4 .sp7-page *::before,body.sport-v4 .sp7-page *::after{animation:none!important;transition:none!important}
+}
+
+
+/* SportOS v0.8 — weekly achievement, adaptive coaching and manual Strava measures */
+body.sport-v4 .so8-celebration{display:flex;align-items:center;gap:20px;position:relative;overflow:hidden;margin:18px 0 22px;padding:24px 28px;background:#153c30;color:#f5f4ef;border:1px solid rgba(212,241,123,.27);border-radius:19px;box-shadow:0 12px 32px rgba(21,60,48,.12)}
+body.sport-v4 .so8-celebration::after{content:"";position:absolute;right:-40px;top:-85px;width:230px;height:230px;border:1px solid rgba(212,241,123,.2);border-radius:50%;pointer-events:none}
+body.sport-v4 .so8-celebration-icon{display:grid;place-items:center;flex:0 0 56px;width:56px;height:56px;border-radius:15px;background:#d4f17b;color:#153c30}
+body.sport-v4 .so8-celebration-icon .so-icon{width:30px;height:30px}
+body.sport-v4 .so8-celebration>div{min-width:0;flex:1}
+body.sport-v4 .so8-celebration-kicker{display:block;margin-bottom:5px;font-size:10px;font-weight:800;letter-spacing:.09em;color:#d4f17b}
+body.sport-v4 .so8-celebration strong{display:block;line-height:1.2;font-size:clamp(18px,2.2vw,25px);letter-spacing:-.04em}
+body.sport-v4 .so8-celebration p{margin:6px 0 0;font-size:13px;line-height:1.5;color:#e4ebe1}
+body.sport-v4 .so8-celebration-check{display:grid;place-items:center;width:35px;height:35px;border:1px solid rgba(212,241,123,.4);border-radius:50%;color:#d4f17b;font-size:20px}
+body.sport-v4 .so8-adaptation{display:flex;gap:17px;align-items:flex-start;padding:22px;margin:0 0 22px;border:1px solid #d9e3d5;border-radius:16px;background:linear-gradient(125deg,#eff4e9,#f9faf5)}
+body.sport-v4 .so8-adapt-icon{display:grid;place-items:center;flex:0 0 42px;height:42px;border-radius:12px;background:#d4f17b;color:#153c30}
+body.sport-v4 .so8-adapt-copy{min-width:0}
+body.sport-v4 .so8-adapt-copy h3{font-size:clamp(18px,1.8vw,23px);line-height:1.2;margin:6px 0 7px;letter-spacing:-.045em;color:#153c30}
+body.sport-v4 .so8-adapt-copy p{margin:0 0 7px;color:#35463b;font-size:13px;line-height:1.55}
+body.sport-v4 .so8-adapt-copy small{display:block;margin-top:8px;color:#536558;font-size:11px;line-height:1.45}
+body.sport-v4 .so8-adapt-target{display:inline-flex;padding:7px 10px;border-radius:7px;background:#d4f17b;color:#153c30;font-size:13px;line-height:1.5}
+body.sport-v4 .so8-ex-increase{display:flex;align-items:center;gap:8px;padding:10px;border-radius:9px;background:#e4ebe1;color:#153c30;font-size:12px;line-height:1.4}
+body.sport-v4 .so8-ex-increase .so-icon{width:17px;height:17px;flex:0 0 17px}
+body.sport-v4 .so8-timed-hint{margin:8px 0 15px;padding:10px 13px;border-radius:9px;background:#e4ebe1;color:#153c30;font-size:12px;line-height:1.45}
+body.sport-v4 .so8-strava-fields{margin-top:14px;padding:20px;border:1px solid #dde5d8;border-radius:13px;background:#f5f4ef}
+body.sport-v4 .so8-strava-heading{display:flex;align-items:center;gap:12px;margin-bottom:15px;color:#153c30}
+body.sport-v4 .so8-strava-heading>.so-icon{height:29px;width:29px;flex:0 0 29px}
+body.sport-v4 .so8-strava-heading strong,body.sport-v4 .so8-strava-heading span{display:block}
+body.sport-v4 .so8-strava-heading strong{font-size:15px}
+body.sport-v4 .so8-strava-heading span{font-size:11px;color:#526757}
+body.sport-v4 .so8-strava-fields .so-section-desc{margin:8px 0 0}
+@media(max-width:600px){
+ body.sport-v4 .so8-celebration{padding:19px;gap:12px;align-items:flex-start}
+ body.sport-v4 .so8-celebration-icon{flex-basis:40px;width:40px;height:40px}
+ body.sport-v4 .so8-celebration-check{display:none}
+ body.sport-v4 .so8-adaptation{padding:16px;gap:11px}
+ body.sport-v4 .so8-adapt-icon{flex-basis:32px;height:32px}
+ body.sport-v4 .so8-strava-fields{padding:14px}
+}
+@media(prefers-reduced-motion:reduce){body.sport-v4 .so8-celebration *,body.sport-v4 .so8-adaptation *{animation:none!important;transition:none!important}}
+
+</style>
+
+</head>
+<body class="sport-v3 sport-v4">
+  <a class="v3-skip" href="#content">Aller au contenu principal</a>
+  <div id="app">
+    <aside class="v3-sidebar" aria-label="Navigation de SportOS">
+      <div class="v3-sidebar-head">
+        <button type="button" class="v3-logo" data-nav="home" aria-label="SportOS, revenir à l'accueil">
+          <svg class="v4-brand-mark" viewBox="0 0 48 48" focusable="false" aria-hidden="true"><rect width="48" height="48" rx="12" fill="#D4F17B"/><path d="M33.5 8.5H20.2c-6.4 0-10.4 3.2-10.4 8.1s3.7 7.4 10.5 7.4h7.4c6.8 0 10.5 3.1 10.5 7.8s-4.1 7.8-10.5 7.8H14" fill="none" stroke="#151915" stroke-width="5.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="37.4" cy="13.1" r="2.6" fill="#151915"/></svg>
+          <span class="v3-wordmark">sport<span>OS</span><small>MOVE WITH INTENTION</small></span>
+        </button>
+      </div>
+
+      <div class="v3-sidebar-inner">
+        <p class="v3-sidebar-label">MON ESPACE</p>
+        <nav class="v3-side-nav" aria-label="Pages">
+          <button type="button" data-nav="home" class="v3-nav-link active" aria-current="page">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/><path d="M9 21v-8h6v8"/></svg><span>Accueil</span>
+          </button>
+          <button type="button" data-nav="program" class="v3-nav-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg><span>Programme</span>
+          </button>
+          <button type="button" data-nav="progress" class="v3-nav-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19V5m0 14h17M8 16l4-5 3 2 5-7"/></svg><span>Progression</span>
+          </button>
+          <button type="button" data-nav="profile" class="v3-nav-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c.3-4 3.4-6 8-6s7.7 2 8 6"/></svg><span>Profil</span>
+          </button>
+        </nav>
+        <div class="v3-sidebar-action">
+          <p class="v3-sidebar-label">ACCÈS RAPIDE</p>
+          <button type="button" data-quick-log class="v3-side-cta"><span aria-hidden="true">+</span> Enregistrer une séance</button>
+          <button type="button" data-review-quick class="v3-side-minor"><span aria-hidden="true">↗</span> Bilan hebdomadaire</button>
+        </div>
+      </div>
+
+      <div class="v3-side-bottom">
+        <div class="v3-side-challenge">
+          <p>OBJECTIF EN LIGNE DE MIRE</p>
+          <div class="v3-side-challenge-title">ESPIENS<span>↗</span></div>
+          <span>À vélo · Mai 2027 · 2 jours envisagés</span>
+          <button type="button" data-open-program="Vélo">Voir la préparation <span aria-hidden="true">→</span></button>
+        </div>
+        <p class="v3-private-note"><span aria-hidden="true">●</span> Ton espace privé</p>
+      </div>
+    </aside>
+
+    <div class="v3-shell shell">
+      <header class="v3-topbar" aria-label="Barre d'actions">
+        <div class="v3-top-left">
+          <svg class="v4-brand-mark v4-mobile-brand-mark" viewBox="0 0 48 48" focusable="false" aria-hidden="true"><rect width="48" height="48" rx="12" fill="#D4F17B"/><path d="M33.5 8.5H20.2c-6.4 0-10.4 3.2-10.4 8.1s3.7 7.4 10.5 7.4h7.4c6.8 0 10.5 3.1 10.5 7.8s-4.1 7.8-10.5 7.8H14" fill="none" stroke="#151915" stroke-width="5.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="37.4" cy="13.1" r="2.6" fill="#151915"/></svg>
+          <div class="v3-top-context"><span>SPORTOS <span aria-hidden="true">/</span> <span id="v3-crumb">ACCUEIL</span></span><strong id="v3-top-title">Ton espace d'entraînement</strong></div>
+        </div>
+        <div class="v3-top-actions">
+          <span class="v3-date" id="today-pill"></span>
+          <button type="button" class="v3-top-cta" data-quick-log><span aria-hidden="true">+</span><span class="v3-top-cta-text">Séance</span></button>
+          <button type="button" class="v3-top-profile" data-nav="profile" aria-label="Ouvrir mon profil"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="8" r="3.5"/><path d="M4.5 21c.5-4.5 3.6-6 7.5-6s7 1.5 7.5 6"/></svg></button>
+        </div>
+      </header>
+      <main id="content" tabindex="-1"><div class="loading">Chargement de SportOS…</div></main>
+    </div>
+
+    <nav class="v3-mobile-nav" aria-label="Navigation mobile">
+      <button type="button" data-nav="home" class="active" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="m3 10 9-7 9 7v11H3z"/><path d="M9 21v-8h6v8"/></svg><span>Accueil</span></button>
+      <button type="button" data-nav="program"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg><span>Programme</span></button>
+      <button type="button" data-nav="progress"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 5v14h17M8 16l4-5 3 2 5-7"/></svg><span>Progrès</span></button>
+      <button type="button" data-nav="profile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c.3-4 3.4-6 8-6s7.7 2 8 6"/></svg><span>Profil</span></button>
+    </nav>
+  </div>
+  <div id="quick-root"></div>
+  <div id="modal-root"></div>
+  <div id="toast" role="status" aria-live="polite"></div>
+  <script>
+window.__SPORTOS_DEMO__=true;
+window.__SPORTOS_FIXTURE__={"version": "0.1.0", "today": "2026-10-19", "profile": [{"Champ": "Age", "Valeur": "25"}, {"Champ": "Taille", "Valeur": "164"}, {"Champ": "Poids de référence", "Valeur": "53"}], "goals": [{"ID": "OBJ-01", "Axe": "Fessiers", "Résultat visé": "Développer les fessiers", "Priorité": "Haute", "Précision": "Progression adaptée et sans précipitation.", "Statut": "Actif"}, {"ID": "OBJ-02", "Axe": "Force", "Résultat visé": "Renforcer l’ensemble du corps", "Priorité": "Haute", "Précision": "Progression adaptée et sans précipitation.", "Statut": "Actif"}, {"ID": "OBJ-03", "Axe": "Bras", "Résultat visé": "Des bras plus forts et dessinés", "Priorité": "Haute", "Précision": "Progression adaptée et sans précipitation.", "Statut": "Actif"}, {"ID": "OBJ-04", "Axe": "Abdominaux", "Résultat visé": "Renforcer les abdominaux", "Priorité": "Haute", "Précision": "Progression adaptée et sans précipitation.", "Statut": "Actif"}, {"ID": "OBJ-05", "Axe": "Cardio", "Résultat visé": "Améliorer l’endurance", "Priorité": "Haute", "Précision": "Progression adaptée et sans précipitation.", "Statut": "Actif"}, {"ID": "OBJ-06", "Axe": "Mobilité", "Résultat visé": "Bouger régulièrement", "Priorité": "Haute", "Précision": "Progression adaptée et sans précipitation.", "Statut": "Actif"}, {"ID": "OBJ-07", "Axe": "Sécurité", "Résultat visé": "Respecter les douleurs", "Priorité": "Haute", "Précision": "Progression adaptée et sans précipitation.", "Statut": "Actif"}, {"ID": "OBJ-08", "Axe": "Course", "Résultat visé": "Courir 30 minutes en continu", "Priorité": "Haute", "Précision": "Progression adaptée et sans précipitation.", "Statut": "Actif"}, {"ID": "OBJ-09", "Axe": "Vélo", "Résultat visé": "Rejoindre Espiens à vélo en mai 2027", "Priorité": "Haute", "Précision": "Progression adaptée et sans précipitation.", "Statut": "Actif"}], "programs": [{"Programme_ID": "SP-REPRISE", "Version": "V1-S2", "Séance": "A", "Activité": "Renforcement", "Objectifs_ID": "OBJ-01; OBJ-02; OBJ-04", "Statut": "Proposé — S2"}, {"Programme_ID": "SP-REPRISE", "Version": "V1-S2", "Séance": "B", "Activité": "Renforcement", "Objectifs_ID": "OBJ-01; OBJ-03; OBJ-04", "Statut": "Proposé — S2"}, {"Programme_ID": "P-COURSE-2026", "Version": "V1-CARDIO", "Séance": "D", "Activité": "Course", "Objectifs_ID": "OBJ-05; OBJ-08", "Statut": "Actif — reprise"}, {"Programme_ID": "P-VELO-ESPIENS-2027", "Version": "V1-CARDIO", "Séance": "C", "Activité": "Vélo", "Objectifs_ID": "OBJ-05; OBJ-09", "Statut": "Proposé"}], "exercises": [{"Version": "V1-S2", "Semaine": "S2", "Séance": "A", "Ordre": 1, "Exercice_ID": "EX-SQUAT", "Nom": "Goblet squat", "Séries": "2", "Rép_min": "12", "Rép_max": "15", "Temps_s": "", "Charge_kg indicative": "5", "Tempo": "3 s descente", "Sécurité": "Sans douleur", "Progression": "Technique", "Objectifs_ID": "OBJ-01; OBJ-02", "Programme_ID": "SP-REPRISE", "Statut": "Proposé — S2"}, {"Version": "V1-S2", "Semaine": "S2", "Séance": "A", "Ordre": 2, "Exercice_ID": "EX-HIP", "Nom": "Pont fessier lesté", "Séries": "2", "Rép_min": "15", "Rép_max": "20", "Temps_s": "", "Charge_kg indicative": "5", "Tempo": "Contraction 2–3 s en haut", "Sécurité": "Sans douleur", "Progression": "Technique", "Objectifs_ID": "OBJ-01", "Programme_ID": "SP-REPRISE", "Statut": "Proposé — S2"}, {"Version": "V1-S2", "Semaine": "S2", "Séance": "A", "Ordre": 3, "Exercice_ID": "EX-FENTE", "Nom": "Fentes arrière", "Séries": "2", "Rép_min": "8", "Rép_max": "10", "Temps_s": "", "Charge_kg indicative": "", "Tempo": "Mouvement contrôlé", "Sécurité": "Sans douleur", "Progression": "Technique", "Objectifs_ID": "OBJ-01; OBJ-02", "Programme_ID": "SP-REPRISE", "Statut": "Proposé — S2"}, {"Version": "V1-S2", "Semaine": "S2", "Séance": "A", "Ordre": 4, "Exercice_ID": "EX-ROW-APPUI", "Nom": "Rowing avec appui", "Séries": "2", "Rép_min": "10", "Rép_max": "12", "Temps_s": "", "Charge_kg indicative": "", "Tempo": "Test sans charge", "Sécurité": "À retirer si douleur", "Progression": "Technique", "Objectifs_ID": "OBJ-02; OBJ-03", "Programme_ID": "SP-REPRISE", "Statut": "Proposé — S2"}, {"Version": "V1-S2", "Semaine": "S2", "Séance": "A", "Ordre": 5, "Exercice_ID": "EX-DEADBUG", "Nom": "Dead bug", "Séries": "2", "Rép_min": "10", "Rép_max": "10", "Temps_s": "", "Charge_kg indicative": "0", "Tempo": "Lent", "Sécurité": "Sans douleur", "Progression": "Technique", "Objectifs_ID": "OBJ-04", "Programme_ID": "SP-REPRISE", "Statut": "Proposé — S2"}, {"Version": "V1-S2", "Semaine": "S2", "Séance": "B", "Ordre": 1, "Exercice_ID": "EX-PONT-1J", "Nom": "Pont fessier une jambe", "Séries": "2", "Rép_min": "8", "Rép_max": "10", "Temps_s": "", "Charge_kg indicative": "0", "Tempo": "Bassin stable", "Sécurité": "Sans douleur", "Progression": "Technique", "Objectifs_ID": "OBJ-01", "Programme_ID": "SP-REPRISE", "Statut": "Proposé — S2"}, {"Version": "V1-S2", "Semaine": "S2", "Séance": "B", "Ordre": 2, "Exercice_ID": "EX-POMPE", "Nom": "Pompes inclinées", "Séries": "2", "Rép_min": "8", "Rép_max": "12", "Temps_s": "", "Charge_kg indicative": "0", "Tempo": "Corps aligné", "Sécurité": "Sans douleur", "Progression": "Technique", "Objectifs_ID": "OBJ-03", "Programme_ID": "SP-REPRISE", "Statut": "Proposé — S2"}, {"Version": "V1-S2", "Semaine": "S2", "Séance": "B", "Ordre": 3, "Exercice_ID": "EX-EPAULE", "Nom": "Développé épaules", "Séries": "2", "Rép_min": "8", "Rép_max": "10", "Temps_s": "", "Charge_kg indicative": "", "Tempo": "Sans cambrer", "Sécurité": "Sans douleur", "Progression": "Technique", "Objectifs_ID": "OBJ-03", "Programme_ID": "SP-REPRISE", "Statut": "Proposé — S2"}, {"Version": "V1-S2", "Semaine": "S2", "Séance": "B", "Ordre": 4, "Exercice_ID": "EX-CURL", "Nom": "Curl biceps", "Séries": "2", "Rép_min": "10", "Rép_max": "12", "Temps_s": "", "Charge_kg indicative": "", "Tempo": "Contrôlé", "Sécurité": "Sans douleur", "Progression": "Technique", "Objectifs_ID": "OBJ-03", "Programme_ID": "SP-REPRISE", "Statut": "Proposé — S2"}, {"Version": "V1-S2", "Semaine": "S2", "Séance": "B", "Ordre": 5, "Exercice_ID": "EX-GAINAGE", "Nom": "Gainage", "Séries": "2", "Rép_min": "", "Rép_max": "", "Temps_s": "40", "Charge_kg indicative": "0", "Tempo": "Aligné", "Sécurité": "Sans douleur", "Progression": "Technique", "Objectifs_ID": "OBJ-04", "Programme_ID": "SP-REPRISE", "Statut": "Proposé — S2"}], "steps": [{"Plan_ID": "P-COURSE-2026", "Type": "Course", "Séance_no": "1", "Période / cycle": "Séance 1", "Statut": "Réalisée 19/10/2026", "Blocs": "1 min course / 1 min marche × 8"}, {"Plan_ID": "P-COURSE-2026", "Type": "Course", "Séance_no": "2", "Période / cycle": "Séance 2", "Statut": "Proposée", "Blocs": "1 min course / 1 min marche × 8"}, {"Plan_ID": "P-COURSE-2026", "Type": "Course", "Séance_no": "3", "Période / cycle": "Séance 3", "Statut": "Conditionnelle", "Blocs": "1.5 min course / 1 min marche × 8"}, {"Plan_ID": "P-COURSE-2026", "Type": "Course", "Séance_no": "4", "Période / cycle": "Séance 4", "Statut": "Conditionnelle", "Blocs": "1.5 min course / 1 min marche × 8"}, {"Plan_ID": "P-COURSE-2026", "Type": "Course", "Séance_no": "5", "Période / cycle": "Séance 5", "Statut": "Conditionnelle", "Blocs": "2 min course / 1 min marche × 7"}, {"Plan_ID": "P-COURSE-2026", "Type": "Course", "Séance_no": "6", "Période / cycle": "Séance 6", "Statut": "Conditionnelle", "Blocs": "2 min course / 1 min marche × 7"}, {"Plan_ID": "P-COURSE-2026", "Type": "Course", "Séance_no": "7", "Période / cycle": "Séance 7", "Statut": "Conditionnelle", "Blocs": "3 min course / 1 min marche × 6"}, {"Plan_ID": "P-COURSE-2026", "Type": "Course", "Séance_no": "8", "Période / cycle": "Séance 8", "Statut": "Conditionnelle", "Blocs": "3 min course / 1 min marche × 6"}, {"Plan_ID": "P-COURSE-2026", "Type": "Course", "Séance_no": "9", "Période / cycle": "Séance 9", "Statut": "Conditionnelle", "Blocs": "4 min course / 1 min marche × 5"}, {"Plan_ID": "P-COURSE-2026", "Type": "Course", "Séance_no": "10", "Période / cycle": "Séance 10", "Statut": "Conditionnelle", "Blocs": "4 min course / 1 min marche × 5"}, {"Plan_ID": "P-COURSE-2026", "Type": "Course", "Séance_no": "11", "Période / cycle": "Séance 11", "Statut": "Conditionnelle", "Blocs": "5 min course / 1 min marche × 5"}, {"Plan_ID": "P-COURSE-2026", "Type": "Course", "Séance_no": "12", "Période / cycle": "Séance 12", "Statut": "Conditionnelle", "Blocs": "5 min course / 1 min marche × 5"}, {"Plan_ID": "P-VELO-ESPIENS-2027", "Type": "Vélo", "Séance_no": "1", "Période / cycle": "Octobre 2026", "Statut": "Proposée", "Blocs": "25–40 min"}, {"Plan_ID": "P-VELO-ESPIENS-2027", "Type": "Vélo", "Séance_no": "2", "Période / cycle": "Novembre 2026", "Statut": "Jalon conditionnel", "Blocs": "40–60 min"}, {"Plan_ID": "P-VELO-ESPIENS-2027", "Type": "Vélo", "Séance_no": "3", "Période / cycle": "Décembre 2026", "Statut": "Jalon conditionnel", "Blocs": "60–90 min"}, {"Plan_ID": "P-VELO-ESPIENS-2027", "Type": "Vélo", "Séance_no": "4", "Période / cycle": "Janvier 2027", "Statut": "Jalon conditionnel", "Blocs": "75–120 min"}, {"Plan_ID": "P-VELO-ESPIENS-2027", "Type": "Vélo", "Séance_no": "5", "Période / cycle": "Février 2027", "Statut": "Jalon conditionnel", "Blocs": "90–150 min"}, {"Plan_ID": "P-VELO-ESPIENS-2027", "Type": "Vélo", "Séance_no": "6", "Période / cycle": "Mars 2027", "Statut": "Jalon conditionnel", "Blocs": "120–210 min"}, {"Plan_ID": "P-VELO-ESPIENS-2027", "Type": "Vélo", "Séance_no": "7", "Période / cycle": "Avril 2027", "Statut": "Jalon conditionnel", "Blocs": "180–300 min"}, {"Plan_ID": "P-VELO-ESPIENS-2027", "Type": "Vélo", "Séance_no": "8", "Période / cycle": "Mai 2027", "Statut": "Jalon conditionnel", "Blocs": "Défi en 2 jours"}], "sessions": [{"Seance_ID": "STR-S1-A", "Semaine": "S1", "Date": "", "Type": "A", "Statut": "Terminée"}, {"Seance_ID": "STR-S1-B", "Semaine": "S1", "Date": "", "Type": "B", "Statut": "Terminée"}], "logs": [{"Log_ID": "LOG-S1-B-01", "Seance_ID": "STR-S1-B", "Exercice_ID": "EX-RDL", "Exercice": "Soulevé de terre roumain", "Douleur": "Oui"}, {"Log_ID": "LOG-S1-B-04", "Seance_ID": "STR-S1-B", "Exercice_ID": "EX-ROW", "Exercice": "Rowing haltère", "Douleur": "Oui"}], "cardio": [{"Cardio_ID": "CARD-20261019-RUN-01", "Semaine": "S2", "Date": "2026-10-19", "Type": "Course", "Durée min": "16", "Effort 1-10": "2,5", "Statut": "Terminée"}], "advice": [], "reviews": [], "measurements": [{"Mesure_ID": "MES-INITIAL", "Date_mesure": "", "Poids_kg": "53"}]};
+
+</script>
+<script>
+(function(){
+  'use strict';
+  const S={data:null,page:'program',programTab:'A',exerciseSelected:'EX-HIP',demo:!!window.__SPORTOS_DEMO__,loading:false};
+  const q=s=>document.querySelector(s);
+  const esc=x=>String(x==null?'':x).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const text=x=>esc(x||'');
+  const norm=x=>String(x==null?'':x).replace(',','.').trim();
+  const toNum=x=>{const n=Number(norm(x));return Number.isFinite(n)?n:0};
+  const fmt=n=>Number(n||0).toLocaleString('fr-FR',{maximumFractionDigits:1});
+  const key=()=>('SO'+Date.now()+Math.floor(Math.random()*100000)).replace(/[^A-Za-z0-9_-]/g,'');
+  const W=()=>{const d=new Date((S.data&&S.data.today||new Date().toISOString().slice(0,10))+'T12:00:00');d.setHours(0,0,0,0);d.setDate(d.getDate()+4-(d.getDay()||7));const year=d.getFullYear(),jan=new Date(year,0,1);return year+'-W'+String(Math.ceil((((d-jan)/86400000)+1)/7)).padStart(2,'0');};
+  const niceDate=s=>{if(!s)return 'Date non renseignée';const d=new Date(s+'T12:00:00');return Number.isNaN(d.getTime())?s:d.toLocaleDateString('fr-FR',{day:'numeric',month:'short',year:'numeric'});};
+  const goalsFor=raw=>(raw||'').split(';').map(x=>x.trim()).map(id=>S.data.goals.find(g=>g.ID===id)).filter(Boolean);
+  const badge=(label,kind='')=>`<span class="pill ${kind}">${esc(label)}</span>`;
+  const safeRaw=(s,max=120)=>esc(String(s||'').slice(0,max));
+  function toast(s){const el=q('#toast');el.textContent=s;el.style.display='block';clearTimeout(toast.timer);toast.timer=setTimeout(()=>el.style.display='none',4200);}
+  function showError(msg){q('#content').innerHTML=`<div class="error-banner"><b>SportOS n'a pas pu charger les données.</b><br>${esc(msg)}<br>Vérifie le déploiement Apps Script et l'accès au Google Sheet.</div><button class="btn" id="retry">Réessayer</button>`;q('#retry').onclick=load;}
+  function server(method,data){return new Promise((resolve,reject)=>{
+    if(S.demo){setTimeout(()=>{try{if(method==='getBootstrap')return resolve(window.__SPORTOS_FIXTURE__);return resolve(demoWrite(method,data));}catch(e){reject(e)}},180);return;}
+    if(!window.google||!google.script||!google.script.run){reject(Error('Cette page doit être ouverte depuis une WebApp Apps Script déployée.'));return;}
+    google.script.run.withSuccessHandler(resolve).withFailureHandler(e=>reject(Error(e.message||String(e))))[method](...(method==='getBootstrap'?[]:[data]));
+  });}
+  function demoWrite(method,p){if(method==='saveStrength'){
+      const existing=S.data.sessions.find(x=>x.Seance_ID===p.id);
+      const session={Seance_ID:p.id,Semaine:W(),Date:p.date,Type:p.type,Statut:'Terminée','Durée réelle min':p.duration,'Effort global 1-10':p.effort,Notes:p.note,Origine:'Aperçu'};
+      if(existing)Object.assign(existing,session);else S.data.sessions.push(session);
+      p.exercises.forEach(x=>{const id=p.id+'_'+x.id;let r=S.data.logs.find(v=>v.Log_ID===id);const row={Log_ID:id,Seance_ID:p.id,Exercice_ID:x.id,Exercice:S.data.exercises.find(y=>y.Exercice_ID===x.id)?.Nom||x.id,'Séries réelles':x.sets,'Rép réelles':x.reps,'Charge réelle kg':x.weight,'Maintien réel s':x.seconds,Difficulté:x.difficulty,RIR:x.rir,'Réserve tenue (s)':x.secondsReserve||'',Douleur:x.pain,Localisation:x.painWhere,Note:x.note};if(r)Object.assign(r,row);else S.data.logs.push(row);});
+    }else if(method==='saveCardio'){
+      let existing=S.data.cardio.find(x=>x.Cardio_ID===p.id);const row={Cardio_ID:p.id,Semaine:W(),Date:p.date,Type:p.type,'Durée min':p.duration,'Distance km':p.distance,'Effort 1-10':p.effort,'Douleur':p.pain,Note:p.note,Statut:'Terminée',Programme_ID:p.type==='Course'?'P-COURSE-2026':'P-VELO-ESPIENS-2027','Course_sec_bloc':p.runSeconds,'Marche_sec_bloc':p.walkSeconds,'Nb_blocs':p.rounds,'Dénivelé positif (m)':p.elevationGain||'','Vitesse moyenne (km/h)':p.averageSpeed||''};if(existing)Object.assign(existing,row);else S.data.cardio.push(row);
+    }else if(method==='saveReview')S.data.reviews.push({Bilan_ID:'BIL-APP-'+p.week,Semaine:p.week,'Fatigue 1-10':p.fatigue,'Sommeil 1-10':p.sleep,'Satisfaction 1-10':p.satisfaction,'Retour libre':p.note,'Semaine suivante':p.next});
+    else if(method==='saveMeasurement')S.data.measurements.push({Mesure_ID:p.id,Date_mesure:p.date,Poids_kg:p.weight});
+    return {ok:true};
+  }
+  function loadingMarkup(){return '<div class="loading">Chargement…</div>'}
+  async function load(){q('#content').innerHTML=loadingMarkup();try{const d=await server('getBootstrap');if(!d||!d.goals||!d.programs)throw Error('Réponse de données incomplète');S.data=d;render();}catch(e){showError(e.message)}}
+  function navigate(page){S.page=page;render();window.scrollTo(0,0);}
+  function qAll(selector){return Array.from(document.querySelectorAll(selector));}
+  function header(title,lede,eyebrow='MON ESPACE'){return `<p class="eyebrow">${esc(eyebrow)}</p><h1 class="page-title">${esc(title)}</h1><p class="lede">${esc(lede)}</p>`}
+  function render(){if(!S.data)return;
+    const today=S.data.today||new Date().toISOString().slice(0,10),labels={home:'ACCUEIL',program:'PROGRAMME',progress:'PROGRESSION',profile:'PROFIL'};
+    q('#today-pill').textContent=niceDate(today);
+    q('#v3-crumb').textContent=labels[S.page]||'ACCUEIL';
+    q('#v3-top-title').textContent=S.page==='home'?"Ton espace d’entraînement":({program:'Tes séances et ta progression',progress:'Les mouvements qui comptent',profile:'Tes objectifs personnels'}[S.page]||'SportOS');
+    qAll('[data-nav]').forEach(b=>{const selected=b.dataset.nav===S.page;b.classList.toggle('active',selected);if(selected)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current');});
+    const html={home:home,program:program,progress:progress,profile:profile}[S.page]();
+    q('#content').innerHTML=(S.demo?'<div class="demo-banner"><b>Mode aperçu :</b> données illustratives. Les saisies ne sont pas enregistrées dans ton Google Sheet.</div>':'')+html;bind();
+  }
+  function currentWeekActivities(){const week=W();const iso=d=>{if(!/^\d{4}-\d\d-\d\d$/.test(d||''))return false;const x=new Date(d+'T12:00:00'),t=new Date(S.data.today+'T12:00:00');return x.getTime()>=t.getTime()-((t.getDay()+6)%7)*86400000&&x.getTime()<t.getTime()+(7-(t.getDay()+6)%7)*86400000};return [...S.data.sessions.filter(r=>r.Statut==='Terminée'&&iso(r.Date)),...S.data.cardio.filter(r=>r.Statut==='Terminée'&&iso(r.Date))];}
+  const activeEx=type=>S.data.exercises.filter(x=>x.Séance===type&&x.Statut==='Proposé — S2'&&x.Version==='V1-S2').sort((a,b)=>toNum(a.Ordre)-toNum(b.Ordre));
+  function activityInfo(type){if(type==='A')return {icon:'◈',name:'Fessiers & full body',sub:'5 exercices · 35–45 min',cls:''};if(type==='B')return {icon:'✦',name:'Haut du corps & fessiers',sub:'5 exercices · 35–45 min',cls:''};if(type==='Vélo')return {icon:'♢',name:'Sortie vélo',sub:'Reprise 25–40 min',cls:'bike'};return {icon:'↗',name:'Course / marche',sub:'Prochain objectif : 8 × 1 min / 1 min',cls:'run'};}
+  function activityRow(type){const x=activityInfo(type),all=currentWeekActivities(),done=all.some(s=>(type==='A'||type==='B')?s.Type===type:s.Type===type);return `<div class="activity"><div class="activity-icon ${x.cls}">${x.icon}</div><div class="activity-info"><strong>${x.name}</strong><p>${x.sub}</p></div><div class="activity-actions">${done?badge('✓ Réalisée'):badge('À faire','gray')}<button class="tiny-link" data-log="${type}">${done?'Ajouter une séance':'Enregistrer ↗'}</button></div></div>`}
+  function v3Icon(type){
+  // SportOS v0.6 — family of line icons, common stroke and optical size.
+  const shapes={
+    A:'<path d="m6.5 6.5 11 11M4.5 8.5l4-4m11 15 4-4M2.5 10.5l8-8m3 19 8-8"/>',
+    B:'<path d="M6 15.5c2.2-1 3-4.5 5.1-5.6L14 12l3-2 3 1.5-2 5-3-1-2.3 4H7L4 16z"/><path d="M11 10 9 6l-3 1M16 9.5l1-3"/>',
+    Course:'<circle cx="14.7" cy="4.4" r="2"/><path d="m12.4 8.2-2.6 4.5 4.5 2.6 1.4 5.4M12.4 8.2l3.5 3.1 4.2.1m-9-2.3-4 1.2-2 3.3m7.3 1.5-3.2 4.3-4.4 1.2"/>',
+    Vélo:'<circle cx="5" cy="17.1" r="3.5"/><circle cx="19" cy="17.1" r="3.5"/><path d="M5 17.1 9.5 9h5L19 17.1H5m4.5-8.1 4.3 8.1M8 6.8h3.3m2.8.1H17l2 3.3m-5.3-3.3-.7 2.1m.8 8.1 2.1 2.2"/>',
+    sparkle:'<path d="m12 2 2.6 7.4L22 12l-7.4 2.6L12 22l-2.6-7.4L2 12l7.4-2.6L12 2Z"/>',
+    route:'<circle cx="5" cy="18" r="2"/><circle cx="19" cy="6" r="2"/><path d="M7 18h4a4 4 0 0 0 0-8h2a4 4 0 0 0 4-4"/>',
+    arrow:'<path d="M5 19 19 5M9 5h10v10"/>',
+    arrowRight:'<path d="M4 12h16m-6-6 6 6-6 6"/>',
+    clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+    calendar:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4m10-4v4M3 10h18"/>',
+    gauge:'<path d="M5 17a9 9 0 1 1 14 0"/><path d="m12 14 4-5m-7 9h6"/>',
+    check:'<path d="m4 12 5 5 11-11"/>',
+    clipboard:'<rect x="5" y="5" width="14" height="17" rx="2"/><path d="M9 5.5V3h6v2.5M9 12h6m-6 4h4"/>',
+    heart:'<path d="M20.8 8.4c0 5-8.8 11.3-8.8 11.3S3.2 13.4 3.2 8.4a4.5 4.5 0 0 1 8.8-1.3 4.5 4.5 0 0 1 8.8 1.3Z"/>',
+    shield:'<path d="m12 2 8 3.5v6.3c0 5.2-4 8.3-8 10.2-4-1.9-8-5-8-10.2V5.5z"/><path d="M12 7v6m0 3h.01"/>',
+    note:'<path d="M4 5h16v14H4zM8 9h8m-8 4h8m-8 4h5"/>',
+    close:'<path d="M5 5 19 19M19 5 5 19"/>'
+  };
+  const known=Object.prototype.hasOwnProperty.call(shapes,type)?type:'sparkle';
+  return '<svg class="so-icon so-icon-'+known+'" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">'+shapes[known]+'</svg>';
+}
+  function homeModel(data) {
+  const validDate = value => {
+    if(typeof value!=='string'||!/^\d{4}-\d{2}-\d{2}$/.test(value))return false;
+    const date=new Date(value+'T12:00:00Z');
+    return !Number.isNaN(date.valueOf())&&date.toISOString().slice(0,10)===value;
+  };
+  const today=validDate(data.today)?data.today:new Date().toISOString().slice(0,10);
+  const mon=new Date(today+'T12:00:00Z');
+  mon.setUTCDate(mon.getUTCDate()-(mon.getUTCDay()+6)%7);
+  const start=mon.toISOString().slice(0,10);
+  const endDate=new Date(mon);endDate.setUTCDate(mon.getUTCDate()+7);
+  const end=endDate.toISOString().slice(0,10);
+  const isWeek=date=>validDate(date)&&date>=start&&date<end;
+  const strength=Array.isArray(data.sessions)?data.sessions:[];
+  const cardio=Array.isArray(data.cardio)?data.cardio:[];
+  const activity=strength.concat(cardio).filter(x=>x&&x.Statut==='Terminée'&&['A','B','Course','Vélo'].includes(x.Type));
+  const weekly=activity.filter(x=>isWeek(x.Date));
+  const types=['A','B','Course','Vélo'];
+  const done=types.filter(type=>weekly.some(a=>a.Type===type));
+  const next=types.find(type=>!done.includes(type))||null;
+  const dated=activity.filter(a=>validDate(a.Date)).sort((a,b)=>b.Date.localeCompare(a.Date));
+  const last=dated[0]||null;
+  const lastRun=dated.find(a=>a.Type==='Course')||null;
+  const pain=Array.isArray(data.logs)&&data.logs.some(x=>x&&x.Douleur==='Oui');
+  const isAppReview=(Array.isArray(data.reviews)?data.reviews:[]).some(x=>x&&x.Semaine===isoWeek(today));
+  const totals={strength:strength.filter(x=>x.Statut==='Terminée'&&['A','B'].includes(x.Type)).length,cardio:cardio.filter(x=>x.Statut==='Terminée'&&['Course','Vélo'].includes(x.Type)).length};
+  return {today,start,end,weekly,done,next,last,lastRun,pain,isAppReview,totals};
+  function isoWeek(dateText){
+    const d=new Date(dateText+'T12:00:00Z');
+    d.setUTCDate(d.getUTCDate()+4-(d.getUTCDay()||7));
+    const year=d.getUTCFullYear();
+    const jan1=new Date(Date.UTC(year,0,1));
+    return year+'-W'+String(Math.ceil(((d-jan1)/86400000+1)/7)).padStart(2,'0');
+  }
+}
+
+  // V0.8: every Monday, calculate suggestions from actual completed sessions last week.
+  // Never mutate historical logs or the base programme in Google Sheets.
+  function so8WeeklyPlan(type){
+    const model=homeModel(S.data),date=new Date(model.start+'T12:00:00Z');
+    date.setUTCDate(date.getUTCDate()-7);
+    const from=date.toISOString().slice(0,10),to=model.start;
+    const rows=[...(S.data.sessions||[]),...(S.data.cardio||[])]
+      .filter(x=>x&&x.Type===type&&x.Statut==='Terminée'&&x.Date>=from&&x.Date<to)
+      .sort((a,b)=>b.Date.localeCompare(a.Date));
+    const last=rows[0]||null;
+    const result={hasPrior:!!last,source:last?niceDate(last.Date):'',reason:'',proposed:'',exercise:{}};
+    if(!last){result.reason='Pas de séance terminée la semaine précédente : objectifs de départ conservés.';return result;}
+    const fatigueWeek=(S.data.reviews||[]).find(r=>{
+      const d=new Date(from+'T12:00:00Z');d.setUTCDate(d.getUTCDate()+4-(d.getUTCDay()||7));
+      const y=d.getUTCFullYear(),jan=new Date(Date.UTC(y,0,1));
+      return r.Semaine===y+'-W'+String(Math.ceil(((d-jan)/86400000+1)/7)).padStart(2,'0');
+    });
+    const fatigue=fatigueWeek?fatigueWeek['Fatigue 1-10']:'';
+    const sleep=fatigueWeek?fatigueWeek['Sommeil 1-10']:'';
+    const effortRaw=['A','B'].includes(type)?last['Effort global 1-10']:last['Effort 1-10'];
+    const effort=effortRaw===''||effortRaw==null?null:toNum(effortRaw);
+    const recoveryRisk=(fatigue!==''&&fatigue!=null&&toNum(fatigue)>=7)||
+      (sleep!==''&&sleep!=null&&toNum(sleep)<=4)||(effort!==null&&effort>=7);
+    if(type==='A'||type==='B'){
+      const logs=(S.data.logs||[]).filter(x=>x.Seance_ID===last.Seance_ID);
+      let raised=0,pain=false;
+      for(const ex of activeEx(type)){
+        const row=logs.find(x=>x.Exercice_ID===ex.Exercice_ID);
+        const timed=!!String(ex.Temps_s||'').trim()&&!String(ex.Rép_min||'').trim();
+        const base=toNum(timed?ex.Temps_s:ex.Rép_max);
+        const actual=row?toNum(timed?row['Maintien réel s']:row['Rép réelles']):0;
+        const reserve=row?(timed?row['Réserve tenue (s)']:row.RIR):'';
+        const painHere=!!row&&row.Douleur==='Oui';if(painHere)pain=true;
+        const favorable=!recoveryRisk&&row&&row.Douleur==='Non'&&
+          ['Facile','Modéré'].includes(row.Difficulté)&&reserve!==''&&reserve!=null&&
+          toNum(reserve)>=(timed?10:2)&&actual>=base&&actual>0;
+        const cap=timed?Math.min(120,Math.ceil(base*1.5)):Math.min(30,base+6);
+        const target=favorable?Math.min(cap,Math.max(base,actual)+(timed?5:1)):base;
+        if(target>base)raised++;
+        result.exercise[ex.Exercice_ID]={target,increase:target>base,timed,
+          explanation:target>base?'Ton retour sans douleur permet de proposer une petite progression.':
+            painHere?'Douleur signalée : aucune augmentation.':'Repère de départ conservé.'};
+      }
+      result.proposed=raised?raised+' exercice'+(raised>1?'s':'')+' avec un objectif ajusté.':'Objectifs conservés.';
+      result.reason=pain?'Douleur signalée : aucune progression pour les mouvements concernés.':
+        recoveryRisk?'Effort élevé, fatigue ou sommeil insuffisant : priorité à la récupération.':
+        raised?'Retour favorable la semaine précédente : ajustements mesurés sur les mouvements concernés.':
+        'Données de séance insuffisantes pour augmenter : consolide les gestes.';
+      return result;
+    }
+    if(last.Douleur==='Oui'||recoveryRisk){
+      result.reason=last.Douleur==='Oui'?'Douleur signalée : pas de progression ; adapte la séance.':
+        'Effort ou fatigue élevé : conserver le format précédent.';
+      return result;
+    }
+    if(last.Douleur!=='Non'){
+      result.reason='Douleur non renseignée : aucun changement automatique par précaution.';
+      return result;
+    }
+    if(type==='Course'){
+      const run=toNum(last.Course_sec_bloc),walk=toNum(last.Marche_sec_bloc),rounds=toNum(last.Nb_blocs);
+      if(effort!==null&&effort<=4&&run>=60&&walk>=30&&rounds>=8){
+        const next=Math.min(180,run+10);
+        if(next>run)result.proposed=rounds+' × ('+next+' s course / '+walk+' s marche)';
+        result.reason='Course précédente facile et sans douleur : +10 secondes de course par bloc proposées.';
+      }else result.reason='Garde le format précédent ; progression conditionnée à un retour complet et facile.';
+    }else if(type==='Vélo'){
+      const duration=toNum(last['Durée min']);
+      if(effort!==null&&effort<=4&&duration>=20){
+        result.proposed='Sortie facile : environ '+Math.min(120,duration+5)+' min';
+        result.reason='Sortie précédente confortable : +5 minutes proposées, sans objectif de vitesse.';
+      }else result.reason='Durée précédente conservée : priorité au confort et à la récupération.';
+    }
+    return result;
+  }
+  function so8CompletionBanner(){
+    if(homeModel(S.data).done.length!==4)return '';
+    return '<section class="so8-celebration" role="status" aria-label="Semaine accomplie">'
+      +'<span class="so8-celebration-icon" aria-hidden="true">'+v3Icon('sparkle')+'</span>'
+      +'<div><span class="so8-celebration-kicker">4 SUR 4 / SEMAINE ACCOMPLIE</span>'
+      +'<strong>Félicitations, tu as tenu ton rythme !</strong>'
+      +'<p>Deux renforcements, une course et une sortie vélo enregistrés. La récupération compte aussi : tes prochains objectifs tiendront compte de tes retours.</p></div>'
+      +'<span class="so8-celebration-check" aria-hidden="true">✓</span></section>';
+  }
+
+  function home() {
+    const vm=homeModel(S.data);
+    const done=vm.done.length;
+    const first=vm.next;
+    const meta={
+      A:{name:'Renforcement A',subtitle:'Fessiers & full body',duration:'35–45 MIN',sub:'5 EXERCICES'},
+      B:{name:'Renforcement B',subtitle:'Haut du corps & fessiers',duration:'35–45 MIN',sub:'5 EXERCICES'},
+      Course:{name:'Course / marche',subtitle:'Reprendre en douceur',duration:so8WeeklyPlan('Course').proposed?'FORMAT ÉVOLUTIF':'16 MIN',sub:so8WeeklyPlan('Course').proposed||'8 × 1 MIN / 1 MIN'},
+      Vélo:{name:'Sortie vélo',subtitle:'Construire ton endurance',duration:so8WeeklyPlan('Vélo').proposed?'DURÉE ÉVOLUTIVE':'25–40 MIN',sub:so8WeeklyPlan('Vélo').proposed||'REPRISE FACILE'}
+    };
+    const dateCaption=new Date(vm.today+'T12:00:00Z').toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+    const intro=done===4?'CE QUE TU AS FAIT COMPTE.':done===0?'UN JOUR POUR BOUGER.':'TON ÉLAN NE FAIT QUE COMMENCER.';
+    const nextName=first?meta[first].name:'Semaine accomplie';
+    const hero=`<section class="v3-feature" aria-labelledby="v3-feature-title">
+      <div class="v3-feature-copy">
+        <p class="v3-feature-kicker"><span class="so-home-kicker-icon" aria-hidden="true">${v3Icon(first||'check')}</span>${first?'À LA UNE / PROCHAINE SÉANCE PROPOSÉE':'TA SEMAINE / OBJECTIFS RÉALISÉS'}</p>
+        <h2 id="v3-feature-title">${first?'BOUGE.<br>À TA FAÇON.':'BRAVO.<br>ET RESPIRE.'}</h2>
+        <p class="v3-feature-intro">${first?'Ton prochain mouvement':'Tu as réalisé les quatre activités proposées'}</p>
+        <div class="v3-feature-workout"><span class="so-feature-sport-icon" aria-hidden="true">${v3Icon(first||'check')}</span>${esc(nextName)}${first?'<span>'+esc(meta[first].subtitle)+'</span>':''}</div>
+        ${first?`<div class="v3-feature-data"><span>${meta[first].duration}</span><span>${meta[first].sub}</span><span>À TON RYTHME</span></div>`:
+        '<p class="v3-feature-recovery">Récupérer fait aussi partie de l’entraînement.</p>'}
+        <div class="v3-feature-actions">
+         ${first?`<button type="button" class="v3-btn-acid" data-open-program="${first}">VOIR MA SÉANCE ${v3Icon('arrow')}</button>
+         <button type="button" class="v3-btn-subtle" data-quick-log>Enregistrer une activité ${v3Icon('arrow')}</button>`:
+         `<button type="button" class="v3-btn-acid" ${vm.isAppReview?'data-nav-go="progress"':'data-review="1"'}>${vm.isAppReview?'VOIR MES PROGRÈS':'FAIRE MON BILAN'} ${v3Icon('arrow')}</button>`}
+        </div>
+        <p class="v3-hero-help">${first?'Une suggestion, jamais une obligation.':'Tu peux poursuivre à ton rythme la semaine prochaine.'}</p>
+      </div>
+      <div class="v3-feature-art" aria-hidden="true">
+        <div class="v3-art-stripe"></div><span class="v3-art-word">MOVE</span><span class="v3-art-index">SO — 03<br>TRAINING CLUB</span>
+        <svg viewBox="0 0 320 340" preserveAspectRatio="none"><path d="M25 260C180 185 132 70 286 22M58 322C238 210 178 110 306 83" stroke="currentColor" stroke-width="1.3" fill="none"/></svg>
+      </div>
+    </section>`;
+    const weekLabel={A:'Renfo A',B:'Renfo B',Course:'Course',Vélo:'Vélo'};
+    const weekList=['A','B','Course','Vélo'].map(type=>{
+      const isDone=vm.done.includes(type),isNext=first===type;
+      const status=isDone?'RÉALISÉE':isNext?'PROPOSÉE':'À PLANIFIER';
+      return `<button type="button" class="v3-week-row ${isDone?'done':''} ${isNext?'next':''}" data-open-program="${type}" aria-label="${esc(weekLabel[type])} : ${isDone?'réalisée cette semaine':isNext?'proposée':'à planifier'}, voir le programme">
+        <span class="v3-week-icon so-activity-icon so-activity-${type==='Course'?'run':type==='Vélo'?'bike':type}">${v3Icon(type)}</span>
+        <span class="v3-week-row-title">${esc(weekLabel[type])}<small>${isDone?'Un mouvement de plus.':isNext?'Ta prochaine proposition.':'Quand tu le souhaites.'}</small></span>
+        <span class="v3-week-status">${isDone?'<span class="so-status-check" aria-hidden="true">✓</span> ':''}${status}</span>
+      </button>`;
+    }).join('');
+    const week=`<section class="v3-week-panel" aria-labelledby="v3-week-title">
+      <p class="v3-label">TON RYTHME</p>
+      <div class="v3-week-head"><h2 id="v3-week-title">Cette semaine<span>.</span></h2><strong>${done}<small>/4</small></strong></div>
+      <p class="v3-week-subtitle">${done===4?'Quatre activités réalisées.':done===0?'Tout est encore possible.':done+' activité'+(done>1?'s':'')+' réalisée'+(done>1?'s':'')+' cette semaine.'}</p>
+      <div class="v3-week-track" role="progressbar" aria-label="Activités réalisées sur quatre cette semaine" aria-valuemin="0" aria-valuemax="4" aria-valuenow="${done}"><span style="width:${done*25}%"></span></div>
+      <div class="v3-week-rows">${weekList}</div>
+      <button type="button" class="v3-link-arrow" data-nav-go="program">TOUS MES PROGRAMMES ${v3Icon('arrow')}</button>
+    </section>`;
+    const l=vm.last;
+    const isStrength=l&&['A','B'].includes(l.Type);
+    const lastKind=l?(isStrength?'Renforcement '+l.Type:l.Type):'Aucune séance datée';
+    const lastDuration=l?(isStrength?l['Durée réelle min']:l['Durée min']):'';
+    const lastEffort=l?(isStrength?l['Effort global 1-10']:l['Effort 1-10']):'';
+    const durationKnown=lastDuration!==''&&lastDuration!==undefined&&lastDuration!==null&&Number.isFinite(Number(String(lastDuration).replace(',','.')));
+    const effortKnown=lastEffort!==''&&lastEffort!==undefined&&lastEffort!==null;
+    const dateNice=l?niceDate(l.Date):'';
+    const lastPanel=`<section class="v3-last" aria-labelledby="v3-last-title">
+      <div class="v3-panel-top"><span class="v3-label">DERNIER MOUVEMENT</span><span class="v3-panel-bubble so-activity-icon" aria-hidden="true">${v3Icon(l?l.Type:'sparkle')}</span></div>
+      <h2 id="v3-last-title">${l?esc(lastKind):'À écrire.'}</h2>
+      <p>${l?'Le '+esc(dateNice):'Ta première séance datée apparaîtra ici.'}</p>
+      <div class="v3-last-numbers">
+        <div><strong>${durationKnown?fmt(toNum(lastDuration)):'—'}</strong><span>${durationKnown?'MINUTES':'DURÉE NON RENSEIGNÉE'}</span></div>
+        <div><strong>${effortKnown?fmt(toNum(lastEffort)):'—'}</strong><span>${effortKnown?'EFFORT / 10':'EFFORT NON RENSEIGNÉ'}</span></div>
+      </div>
+      <button type="button" class="v3-link-arrow" data-nav-go="progress">VOIR MES PROGRÈS ${v3Icon('arrow')}</button>
+    </section>`;
+    const challenge=`<section class="v3-challenge" aria-labelledby="v3-challenge-title">
+      <div class="v3-challenge-top"><span class="v3-challenge-label">${v3Icon('route')} <span class="v3-label">LE GRAND DÉFI</span></span><span>05 / 2027</span></div>
+      <h2 id="v3-challenge-title">Espiens<span>.</span></h2>
+      <p>Depuis Toulouse, à vélo. Un défi qui se construit sortie après sortie.</p>
+      <div class="v3-challenge-foot"><span>OBJECTIF <strong>2 JOURS ENVISAGÉS</strong></span><button type="button" data-open-program="Vélo">VOIR LA PRÉPARATION ${v3Icon('arrow')}</button></div>
+    </section>`;
+    const r=vm.lastRun;
+    const rpe=r?Number(String(r['Effort 1-10']||'').replace(',','.')):NaN;
+    let coachLine='Chaque séance nous donnera des repères. Pour l’instant, priorité au confort, à la régularité et à tes sensations.';
+    if(r&&Number.isFinite(rpe)&&rpe<=3)coachLine='Ta course du '+niceDate(r.Date)+' t’a semblé facile ('+fmt(rpe)+'/10). On consolide encore 8 × (1 min course / 1 min marche) avant d’augmenter.';
+    else if(r&&Number.isFinite(rpe))coachLine='Ta dernière course a été ressentie à '+fmt(rpe)+'/10. La prochaine étape dépendra de ta récupération et de l’absence de douleur.';
+    const coach=`<section class="v3-coach" aria-labelledby="v3-coach-title"><div class="v3-coach-tag"><span class="so-coach-icon">${v3Icon('sparkle')}</span> <span>LE REGARD DU COACH</span></div>
+      <h2 id="v3-coach-title">La suite se construit,<br>pas à pas.</h2>
+      <p>${esc(coachLine)}</p>
+      ${vm.pain?'<div class="v3-coach-warning">Des douleurs ont été signalées sur certains exercices. Leur progression reste prudente et conditionnée à un mouvement sans douleur.</div>':''}
+      <button type="button" class="v3-link-arrow" data-open-program="Course">VOIR LA REPRISE COURSE ${v3Icon('arrow')}</button>
+    </section>`;
+    const checkin=`<section class="v3-checkin">
+      <div><span class="v3-label">MOMENT POUR SOI</span><h2>${vm.isAppReview?'Ton bilan est enregistré.':'Et si tu faisais le point ?'}</h2><p>${vm.isAppReview?'Tes ressentis de la semaine sont conservés dans ton espace privé.':'Fatigue, sommeil, sensations : quelques minutes pour mieux avancer.'}</p></div>
+      ${vm.isAppReview?'<span class="v3-checkin-done">✓ CETTE SEMAINE</span>':`<button type="button" class="v3-checkin-cta" data-review="1">FAIRE MON BILAN ${v3Icon('arrow')}</button>`}
+    </section>`;
+    return `<div class="v3-dashboard">
+      <header class="v3-intro"><div><p class="v3-label">${esc(dateCaption)} / TON ESPACE</p><h1>${esc(intro)}</h1><p>L’entraînement à ta façon. Une séance après l’autre.</p></div><span class="v4-intro-index" aria-hidden="true">SPORTOS / 01</span></header>
+      ${so8CompletionBanner()}
+       <div class="v3-leading">${hero}${week}</div>
+      <div class="v3-section-title"><div><p class="v3-label">GARDER LE CAP</p><h2>TON ÉLAN<span aria-hidden="true">${v3Icon('arrow')}</span></h2></div><span>Les petits progrès font les grandes histoires.</span></div>
+      <div class="v3-insights">${lastPanel}${challenge}</div>
+      ${coach}
+      ${checkin}
+      <div class="v3-fineprint">DEPUIS LE DÉBUT : ${vm.totals.strength} RENFORCEMENT${vm.totals.strength>1?'S':''} · ${vm.totals.cardio} SORTIE${vm.totals.cardio>1?'S':''} CARDIO. <button type="button" data-nav-go="progress">HISTORIQUE COMPLET ${v3Icon('arrow')}</button></div>
+    </div>`;
+  }
+  function program(){
+  const types=['A','B','Course','Vélo'],type=types.includes(S.programTab)?S.programTab:'A';
+  const strength=type==='A'||type==='B',running=type==='Course',cycling=type==='Vélo';
+  const all=homeModel(S.data),completed=all.done.includes(type);
+  const catalog={
+    A:{name:'Renforcement A',title:'Des bases solides.',subtitle:'Fessiers, jambes, gainage et technique.',group:'RENFORCEMENT',estimate:'35–45 MIN PROPOSÉES',focus:'FESSIERS + FULL BODY',tone:'lime'},
+    B:{name:'Renforcement B',title:'La force en mouvement.',subtitle:'Haut du corps, fessiers et stabilité.',group:'RENFORCEMENT',estimate:'35–45 MIN PROPOSÉES',focus:'HAUT DU CORPS + GAINAGE',tone:'sage'},
+    Course:{name:'Course',title:'Trouver ton souffle.',subtitle:'Une reprise à ton rythme, sans pression de vitesse.',group:'ENDURANCE',estimate:'PROGRESSION ADAPTATIVE',focus:'CAP : 30 MIN EN CONTINU',tone:'lime'},
+    Vélo:{name:'Vélo',title:'La route se construit.',subtitle:'De premières sorties faciles vers ton défi Espiens.',group:'ENDURANCE',estimate:'DÉPART : SORTIES FACILES',focus:'ESPIENS · MAI 2027',tone:'sage'}
+  };
+  const current=catalog[type];
+  const weeklyPlan=so8WeeklyPlan(type);
+   const ex=strength?activeEx(type):[];
+  const steps=strength?[]:(S.data.steps||[]).filter(x=>x.Type===type);
+  const plan=(S.data.programs||[]).find(x=>x.Séance===type&&(!strength||x.Version==='V1-S2'));
+  const goalIds=plan?.Objectifs_ID||(strength?'OBJ-01; OBJ-02; OBJ-04':running?'OBJ-05; OBJ-08':'OBJ-05; OBJ-09');
+  const goals=goalsFor(goalIds);
+  const dated=[...(S.data.sessions||[]),...(S.data.cardio||[])].filter(x=>x.Type===type&&x.Statut==='Terminée'&&/^\d{4}-\d{2}-\d{2}$/.test(x.Date||'')).sort((a,b)=>b.Date.localeCompare(a.Date));
+  const last=dated[0]||null;
+  const lastLabel=last?niceDate(last.Date):'Aucune activité datée';
+  const caution=(S.data.logs||[]).some(x=>x.Douleur==='Oui');
+  const item=(t)=>{
+    const data=catalog[t],done=all.done.includes(t),active=t===type;
+    return `<button type="button" class="sp7-switch ${active?'is-active':''}" data-program-tab="${esc(t)}" aria-pressed="${active}" aria-label="${esc(data.name)}${done?', réalisée cette semaine':''}">
+      <span class="sp7-switch-icon" aria-hidden="true">${v3Icon(t)}</span>
+      <span class="sp7-switch-main"><strong>${esc(data.name)}</strong><small>${t==='A'||t==='B'?'FORCE':t==='Course'?'RUN':'RIDE'}</small></span>
+      <span class="sp7-switch-state ${done?'is-done':''}" aria-hidden="true">${done?v3Icon('check'):v3Icon('arrowRight')}</span>
+    </button>`;
+  };
+  const details=strength?`<div class="sp7-ex-list">
+    ${ex.length?ex.map((x,i)=>{
+      const adaptive=weeklyPlan.exercise[x.Exercice_ID];
+       const target=x.Rép_min&&x.Rép_max?esc(x.Rép_min)+(x.Rép_min===x.Rép_max&&!(adaptive&&adaptive.increase)?'':'–'+esc(adaptive?adaptive.target:x.Rép_max))+' répétitions':x.Temps_s?esc(adaptive?adaptive.target:x.Temps_s)+' secondes':'selon sensation';
+      const safety=String(x.Sécurité||'');
+      const risky=/douleur|retirer|lombaire/i.test(safety)&&/retirer|arrêter|éviter|douleur/i.test(safety);
+      return `<details class="sp7-ex" ${i===0?'open':''}>
+        <summary class="sp7-ex-heading"><span class="sp7-ex-index">${String(i+1).padStart(2,'0')}</span><span class="sp7-ex-titles"><strong>${esc(x.Nom)}</strong><small>${esc(x.Séries||'—')} séries · ${target}</small></span><span class="sp7-ex-chevron" aria-hidden="true">${v3Icon('arrowRight')}</span></summary>
+        <div class="sp7-ex-body">
+          <div class="sp7-ex-metrics"><div><span>OBJECTIF DE SÉRIES</span><strong>${esc(x.Séries||'—')}</strong></div><div><span>RÉPÉTITIONS / TENUE</span><strong>${target}</strong></div><div><span>CHARGE INDICATIVE</span><strong>${x['Charge_kg indicative']!==''&&x['Charge_kg indicative']!=null?esc(x['Charge_kg indicative'])+' kg':'À adapter'}</strong></div></div>
+          ${adaptive&&adaptive.increase?`<p class="so8-ex-increase">${v3Icon('sparkle')} <span>${esc(adaptive.explanation)}</span></p>`:''}
+           ${x.Tempo?`<p class="sp7-ex-coach">${v3Icon('gauge')} <span><b>Repère technique :</b> ${esc(x.Tempo)}</span></p>`:''}
+          ${safety?`<p class="sp7-ex-safety ${risky?'is-caution':''}">${v3Icon('shield')} <span>${esc(safety)}${risky?' — ne pas forcer si une douleur apparaît.':''}</span></p>`:''}
+        </div>
+      </details>`;
+    }).join(''):`<p class="sp7-empty">Aucun exercice proposé pour cette séance pour le moment.</p>`}
+    </div>`:`
+    <div class="sp7-timeline">${steps.length?steps.map((x,i)=>{
+      const status=String(x.Statut||'Non renseigné');
+      const done=/réalisée|terminée/i.test(status);
+      const label=running?`Séance ${esc(x.Séance_no||String(i+1))}`:esc(x['Période / cycle']||`Étape ${i+1}`);
+      return `<div class="sp7-milestone ${done?'is-complete':''}">
+        <span class="sp7-milestone-track" aria-hidden="true">${done?v3Icon('check'):String(i+1).padStart(2,'0')}</span>
+        <div class="sp7-milestone-content"><div class="sp7-milestone-head"><strong>${label}</strong><span>${esc(status)}</span></div><p>${esc(x.Blocs||'Détails à préciser')}</p></div>
+      </div>`;
+    }).join(''):`<p class="sp7-empty">Ton calendrier n’est pas encore renseigné. Les sorties sont à construire progressivement.</p>`}</div>`;
+  const sectionTitle=strength?'Tes mouvements':running?'Ta progression course':'Les étapes du défi';
+  const sectionLede=strength?`${ex.length} exercices proposés · programme V1-S2. Ouvre un mouvement pour voir les repères.`:running?'Les séances proposées restent adaptables selon tes sensations et ta récupération.':'Les jalons sont indicatifs : l’itinéraire et les durées restent à définir.';
+  const weeklyCard=`<section class="so8-adaptation" aria-labelledby="so8-adapt-title">
+     <span class="so8-adapt-icon" aria-hidden="true">${v3Icon('sparkle')}</span>
+     <div class="so8-adapt-copy"><span class="sp7-overline">COACH / NOUVELLE SEMAINE</span>
+       <h3 id="so8-adapt-title">Ton programme évolue.</h3>
+       <p>${esc(weeklyPlan.reason)}</p>
+       ${weeklyPlan.proposed?`<strong class="so8-adapt-target">${esc(weeklyPlan.proposed)}</strong>`:''}
+       <small>${weeklyPlan.hasPrior?'Basé sur ton retour du '+esc(weeklyPlan.source):'En attente de ta première séance de référence'} · Proposition indicative ; aucune séance passée modifiée.</small>
+     </div>
+   </section>`;
+  const coach=strength?'Privilégie la maîtrise du geste et une récupération suffisante. Une charge indicative n’est jamais une consigne de performance.':running?'Répéter la séance précédente est un progrès si elle est bien tolérée. Augmente seulement quand tu te sens prête.':'Commence par des sorties faciles. La distance vers Espiens et les deux journées consécutives seront évaluées à partir de tes sorties réelles.';
+  const foot=strength?'Chaque exercice est une proposition, pas une performance à atteindre.':running?'Les intervalles sont des propositions : ton compte rendu décrira uniquement ce que tu as réalisé.':'Aucune distance, durée de trajet ou sortie réalisée n’est supposée.';
+  return `<div class="sp7-page">
+    <header class="sp7-head">
+      <div class="sp7-eyebrow"><span class="sp7-dot"></span> TRAINING SYSTEM / PROGRAMME</div>
+      <div class="sp7-head-row"><div><h1>Construis <em>ton élan.</em></h1><p>Deux séances de renforcement, une reprise de la course et un défi vélo. Un programme qui s’adapte à tes sensations.</p></div>
+      <div class="sp7-head-stat" aria-label="${all.done.length} activités différentes réalisées cette semaine sur quatre"><strong>${all.done.length}<span>/04</span></strong><small>TYPES D’ACTIVITÉS<br>RÉALISÉS CETTE SEMAINE</small></div></div>
+    </header>
+    ${so8CompletionBanner()}
+     <nav class="sp7-selector" aria-label="Choisir une activité sportive">${types.map(item).join('')}</nav>
+    <section class="sp7-hero sp7-hero-${current.tone}" aria-labelledby="sp7-hero-title">
+      <div class="sp7-hero-primary">
+        <div class="sp7-hero-brow"><span class="sp7-hero-tag">${esc(current.group)}</span><span>${completed?'✓ RÉALISÉE CETTE SEMAINE':'SÉANCE PROPOSÉE'}</span></div>
+        <span class="sp7-hero-sport" aria-hidden="true">${v3Icon(type)}</span>
+        <h2 id="sp7-hero-title">${esc(current.title)}</h2>
+        <p>${esc(current.subtitle)}</p>
+        <div class="sp7-hero-actions">
+          <button type="button" class="sp7-primary" data-log="${esc(type)}">Enregistrer mon retour ${v3Icon('arrowRight')}</button>
+          <button type="button" class="sp7-secondary" data-nav-go="progress">Voir mon évolution ${v3Icon('arrow')}</button>
+        </div>
+        <div class="sp7-hero-disclaimer">Le bouton ouvre ton journal : il ne démarre pas de chronomètre.</div>
+      </div>
+      <div class="sp7-hero-panel" aria-label="Repères de la séance">
+        <div class="sp7-hero-symbol" aria-hidden="true">${v3Icon(type)}</div>
+        <div><span>LE FOCUS</span><strong>${esc(current.focus)}</strong></div>
+        <div><span>LE FORMAT</span><strong>${esc(weeklyPlan.proposed||current.estimate)}</strong></div>
+        <div><span>DERNIER RETOUR DATÉ</span><strong>${esc(lastLabel)}</strong></div>
+      </div>
+    </section>
+    <div class="sp7-layout">
+      <section class="sp7-core" aria-labelledby="sp7-plan-title">
+        <div class="sp7-section-heading"><div><span class="sp7-overline">01 / TON PLAN</span><h2 id="sp7-plan-title">${esc(sectionTitle)}<span class="sp7-title-dot">.</span></h2><p>${esc(sectionLede)}</p></div><span class="sp7-count">${strength?`${ex.length} MOUVEMENTS`:`${steps.length} JALONS`}</span></div>
+        ${weeklyCard}
+         ${details}
+        <div class="sp7-notice">${v3Icon('shield')} <span>${esc(foot)}</span></div>
+      </section>
+      <aside class="sp7-aside" aria-label="Objectifs et accompagnement">
+        <section class="sp7-goal-panel" aria-labelledby="sp7-goal-title">
+          <div class="sp7-aside-eyebrow">${v3Icon('route')} TON HORIZON</div><h3 id="sp7-goal-title">Ce qu’on construit.</h3>
+          <div class="sp7-goals">${goals.length?goals.map((g,i)=>`<div class="sp7-goal"><span>${String(i+1).padStart(2,'0')}</span><div><strong>${esc(g['Résultat visé'])}</strong><p>${esc(g.Précision||'')}</p></div></div>`).join(''):`<p>Des objectifs personnels à préciser dans ton profil.</p>`}</div>
+        </section>
+        <section class="sp7-coach-panel" aria-labelledby="sp7-coach-title">
+          <div class="sp7-aside-eyebrow">${v3Icon('sparkle')} LE REGARD DU COACH</div>
+          <h3 id="sp7-coach-title">Le bon rythme, c’est le tien.</h3><p>${esc(coach)}</p>
+          ${caution&&strength?`<div class="sp7-coach-alert">${v3Icon('shield')} Des douleurs ont été signalées auparavant. Évite de progresser sur un mouvement douloureux.</div>`:''}
+        </section>
+        <section class="sp7-last-panel" aria-label="Dernière activité enregistrée">
+          <span class="sp7-overline">TON DERNIER RETOUR</span><strong>${esc(lastLabel)}</strong><p>${last?'Activité terminée et datée dans ton journal.':'Aucun retour daté pour cette activité.'}</p>
+          <button type="button" data-nav-go="progress">Consulter l’historique ${v3Icon('arrowRight')}</button>
+        </section>
+      </aside>
+    </div>
+  </div>`;
+}
+  function recentHistory(){return [...S.data.sessions.filter(x=>x.Statut==='Terminée').map(x=>({date:x.Date,label:'Renforcement '+x.Type,detail:(x['Effort global 1-10']?'Effort '+x['Effort global 1-10']+'/10':'Retour initial'),type:'strength'})),...S.data.cardio.filter(x=>x.Statut==='Terminée').map(x=>({date:x.Date,label:x.Type,detail:(x['Durée min']||'?')+' min · Effort '+(x['Effort 1-10']||'?')+'/10',type:'cardio'}))].sort((a,b)=>(b.date||'').localeCompare(a.date||''));}
+  function recommendations(){const current=S.data.logs.filter(x=>x.Seance_ID&&S.data.sessions.some(s=>s.Seance_ID===x.Seance_ID&&s.Date)).slice(-60);let msg=[];
+    for(const x of S.data.logs.filter(x=>x.Douleur==='Oui').slice(-4))msg.push({type:'warn',text:'Douleur enregistrée sur '+x.Exercice+'. Progression suspendue pour cet exercice et évaluation conseillée si elle persiste.'});
+    const planned=S.data.exercises.filter(x=>x.Statut==='Proposé — S2');for(const x of planned){const matching=current.filter(y=>y.Exercice_ID===x.Exercice_ID&&y.Douleur!=='Oui'&&y['Rép réelles']);const last=matching.slice(-2);if(last.length===2&&last.every(z=>toNum(z['Rép réelles'])>=toNum(x.Rép_max)&&toNum(z.RIR)>=2&&toNum(z.RIR)<=3&&z.Douleur==='Non'))msg.push({type:'success',text:x.Nom+' : deux séances au haut de la plage, sans douleur et RIR 2–3. Progression légère à envisager, après vérification de la technique.'});}
+    if(!msg.length)msg.push({type:'info',text:'Continue à renseigner tes charges, répétitions, sensations et éventuelles douleurs. Les recommandations de progression nécessitent plusieurs séances comparables.'});return msg.slice(0,5);
+  }
+  function progress(){const cardio=S.data.cardio.filter(x=>x.Statut==='Terminée');const runs=cardio.filter(x=>x.Type==='Course');const bikes=cardio.filter(x=>x.Type==='Vélo');const hist=recentHistory();const vals=cardio.slice(-8).map(x=>toNum(x['Durée min']));let scale=Math.max(...vals,25);
+    return `${header('Mes progrès','Regarde tes tendances dans le temps, sans réduire le sport à une performance.','ÉVOLUTION')}
+      <div class="grid cols-4"><div class="card"><span class="stat-label">Séances de renforcement</span><div class="stat">${S.data.sessions.filter(x=>x.Statut==='Terminée').length}</div></div><div class="card"><span class="stat-label">Sorties course</span><div class="stat">${runs.length}</div></div><div class="card"><span class="stat-label">Sorties vélo</span><div class="stat">${bikes.length}</div></div><div class="card"><span class="stat-label">Dernier effort course</span><div class="stat">${runs.length?fmt(toNum(runs[runs.length-1]['Effort 1-10'])):'—'} <small>/10</small></div></div>
+      <div class="grid cols-2" style="margin-top:17px"><section class="card"><div class="card-heading"><h2>Durée des sorties cardio</h2><span class="small">8 dernières sorties</span></div>${vals.length?`<div class="block-bars" role="img" aria-label="Durées des dernières sorties cardio">${vals.map(n=>`<div title="${esc(n)} min" style="height:${Math.max(7,Math.round(n/scale*100))}%"></div>`).join('')}</div><div class="row-between small"><span>Activités enregistrées</span><span>En minutes</span></div>`:'<div class="empty">Les courbes apparaîtront avec tes premières sorties.</div>'}</section><section class="card"><div class="card-heading"><h2>Analyse du coach</h2></div>${recommendations().map(x=>`<div class="${x.type==='warn'?'warning':'well'}" style="margin-bottom:10px">${esc(x.text)}</div>`).join('')}</section></div>
+      <div class="section-row"><h2>Évolution par exercice</h2></div>${exerciseProgress()}
+      <div class="section-row"><h2>Historique des séances</h2></div><div class="card">${hist.length?hist.slice(0,20).map(x=>`<div class="hist-row"><div><strong>${esc(x.label)}</strong><small>${esc(x.detail)}</small></div><span class="small">${niceDate(x.date)}</span></div>`).join(''):'<div class="empty">Aucune séance enregistrée.</div>'}</div>`;
+  }
+
+  function exerciseProgress(){
+    const dict=new Map();S.data.exercises.filter(x=>x.Statut==='Proposé — S2').forEach(x=>dict.set(x.Exercice_ID,x.Nom));
+    const first=dict.keys().next().value;const selected=dict.has(S.exerciseSelected)?S.exerciseSelected:first;
+    const sessions=new Map(S.data.sessions.filter(x=>x.Date).map(x=>[x.Seance_ID,x.Date]));
+    const entries=S.data.logs.filter(x=>x.Exercice_ID===selected&&sessions.has(x.Seance_ID)).map(x=>({...x,date:sessions.get(x.Seance_ID)})).sort((a,b)=>a.date.localeCompare(b.date)).slice(-12);
+    const series=entries.map(x=>toNum(x['Rép réelles'])||toNum(x['Maintien réel s'])).filter(n=>n>0);const max=Math.max(...series,1);
+    const chart=series.length?`<div class="block-bars" role="img" aria-label="Progression du nombre de répétitions ou secondes sur les dernières séances">${series.map((v,i)=>`<div title="${v} répétitions ou secondes" style="height:${Math.max(8,Math.round(v/max*100))}%"></div>`).join('')}</div><div class="row-between small"><span>Ancien → récent</span><span>${selected==='EX-GAINAGE'?'Secondes':'Répétitions (ou secondes)'}</span></div>`:`<div class="empty">Pas encore de répétitions enregistrées pour cet exercice. Tes prochains retours permettront d'afficher la courbe.</div>`;
+    return `<div class="card"><div class="row-between" style="margin-bottom:18px"><h2 class="section-title">Progression ciblée</h2><label class="small" for="exercise-picker">Exercice</label></div><select id="exercise-picker" class="input" style="margin-bottom:14px">${[...dict].map(([id,name])=>`<option value="${esc(id)}" ${id===selected?'selected':''}>${esc(name)}</option>`).join('')}</select>${chart}<div class="small" style="margin-top:14px">${entries.length?entries.map(x=>`<div style="padding:5px 0;border-bottom:1px solid var(--line)">${niceDate(x.date)} : ${esc(x['Rép réelles']||x['Maintien réel s']||'—')} reps/sec · ${esc(x['Charge réelle kg']||'—')} kg · difficulté ${esc(x.Difficulté||'—')}</div>`).join(''):'Ajoute tes valeurs réelles, ton effort et ta récupération pour suivre ton évolution.'}</div></div>`;
+  }
+  function profile(){const kv=Object.fromEntries(S.data.profile.map(x=>[x.Champ,x.Valeur]));const goals=S.data.goals.filter(g=>g.Statut&&(g.Statut.startsWith('Actif')));const measurements=S.data.measurements.filter(x=>x.Poids_kg).slice(-4);return `${header('Mon profil','Ton point de départ, tes objectifs et tes préférences au même endroit.','MON IDENTITÉ SPORTIVE')}<div class="grid cols-2"><section class="card"><div class="row-between"><h2 class="section-title">Mes repères</h2>${badge('Privé')}</div><div class="grid cols-3" style="margin-top:18px"><div class="measure"><small>Âge</small><b>${esc(kv.Age||'—')} <small>ans</small></b></div><div class="measure"><small>Taille</small><b>${kv.Taille?fmt(toNum(kv.Taille)/100):'—'} <small>m</small></b></div><div class="measure"><small>Poids de départ</small><b>${esc(kv['Poids de référence']||'—')} <small>kg</small></b></div></div><div class="kpi-line"><span>Équipement</span><b class="s12">2 haltères de 5 kg + tapis</b></div><div class="kpi-line"><span>Renforcement</span><b class="s12">2 fois / semaine</b></div><div class="kpi-line"><span>Course + vélo</span><b class="s12">1 fois chacun / semaine</b></div><div class="kpi-line"><span>Strava</span>${badge('Non connecté','gray')}</div><button class="btn outline full" data-weight="1" style="margin-top:18px">Ajouter une mesure de poids (facultatif)</button><p class="micro">Ce suivi n’a aucun objectif de perte de poids.</p></section>
+      <section class="card"><div class="card-heading"><h2>Mes objectifs personnels</h2></div><div class="goal-list">${goals.map(g=>`<div class="goal"><div class="row-between"><strong>${esc(g.Axe)}</strong>${badge(g.Priorité,g.Priorité==='Bloquante'?'orange':'gray')}</div><p>${esc(g['Résultat visé'])}</p></div>`).join('')}</div></section></div>
+      <div class="grid cols-2" style="margin-top:17px"><div class="card"><h2 class="section-title">Mon évolution physique</h2><p class="small">Les mesures sont facultatives et privées. Les performances et les sensations restent centrales.</p>${measurements.map(x=>`<div class="kpi-line"><span>${niceDate(x.Date_mesure)}</span><b>${esc(x.Poids_kg)} kg</b></div>`).join('')||'<div class="empty">Tu n’as pas encore ajouté de mesure datée.</div>'}</div><div class="card"><h2 class="section-title">Connexions et données</h2><p class="small">Le suivi fonctionne sans Strava. Un import de fichiers et une connexion sécurisée sont envisagés plus tard.</p><div class="well">Tes données de pratique restent dans ton Google Sheet personnel. Déploiement recommandé : accès réservé uniquement à toi.</div></div></div>`;}
+  function openQuickLog(){
+    const root=q('#quick-root');
+    if(!root)return;
+    const focused=document.activeElement;
+    const options=[['A','RENFORCEMENT A','Fessiers & full body'],['B','RENFORCEMENT B','Haut du corps & fessiers'],['Course','COURSE / MARCHE','Endurance à ton rythme'],['Vélo','VÉLO','En route vers Espiens']];
+    root.innerHTML=`<div class="v3-quick-overlay" id="v3-quick-overlay"><section class="v3-quick-sheet" role="dialog" aria-modal="true" aria-labelledby="v3-quick-title">
+      <div class="v3-quick-heading"><div><span class="v3-label">AJOUTER UN MOUVEMENT</span><h2 id="v3-quick-title">Quelle activité as-tu réalisée ?</h2><p>Choisir une activité ouvre le formulaire. Rien n’est enregistré avant confirmation.</p></div>
+      <button type="button" class="v3-quick-close" id="v3-quick-close" aria-label="Fermer">×</button></div>
+      <div class="v3-quick-options">${options.map(([type,title,caption])=>`<button type="button" data-choose-type="${type}">${v3Icon(type)}<span><b>${title}</b><small>${caption}</small></span><span class="v3-quick-go" aria-hidden="true">↗</span></button>`).join('')}</div></section></div>`;
+    const close=()=>{document.removeEventListener('keydown',onKey);root.innerHTML='';if(focused&&typeof focused.focus==='function')focused.focus()};
+    const onKey=e=>{
+      if(e.key==='Escape'){e.preventDefault();close()}
+      if(e.key==='Tab'){
+        const nodes=[...root.querySelectorAll('button:not([disabled])')];if(!nodes.length)return;
+        if(e.shiftKey&&document.activeElement===nodes[0]){e.preventDefault();nodes[nodes.length-1].focus()}
+        else if(!e.shiftKey&&document.activeElement===nodes[nodes.length-1]){e.preventDefault();nodes[0].focus()}
+      }
+    };
+    q('#v3-quick-close').onclick=close;
+    q('#v3-quick-overlay').onclick=e=>{if(e.target.id==='v3-quick-overlay')close()};
+    qAll('[data-choose-type]').forEach(btn=>btn.onclick=()=>{const type=btn.dataset.chooseType;close();openLog(type)});
+    document.addEventListener('keydown',onKey);
+    q('#v3-quick-close').focus();
+  }
+  function bind(){qAll('#content [data-quick-log]').forEach(b=>b.onclick=openQuickLog);qAll('[data-nav-go]').forEach(b=>b.onclick=()=>navigate(b.dataset.navGo));qAll('[data-open-program]').forEach(b=>b.onclick=()=>{S.programTab=b.dataset.openProgram;navigate('program')});qAll('[data-log]').forEach(b=>b.onclick=()=>openLog(b.dataset.log));qAll('[data-program-tab]').forEach(b=>b.onclick=()=>{const selected=b.dataset.programTab;S.programTab=selected;render();q('[data-program-tab="'+selected+'"]')?.focus()});qAll('[data-review]').forEach(b=>b.onclick=openReview);qAll('[data-weight]').forEach(b=>b.onclick=openWeight);const pick=q('#exercise-picker');if(pick)pick.onchange=()=>{S.exerciseSelected=pick.value;render()};}
+  function showModal(title,inner,onSubmit,opts={}){
+  const session=opts.kind==='session';
+  const root=q('#modal-root');
+  const returnFocus=document.activeElement;
+  const sport=opts.type||'A';
+  const sessionIcon=v3Icon(sport);
+  const sessionName=opts.activity||title;
+  const caption=opts.caption||'Tes sensations, sans pression.';
+  const railSteps=opts.steps||['Les repères','Tes sensations','Ton retour'];
+  const heading=session?`
+    <div class="so-session-heading-label">SPORTOS <span aria-hidden="true">/</span> JOURNAL D'ENTRAÎNEMENT</div>
+    <div class="so-session-header-title"><span class="so-session-mobile-icon" aria-hidden="true">${sessionIcon}</span><h2 id="modal-title">${esc(title)}</h2></div>
+    <p id="so-session-description">Renseigne seulement ce que tu as réellement fait. Rien n’est enregistré avant validation.</p>`:
+    `<h2 id="modal-title">${esc(title)}</h2>`;
+  const rail=session?`<aside class="so-session-rail" aria-label="Résumé de la séance">
+    <div class="so-session-rail-brand"><span class="so-session-rail-symbol" aria-hidden="true">${q('.v3-logo .v4-brand-mark')?.outerHTML||v3Icon('sparkle')}</span> SPORTOS <span> / TON JOURNAL</span></div>
+    <div class="so-session-rail-body">
+      <div class="so-session-rail-icon" aria-hidden="true">${sessionIcon}</div>
+      <div class="so-session-rail-label">UN MOUVEMENT APRÈS L'AUTRE</div>
+      <div class="so-session-rail-name">${esc(sessionName)}</div>
+      <p>${esc(caption)}</p>
+      <div class="so-session-rail-steps">${railSteps.map((label,i)=>`<div><span>${String(i+1).padStart(2,'0')}</span> ${esc(label)}</div>`).join('')}</div>
+    </div>
+    <div class="so-session-rail-bottom">${v3Icon('shield')} Ton retour reste dans ton espace privé.</div>
+  </aside>`:'';
+  const footer=`<div class="modal-actions${session?' so-session-actions':''}">
+    ${session?'<p id="so-save-error" class="so-save-error" role="alert" hidden></p>':''}
+    <button class="btn ghost" type="button" id="modal-cancel">Annuler</button>
+    <button class="btn${session?' so-save-cta':''}" id="modal-submit" type="submit">${session?'Enregistrer mon retour':'Enregistrer'}${session?v3Icon('arrowRight'):''}</button>
+  </div>`;
+  root.innerHTML=`<div class="modal-backdrop${session?' so-session-backdrop':''}" id="modal-backdrop"><div class="modal${session?' so-session-page':''}" role="dialog" aria-modal="true" aria-labelledby="modal-title" ${session?'aria-describedby="so-session-description"':''}>
+    ${rail}<div class="${session?'so-session-main':'so-modal-main'}">
+    <div class="modal-head${session?' so-session-head':''}"><div class="so-modal-heading">${heading}</div><button type="button" class="close" id="modal-close" aria-label="Fermer le formulaire">${session?v3Icon('close'):'×'}</button></div>
+    <form class="modal-content${session?' so-session-form':''}" id="form-modal"><div class="${session?'so-session-fields':'so-modal-fields'}">${inner}</div>${footer}</form>
+    </div></div></div>`;
+  let dirty=false,closed=false;
+  const form=q('#form-modal'),dialog=root.querySelector('[role="dialog"]');
+  const updateProgress=()=>{
+    if(!session)return;
+    const item=q('#so-feedback-progress');
+    if(item){
+      const forms=[...form.querySelectorAll('.so-exercise')];
+      const count=forms.filter(el=>[...el.querySelectorAll('input:not([type="hidden"]),select,textarea')].some(input=>input.value.trim()!=='')).length;
+      item.textContent=count+' / '+forms.length+' exercices renseignés';
+      const fill=q('#so-progress-fill');
+      if(fill)fill.style.width=(forms.length?100*count/forms.length:0)+'%';
+    }
+    const input=form.querySelector('input[name="effort"]');
+    if(input)form.querySelectorAll('[data-effort-value]').forEach(b=>b.setAttribute('aria-pressed',String(input.value===b.dataset.effortValue)));
+  };
+  const close=(force=false)=>{
+    if(closed||S.loading)return;
+    if(session&&!force&&dirty&&!window.confirm('Quitter sans enregistrer ton retour de séance ?'))return;
+    closed=true;
+    document.removeEventListener('keydown',keyHandler);
+    root.innerHTML='';
+    if(returnFocus&&typeof returnFocus.focus==='function'&&returnFocus.isConnected)returnFocus.focus();
+  };
+  const keyHandler=e=>{
+    if(e.key==='Escape'){e.preventDefault();close();return}
+    if(e.key==='Tab'){
+      const nodes=[...dialog.querySelectorAll('button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),a[href]')].filter(n=>n.getClientRects().length>0);
+      if(!nodes.length)return;
+      if(e.shiftKey&&document.activeElement===nodes[0]){e.preventDefault();nodes[nodes.length-1].focus()}
+      else if(!e.shiftKey&&document.activeElement===nodes[nodes.length-1]){e.preventDefault();nodes[0].focus()}
+    }
+  };
+  document.addEventListener('keydown',keyHandler);
+  q('#modal-close').onclick=()=>close();
+  q('#modal-cancel').onclick=()=>close();
+  q('#modal-backdrop').onclick=e=>{if(e.target.id==='modal-backdrop')close()};
+  if(session){
+    form.addEventListener('input',()=>{dirty=true;updateProgress()});
+    form.addEventListener('change',()=>{dirty=true;updateProgress()});
+    form.querySelectorAll('[data-effort-value]').forEach(button=>{
+      button.onclick=()=>{
+        const effort=form.querySelector('[name="effort"]');
+        if(!effort)return;
+        effort.value=button.dataset.effortValue;
+        dirty=true;
+        effort.dispatchEvent(new Event('input',{bubbles:true}));
+      };
+    });
+    updateProgress();
+  }
+  q('#modal-close').focus();
+  form.onsubmit=async e=>{
+    e.preventDefault();
+    if(S.loading)return;
+    S.loading=true;
+    const b=q('#modal-submit');
+    b.disabled=true;b.textContent='Enregistrement…';
+    const error=q('#so-save-error');if(error){error.textContent='';error.hidden=true;}
+    try{
+      await onSubmit(new FormData(e.target));
+      dirty=false;
+      S.loading=false;
+      close(true);
+      const doneBefore=homeModel(S.data).done.length;
+      await reload();
+      const doneAfter=homeModel(S.data).done.length;
+      toast(S.demo?'Retour simulé — aucune écriture dans ton Google Sheet.':session&&doneBefore<4&&doneAfter===4?
+        '🎉 Félicitations ! Tes quatre activités sont enregistrées. Place à la récupération !':'Ton retour de séance a bien été enregistré ✓');
+    }catch(err){
+      if(error){error.textContent='Impossible d’enregistrer : '+err.message;error.hidden=false;}
+      else toast('Erreur : '+err.message);
+      b.disabled=false;
+      b.innerHTML=session?'Enregistrer mon retour '+v3Icon('arrowRight'):'Réessayer';
+    }finally{S.loading=false;}
+  };
+}
+  async function reload(){if(S.demo){render();return}try{S.data=await server('getBootstrap');render()}catch(e){toast('Enregistrement effectué mais actualisation impossible : '+e.message);render()}}
+  const field=(label,name,opts={})=>`<div class="field"><label for="f-${esc(name)}">${esc(label)}</label><input class="input" id="f-${esc(name)}" name="${esc(name)}" type="${opts.type||'number'}" ${opts.min!==undefined?'min="'+opts.min+'"':''} ${opts.max!==undefined?'max="'+opts.max+'"':''} ${opts.step?'step="'+opts.step+'"':''} ${opts.placeholder?'placeholder="'+esc(opts.placeholder)+'"':''} ${opts.value!==undefined?'value="'+esc(opts.value)+'"':''} ${opts.required?'required':''}></div>`;
+  const select=(label,name,options)=>`<div class="field"><label for="f-${esc(name)}">${esc(label)}</label><select class="input" name="${esc(name)}" id="f-${esc(name)}">${options.map(([v,t])=>`<option value="${esc(v)}">${esc(t)}</option>`).join('')}</select></div>`;
+  const longtext=(label,name)=>`<div class="field"><label for="f-${esc(name)}">${esc(label)}</label><textarea class="input" name="${esc(name)}" id="f-${esc(name)}" rows="2" maxlength="500" placeholder="Ton ressenti, si tu le souhaites…"></textarea></div>`;
+  function openLog(type){if(type==='A'||type==='B')return strengthForm(type);return cardioForm(type)}
+  function soEffortScale(){
+  return `<div class="so-effort-scale" role="group" aria-label="Raccourcis pour l'effort ressenti">
+    ${[[2,'Très facile'],[4,'Facile'],[6,'Modéré'],[8,'Soutenu'],[10,'Très dur']].map(([v,label])=>`<button type="button" data-effort-value="${v}" aria-pressed="false"><strong>${v}</strong><small>${label}</small></button>`).join('')}
+    <p class="so-effort-hint">Tu peux aussi saisir une valeur précise, comme 2,5/10.</p>
+  </div>`;
+}
+  function strengthForm(type){
+  const entryId=key(),ex=activeEx(type),weeklyPlan=so8WeeklyPlan(type);
+  const forms=ex.map((x,i)=>`<details class="exercise-form so-exercise" ${i===0?'open':''}>
+    <summary class="so-exercise-summary">
+      <span class="so-exercise-count">${String(i+1).padStart(2,'0')}</span>
+      <span class="so-exercise-summary-text"><strong>${esc(x.Nom)}</strong><small>Objectif proposé · ${esc(x.Séries)} séries ${x.Rép_min?'/ '+esc(x.Rép_min)+'–'+esc(weeklyPlan.exercise[x.Exercice_ID]?.target||x.Rép_max)+' répétitions': '/ '+esc(weeklyPlan.exercise[x.Exercice_ID]?.target||x.Temps_s)+' secondes'}</small></span>
+      <span class="so-exercise-expand" aria-hidden="true">${v3Icon('arrowRight')}</span>
+    </summary>
+    <div class="so-exercise-body">
+      <p class="so-exercise-instruction">Indique uniquement ce que tu as réalisé : les indications du programme ne sont pas préremplies.</p>
+      <div class="form-grid cols-3">
+      ${field('Séries réalisées','sets'+i,{min:0,max:8,step:1,placeholder:String(x.Séries)})}
+      ${field('Répétitions','reps'+i,{min:0,max:100,step:1,placeholder:String(weeklyPlan.exercise[x.Exercice_ID]?.target||x.Rép_max||'—')})}
+      ${field('Charge (kg)','weight'+i,{min:0,max:150,step:.5,placeholder:x['Charge_kg indicative']||'0'})}
+      ${field('Maintien (sec)','seconds'+i,{min:0,max:1200,step:1,placeholder:weeklyPlan.exercise[x.Exercice_ID]?.target||x.Temps_s||'—'})}
+      ${select('Difficulté','difficulty'+i,[['','Non renseignée'],['Facile','Facile'],['Modéré','Modéré'],['Difficile','Difficile'],['Très difficile','Très difficile']])}
+       ${String(x.Temps_s||'').trim()&&!String(x.Rép_min||'').trim()?field('Secondes encore possibles (estimation)','secondsReserve'+i,{min:0,max:120,step:1,placeholder:'Ex. 10'}):select('Répétitions en réserve (RIR)','rir'+i,[['','Non renseigné'],['0','0'],['1','1'],['2','2'],['3','3'],['4','4'],['5','5'],['6','6+']])}
+      </div>
+       ${String(x.Temps_s||'').trim()&&!String(x.Rép_min||'').trim()?'<p class="so8-timed-hint">Pour le gainage, combien de secondes supplémentaires pouvais-tu tenir avec une bonne posture ? Pas de répétitions à compter.</p>':''}
+      <div class="so-exercise-safety"><div class="so-safety-title">${v3Icon('shield')} Douleur ou gêne ?</div>
+      <div class="form-grid">${select('Douleur','pain'+i,[['','Non renseignée'],['Non','Non'],['Oui','Oui']])}${field('Où ? (si nécessaire)','painWhere'+i,{type:'text',placeholder:'Ex. bas du dos'})}</div></div>
+      ${field('Commentaire personnel','note'+i,{type:'text',placeholder:'Technique, sensations, adaptation…'})}
+    </div><input type="hidden" name="id${i}" value="${esc(x.Exercice_ID)}">
+  </details>`).join('');
+  const html=`<section class="so-feedback-section" aria-labelledby="so-basics">
+    <div class="so-feedback-section-title"><span class="so-section-number">01</span><div><p class="so-overline">TON ACTIVITÉ</p><h3 id="so-basics">Les repères</h3></div>${v3Icon('calendar')}</div>
+    <div class="form-grid">${field('Date','date',{type:'date',value:S.data.today,required:true})}${field('Durée réelle (min)','duration',{min:0,max:240,step:1,placeholder:'Ex. 40'})}</div>
+  </section>
+  <section class="so-feedback-section" aria-labelledby="so-feelings">
+    <div class="so-feedback-section-title"><span class="so-section-number">02</span><div><p class="so-overline">TON RESSENTI</p><h3 id="so-feelings">Comment tu t’es sentie</h3></div>${v3Icon('heart')}</div>
+    <p class="so-section-desc">L’intensité et ton énergie servent à adapter tes prochaines propositions.</p>
+    <div class="form-grid">${field('Effort ressenti /10','effort',{min:0,max:10,step:.5,placeholder:'Ex. 4'})}${field('Énergie après /10','energyAfter',{min:0,max:10,step:1,placeholder:'Ex. 7'})}</div>
+    ${soEffortScale()}
+  </section>
+  <section class="so-feedback-section so-feedback-section-exercises" aria-labelledby="so-exercises">
+    <div class="so-feedback-section-title"><span class="so-section-number">03</span><div><p class="so-overline">LE DÉTAIL</p><h3 id="so-exercises">Tes exercices</h3></div>${v3Icon('clipboard')}</div>
+    <div class="so-progress-row"><span id="so-feedback-progress">0 / ${ex.length} exercices renseignés</span><span>Facultatif par champ</span></div>
+    <div class="so-progress-track" aria-hidden="true"><span id="so-progress-fill"></span></div>
+    ${forms}
+    <div class="so-exercise-info">${v3Icon('shield')} Si un mouvement provoque une douleur, note-la et n’augmente pas sa charge.</div>
+  </section>
+  <section class="so-feedback-section" aria-labelledby="so-recap">
+    <div class="so-feedback-section-title"><span class="so-section-number">04</span><div><p class="so-overline">POUR LA SUITE</p><h3 id="so-recap">Ton mot de la fin</h3></div>${v3Icon('note')}</div>
+    ${longtext('Ton bilan de séance (facultatif)','note')}
+  </section>`;
+  showModal('Retour de séance — Renforcement '+type,html,async f=>{
+    const exercises=ex.map((x,i)=>{const read=k=>f.get(k+i)||'';return {
+      id:read('id'),sets:read('sets'),reps:read('reps'),weight:read('weight'),seconds:read('seconds'),
+       difficulty:read('difficulty'),rir:read('rir'),secondsReserve:read('secondsReserve'),pain:read('pain'),painWhere:read('painWhere'),note:read('note')
+    }}).filter(x=>x.sets!==''||x.reps!==''||x.weight!==''||x.seconds!==''||x.difficulty!==''||x.pain!==''||x.note!==''||x.rir!==''||x.secondsReserve!==''||x.painWhere!=='');
+    if(!exercises.length)throw Error('Renseigne au moins un exercice pour enregistrer ton renforcement.');
+    await server('saveStrength',{id:entryId,date:f.get('date'),type,duration:f.get('duration'),effort:f.get('effort'),energyAfter:f.get('energyAfter'),note:f.get('note'),exercises});
+  },{kind:'session',type,activity:'Renforcement '+type,caption:type==='A'?'Fessiers & full body':'Haut du corps & fessiers',steps:['Les repères','Tes sensations','Tes exercices','Ton retour']});
+}
+  function cardioForm(type){
+  const entryId=key(),isRun=type==='Course';
+  const html=`<section class="so-feedback-section" aria-labelledby="so-basics">
+    <div class="so-feedback-section-title"><span class="so-section-number">01</span><div><p class="so-overline">TON ACTIVITÉ</p><h3 id="so-basics">Les repères</h3></div>${v3Icon('clock')}</div>
+    <div class="form-grid">${field('Date','date',{type:'date',value:S.data.today,required:true})}${field('Durée totale (min)','duration',{min:1,max:1440,step:1,required:true,placeholder:'Ex. 16'})}${field('Distance (km) · facultatif','distance',{min:0,max:600,step:.01,placeholder:'Si connue'})}</div>
+     ${isRun?'<p class="so-section-desc">Course et marche comptent dans la durée totale.</p>':`<div class="so8-strava-fields"><div class="so8-strava-heading">${v3Icon('Vélo')} <div><strong>Les données de ta sortie</strong><span>À recopier depuis Strava, si disponibles · saisie manuelle</span></div></div><div class="form-grid">${field('Dénivelé positif (m)','elevationGain',{min:0,max:10000,step:1,placeholder:'Ex. 215'})}${field('Vitesse moyenne (km/h)','averageSpeed',{min:0,max:150,step:.01,placeholder:'Ex. 18,6'})}</div><p class="so-section-desc">Ces données facultatives ne sont pas calculées à partir de la distance et la durée.</p></div>`}
+  </section>
+  <section class="so-feedback-section" aria-labelledby="so-feelings">
+    <div class="so-feedback-section-title"><span class="so-section-number">02</span><div><p class="so-overline">TON RESSENTI</p><h3 id="so-feelings">Comment c’était ?</h3></div>${v3Icon('heart')}</div>
+    ${field('Difficulté ressentie /10','effort',{min:0,max:10,step:.5,required:true,placeholder:'Ex. 2,5'})}
+    ${soEffortScale()}
+    <div class="so-safety-inline">${v3Icon('shield')}${select('Douleur pendant ou après','pain',[['','Non renseignée'],['Non','Non'],['Oui','Oui']])}</div>
+  </section>
+  ${isRun?`<section class="so-feedback-section" aria-labelledby="so-intervals">
+    <div class="so-feedback-section-title"><span class="so-section-number">03</span><div><p class="so-overline">SI TU AS FAIT DES INTERVALLES</p><h3 id="so-intervals">Course / marche</h3></div>${v3Icon('Course')}</div>
+    <p class="so-section-desc">Proposition de cette semaine : ${esc(so8WeeklyPlan(type).proposed||'8 × (1 min course / 1 min marche)')}. Renseigne uniquement ce que tu as réalisé.</p>
+    <div class="form-grid cols-3">
+      ${field('Course par bloc (sec)','runSeconds',{min:0,max:3600,step:1,placeholder:'Ex. 60'})}
+      ${field('Marche par bloc (sec)','walkSeconds',{min:0,max:3600,step:1,placeholder:'Ex. 60'})}
+      ${field('Nombre de blocs','rounds',{min:0,max:200,step:1,placeholder:'Ex. 8'})}
+    </div>
+  </section>`:''}
+  <section class="so-feedback-section" aria-labelledby="so-recap">
+    <div class="so-feedback-section-title"><span class="so-section-number">${isRun?'04':'03'}</span><div><p class="so-overline">POUR LA SUITE</p><h3 id="so-recap">Tes sensations</h3></div>${v3Icon('note')}</div>
+    ${longtext('Un détail à retenir (facultatif)','note')}
+  </section>`;
+  showModal(isRun?'Retour de course':'Retour de sortie vélo',html,async f=>{
+    const p={id:entryId,date:f.get('date'),type,duration:f.get('duration'),distance:f.get('distance'),effort:f.get('effort'),runSeconds:isRun?f.get('runSeconds'):'',walkSeconds:isRun?f.get('walkSeconds'):'',rounds:isRun?f.get('rounds'):'',pain:f.get('pain'),note:f.get('note'),elevationGain:isRun?'':f.get('elevationGain'),averageSpeed:isRun?'':f.get('averageSpeed'),planStep:isRun?'RUN-02':'BIKE-01'};
+    if(Number(p.duration)<=0)throw Error('Renseigne la durée.');
+    await server('saveCardio',p);
+  },{kind:'session',type,activity:isRun?'Course & marche':'Sortie vélo',caption:isRun?'Avancer progressivement, sans chercher la vitesse.':'Construire ton endurance pour Espiens.',steps:isRun?['Les repères','Ton ressenti','Course et marche','Ton retour']:['Les repères','Ton ressenti','Ton retour']});
+}
+  function openReview(){const html=`<p class="small">Ce bilan sert à comprendre ton ressenti, pas à juger tes résultats.</p><div class="form-grid">${field('Fatigue /10','fatigue',{min:0,max:10,step:1,placeholder:'5'})}${field('Sommeil /10','sleep',{min:0,max:10,step:1,placeholder:'7'})}${field('Satisfaction /10','satisfaction',{min:0,max:10,step:1,placeholder:'8'})}</div>${longtext('Ce qui a bien fonctionné','note')}${longtext('Pour la semaine prochaine','next')}`;showModal('Mon bilan hebdomadaire',html,async f=>server('saveReview',{week:W(),fatigue:f.get('fatigue'),sleep:f.get('sleep'),satisfaction:f.get('satisfaction'),note:f.get('note'),next:f.get('next')}));}
+  function openWeight(){const entryId=key();const html=`<p class="small">Mesure complètement facultative. Aucune obligation de te peser.</p>${field('Date de mesure','date',{type:'date',value:S.data.today,required:true})}${field('Poids en kg','weight',{min:20,max:250,step:.1,required:true,placeholder:'53'})}${longtext('Note facultative','note')}`;showModal('Ajouter une mesure',html,async f=>server('saveMeasurement',{id:entryId,date:f.get('date'),weight:f.get('weight'),note:f.get('note')}));}
+  qAll('[data-nav]').forEach(b=>b.addEventListener('click',()=>navigate(b.dataset.nav)));
+  qAll('[data-quick-log]').forEach(b=>b.addEventListener('click',openQuickLog));
+  qAll('[data-review-quick]').forEach(b=>b.addEventListener('click',()=>{if(!S.data)return;openReview()}));
+  qAll('.v3-side-challenge [data-open-program]').forEach(b=>b.addEventListener('click',()=>{S.programTab='Vélo';navigate('program')}));
+
+  load();
+})();
+</script>
+
+</body>
+</html>
