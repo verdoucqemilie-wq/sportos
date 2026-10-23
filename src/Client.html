@@ -202,8 +202,8 @@
     const meta={
       A:{name:'Renforcement A',subtitle:'Fessiers & full body',duration:'35–45 MIN',sub:'5 EXERCICES'},
       B:{name:'Renforcement B',subtitle:'Haut du corps & fessiers',duration:'35–45 MIN',sub:'5 EXERCICES'},
-      Course:{name:'Course / marche',subtitle:'Reprendre en douceur',duration:'16 MIN',sub:'8 × 1 MIN / 1 MIN'},
-      Vélo:{name:'Sortie vélo',subtitle:'Construire ton endurance',duration:'25–40 MIN',sub:'REPRISE FACILE'}
+      Course:{name:'Course / marche',subtitle:'Reprendre en douceur',duration:so8WeeklyPlan('Course').proposed?'FORMAT ÉVOLUTIF':'16 MIN',sub:so8WeeklyPlan('Course').proposed||'8 × 1 MIN / 1 MIN'},
+      Vélo:{name:'Sortie vélo',subtitle:'Construire ton endurance',duration:so8WeeklyPlan('Vélo').proposed?'DURÉE ÉVOLUTIVE':'25–40 MIN',sub:so8WeeklyPlan('Vélo').proposed||'REPRISE FACILE'}
     };
     const dateCaption=new Date(vm.today+'T12:00:00Z').toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
     const intro=done===4?'CE QUE TU AS FAIT COMPTE.':done===0?'UN JOUR POUR BOUGER.':'TON ÉLAN NE FAIT QUE COMMENCER.';
@@ -590,20 +590,20 @@
   </div>`;
 }
   function strengthForm(type){
-  const entryId=key(),ex=activeEx(type);
+  const entryId=key(),ex=activeEx(type),weeklyPlan=so8WeeklyPlan(type);
   const forms=ex.map((x,i)=>`<details class="exercise-form so-exercise" ${i===0?'open':''}>
     <summary class="so-exercise-summary">
       <span class="so-exercise-count">${String(i+1).padStart(2,'0')}</span>
-      <span class="so-exercise-summary-text"><strong>${esc(x.Nom)}</strong><small>Objectif · ${esc(x.Séries)} séries ${x.Rép_min?'/ '+esc(x.Rép_min)+'–'+esc(x.Rép_max)+' répétitions': '/ '+esc(x.Temps_s)+' secondes'}</small></span>
+      <span class="so-exercise-summary-text"><strong>${esc(x.Nom)}</strong><small>Objectif proposé · ${esc(x.Séries)} séries ${x.Rép_min?'/ '+esc(x.Rép_min)+'–'+esc(weeklyPlan.exercise[x.Exercice_ID]?.target||x.Rép_max)+' répétitions': '/ '+esc(weeklyPlan.exercise[x.Exercice_ID]?.target||x.Temps_s)+' secondes'}</small></span>
       <span class="so-exercise-expand" aria-hidden="true">${v3Icon('arrowRight')}</span>
     </summary>
     <div class="so-exercise-body">
       <p class="so-exercise-instruction">Indique uniquement ce que tu as réalisé : les indications du programme ne sont pas préremplies.</p>
       <div class="form-grid cols-3">
       ${field('Séries réalisées','sets'+i,{min:0,max:8,step:1,placeholder:String(x.Séries)})}
-      ${field('Répétitions','reps'+i,{min:0,max:100,step:1,placeholder:String(x.Rép_max||'—')})}
+      ${field('Répétitions','reps'+i,{min:0,max:100,step:1,placeholder:String(weeklyPlan.exercise[x.Exercice_ID]?.target||x.Rép_max||'—')})}
       ${field('Charge (kg)','weight'+i,{min:0,max:150,step:.5,placeholder:x['Charge_kg indicative']||'0'})}
-      ${field('Maintien (sec)','seconds'+i,{min:0,max:1200,step:1,placeholder:x.Temps_s||'—'})}
+      ${field('Maintien (sec)','seconds'+i,{min:0,max:1200,step:1,placeholder:weeklyPlan.exercise[x.Exercice_ID]?.target||x.Temps_s||'—'})}
       ${select('Difficulté','difficulty'+i,[['','Non renseignée'],['Facile','Facile'],['Modéré','Modéré'],['Difficile','Difficile'],['Très difficile','Très difficile']])}
        ${String(x.Temps_s||'').trim()&&!String(x.Rép_min||'').trim()?field('Secondes encore possibles (estimation)','secondsReserve'+i,{min:0,max:120,step:1,placeholder:'Ex. 10'}):select('Répétitions en réserve (RIR)','rir'+i,[['','Non renseigné'],['0','0'],['1','1'],['2','2'],['3','3'],['4','4'],['5','5'],['6','6+']])}
       </div>
@@ -658,7 +658,7 @@
   </section>
   ${isRun?`<section class="so-feedback-section" aria-labelledby="so-intervals">
     <div class="so-feedback-section-title"><span class="so-section-number">03</span><div><p class="so-overline">SI TU AS FAIT DES INTERVALLES</p><h3 id="so-intervals">Course / marche</h3></div>${v3Icon('Course')}</div>
-    <p class="so-section-desc">Programme proposé : 8 × (1 min de course / 1 min de marche). Renseigne ce que tu as réellement réalisé, si tu le souhaites.</p>
+    <p class="so-section-desc">Proposition de cette semaine : ${esc(so8WeeklyPlan(type).proposed||'8 × (1 min course / 1 min marche)')}. Renseigne uniquement ce que tu as réalisé.</p>
     <div class="form-grid cols-3">
       ${field('Course par bloc (sec)','runSeconds',{min:0,max:3600,step:1,placeholder:'Ex. 60'})}
       ${field('Marche par bloc (sec)','walkSeconds',{min:0,max:3600,step:1,placeholder:'Ex. 60'})}
