@@ -4,6 +4,14 @@
 
 **Important :** `@9` n'est pas une version produit SportOS. Le résultat `INCONNU` ne permet pas de conclure à une erreur, à un déploiement de V0.7 ou à une modification malveillante : il manque les différences de fichiers.
 
+## Correctif apporté après le diagnostic HEAD (23 octobre 2026)
+
+La sortie `EXTRA_FILES=1`, `MISSING_FILES=1`, `MATCH_BACKEND=ABSENT` avec les quatre autres fichiers reconnus correspond très probablement à la conversion normale du backend `Code.gs` en `Code.js` par `clasp pull`.
+
+La documentation officielle de `clasp` indique que `scriptExtensions` vaut `[".js", ".gs"]` par défaut et que la première extension sert lors d'un `pull`. Le comparateur a été corrigé pour reconnaître **uniquement** cette substitution de nom, et exige toujours une correspondance **exacte du contenu** pour autoriser une publication. Les doublons `Code.js`+`Code.gs`, tout autre fichier supplémentaire et toute mutation du backend sont bloquants.
+
+**Prochaine action recommandée :** relancer le script de publication V0.7 après mise à jour GitHub (`git pull --ff-only origin main`). Celui-ci relira les snapshots `@9` et `HEAD` en lecture seule avant de décider. Si l’un est réellement inconnu, il s'arrêtera encore **avant** `clasp push`.
+
 ## Prochaine opération : diagnostic UNIQUEMENT
 Depuis le Cloud Shell **personnel** où SportOS et clasp sont déjà liés :
 
