@@ -17,6 +17,27 @@ try{
  for(const item of VERSIONS){
    expect(()=>{populate(item.ref);assert.equal(classify(tmp,root),item.label)},'CLASSIFY_'+item.label);
  }
+ for(const item of VERSIONS){
+   expect(()=>{
+     populate(item.ref);
+     fs.renameSync(path.join(tmp,'Code.gs'),path.join(tmp,'Code.js'));
+     assert.equal(classify(tmp,root),item.label);
+     fs.renameSync(path.join(tmp,'Code.js'),path.join(tmp,'Code.gs'));
+   },'ALLOW_CLASP_JS_ALIAS_'+item.label);
+ }
+ expect(()=>{
+   populate(VERSIONS[0].ref);
+   fs.copyFileSync(path.join(tmp,'Code.gs'),path.join(tmp,'Code.js'));
+   assert.equal(classify(tmp,root),'INCONNU');
+   fs.rmSync(path.join(tmp,'Code.js'));
+ },'REJECT_DUPLICATE_BACKEND_EXTENSIONS');
+ expect(()=>{
+   populate(VERSIONS[0].ref);
+   fs.renameSync(path.join(tmp,'Code.gs'),path.join(tmp,'Code.js'));
+   fs.appendFileSync(path.join(tmp,'Code.js'),'\n// remote backend changed');
+   assert.equal(classify(tmp,root),'INCONNU');
+   fs.rmSync(path.join(tmp,'Code.js'));
+ },'REJECT_MODIFIED_CLASP_JS');
  expect(()=>{populate(VERSIONS[0].ref);fs.appendFileSync(path.join(tmp,'Styles.html'),'\n/* remote mutation */');assert.equal(classify(tmp,root),'INCONNU')},'REJECT_CHANGED_CSS');
  expect(()=>{populate(VERSIONS[0].ref);fs.writeFileSync(path.join(tmp,'Untracked.gs'),'x');assert.equal(classify(tmp,root),'INCONNU');fs.rmSync(path.join(tmp,'Untracked.gs'))},'REJECT_EXTRA_FILE');
  expect(()=>{populate(VERSIONS[0].ref);fs.rmSync(path.join(tmp,'Client.html'));assert.equal(classify(tmp,root),'INCONNU')},'REJECT_MISSING_FILE');
