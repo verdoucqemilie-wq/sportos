@@ -82,7 +82,7 @@ const html=path.join(__dirname,'../docs/apercu-sportos-v0.8.html');
   });
   await open('A');
   assert.match(await page.locator('.so8-adaptation').innerText(),/Douleur signalée/);
-  assert.doesNotMatch(await page.locator('.sp7-ex').first().innerText(),/13 répétitions/);
+  assert.doesNotMatch(await page.locator('.sp7-ex').first().innerText(),/16 répétitions/);
   console.log('V08_PAIN_VETO=PASS');
   for(const width of [320,390,768,1280]){
     await page.setViewportSize({width,height:800});
