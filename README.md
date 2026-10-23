@@ -1,27 +1,31 @@
 # SportOS — WebApp sportive personnelle
 
-**Version du code GitHub : V0.6.0 (22/10/2026)** — nouvelle iconographie de l’accueil et interface de retour de séance premium. [PR #5 fusionnée](https://github.com/verdoucqemilie-wq/sportos/pull/5) ; tests navigateur validés. **Publication Apps Script encore à réaliser depuis le compte Google personnel.**
+**Code GitHub : V0.7.0** — Refonte premium de la page « Mon programme », fusionnée dans `main` le 23 octobre 2026 via la [PR #8](https://github.com/verdoucqemilie-wq/sportos/pull/8). Backend sportif, Google Sheet personnel et permissions Apps Script inchangés.
 
-## Mise à jour du déploiement existant vers V0.6
+**Publication Apps Script : à exécuter depuis Cloud Shell avec le compte personnel.** Le dernier déploiement connu était `@8`, mais son contenu n'a pas encore été identifié de façon certaine.
 
-Depuis le **Cloud Shell personnel déjà associé** à SportOS :
+## Publier la V0.7 sur la WebApp existante
 
 ```bash
 cd ~/SportOS_deploiement_unique
 git switch main
 git pull --ff-only origin main
-bash scripts/publier-v0.6-cloud-shell.sh
+bash scripts/publier-v0.7-cloud-shell.sh
 ```
 
-- Le script vérifie le dépôt privé, le manifeste WebApp (`MYSELF`, `USER_DEPLOYING`), la base sportive unique, les nouvelles pages et `npm run verify`.
-- Il cible **exclusivement** le déploiement existant `AKfycbx9CoVk8WioZ2a_IJl4CwBk6Mk23lLEf_9yJY_g-NBJ8Zxzog7TyXaoPAxS02PeOxZYCw`, jamais les autres déploiements.
-- Il accepte `@6` ou `@7` avec les garde-fous existants. **Version `@8` observée le 22/10/2026 : un audit immuable en lecture seule est obligatoire avant tout push**. L’audit récupère les cinq fichiers de `@8` dans un dossier temporaire et les compare à la V0.5 connue et à la V0.6 du dépôt. Si `@8` = V0.6, le script s'arrête sans republier ; si `@8` = V0.5, il autorise sa mise à jour ; pour tout contenu inconnu, il stoppe avant toute écriture. Les descriptions restent facultatives.
-- Il recontrôle le numéro juste avant le push et avant l'actualisation du déploiement. Aucun nouveau projet, aucun nouveau déploiement, aucune nouvelle URL n'est créé.
-- `clasp push` synchronise du **code**, pas de nouvelles données sportives. Les données réelles restent privées dans le Google Sheet existant. N'enregistrer aucune séance fictive pour vérifier la WebApp.
+**Le script ne crée pas de nouvelle WebApp** et n’utilise que l'identifiant du déploiement actuel. Avant de publier, il :
+- vérifie le code GitHub, les permissions `MYSELF`/`USER_DEPLOYING`, la base sportive unique et les tests ;
+- télécharge **en lecture seule et en dossier temporaire** le snapshot de la version effectivement déployée, puis le code distant HEAD ;
+- compare chacun des cinq fichiers Apps Script à V0.5, V0.6 et V0.7 connues (commits Git immuables) ;
+- si V0.7 est déjà déployée, s'arrête **sans aucun push** ;
+- si le déploiement ou HEAD contient une modification inconnue, **s'arrête avant toute écriture** ;
+- si la cible actuelle et HEAD sont reconnues, ne synchronise que si nécessaire, actualise **l'identifiant existant** et vérifie la nouvelle version par lecture seule.
 
-**Fin attendue :** `SPORTOS_V0_6_DEPLOIEMENT_CIBLE=TERMINE` puis test de l'URL `/exec` habituelle, des icônes, des quatre retours de séance et de l'accès « Moi uniquement ». En cas de STOP, ne pas forcer le push.
+`clasp push` remplace tous les fichiers du projet Apps Script ; ne jamais lancer cette commande isolément ni contourner un STOP. La mise à jour du déploiement ne crée pas de nouvelle URL `/exec`. Aucune séance sportive fictive ne doit être créée pour tester.
 
-Documentation : [Charte SportOS](docs/brand-guidelines-v0.4.md) · [Accueil V0.5](docs/design-home-v0.5.md) · [Design du retour V0.6](docs/design-feedback-v0.6.md) · [Aperçu V0.6](docs/apercu-v0.6.html).
+**Après publication attendue :** `SPORTOS_V0_7_DEPLOIEMENT_CIBLE=TERMINE` avec un numéro numérique `@N`, ou `SPORTOS_V0_7_DEJA_DEPLOYEE=@N` si la V0.7 est déjà présente. Si le script s'arrête, transmettre sa sortie et analyser la version inconnue.
+
+Design : [Spécifications Mon programme V0.7](docs/design-programme-v0.7.md) · [Aperçu autonome](docs/apercu-programme-v0.7.html) · [Garde-fous de publication](tests/release-v0.7.test.cjs).
 
 
 ---
