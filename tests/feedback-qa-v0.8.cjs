@@ -77,8 +77,9 @@ const html=path.join(__dirname,'../docs/apercu-sportos-v0.8.html');
   console.log('V08_WEEKLY_PLAN_ADAPTATION=PASS');
   await page.evaluate(()=>{
     const d=window.__SPORTOS_FIXTURE__;
-    const a=d.sessions.find(x=>x.Type==='A'&&x.Statut==='Terminée');
-    d.logs.find(x=>x.Seance_ID===a.Seance_ID&&x.Exercice_ID==='EX-SQUAT').Douleur='Oui';
+    const squat=d.logs.find(x=>x.Exercice_ID==='EX-SQUAT'&&String(x.Seance_ID||'').startsWith('SO'));
+    if(!squat)throw Error('Séance A de démonstration introuvable');
+    squat.Douleur='Oui';
   });
   await open('A');
   assert.match(await page.locator('.so8-adaptation').innerText(),/Douleur signalée/);
