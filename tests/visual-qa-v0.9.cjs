@@ -12,7 +12,7 @@ const html=path.join(__dirname,'../docs/apercu-sportos-v0.9.html');
   const page=await browser.newPage({viewport:{width:1440,height:900}});
   const errors=[];page.on('pageerror',e=>errors.push(e.message));
   const out=path.join(__dirname,'../artifacts/v0.9');fs.mkdirSync(out,{recursive:true});
-  const choose=async type=>{await page.locator('[data-nav="program"]').first().click();await page.locator('[data-program-tab="'+type+'"]').click()};
+  const choose=async type=>{await page.locator('[data-nav="program"]').first().click();await page.locator('[data-program-week="0"]').click();await page.locator('.sp7-selector [data-program-tab="'+type+'"]').click()};
   const checkOverflow=async(width,part)=>{
     await page.setViewportSize({width,height:780});
     const [scroll,inner]=await page.evaluate(()=>[document.documentElement.scrollWidth,innerWidth]);
