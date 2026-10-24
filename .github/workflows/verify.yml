@@ -27,6 +27,7 @@ jobs:
           bash -n scripts/publier-v0.6-cloud-shell.sh
           bash -n scripts/publier-v0.7-cloud-shell.sh
           bash -n scripts/publier-v0.8-cloud-shell.sh
+          bash -n scripts/publier-v0.9-cloud-shell.sh
           bash -n scripts/diagnostiquer-deploiement-v0.7.sh
           bash -n scripts/auditer-deploiement-8-sportos.sh
 
