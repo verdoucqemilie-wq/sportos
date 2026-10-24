@@ -9,7 +9,7 @@ const populate=(v,alias=false)=>{for(const f of fs.readdirSync(tmp))fs.rmSync(pa
   fs.writeFileSync(path.join(tmp,alias&&name==='Code.gs'?'Code.js':name),cp.execFileSync('git',['show',v.ref+':src/'+name],{cwd:root,maxBuffer:6e6}));
 };
 try{
-  test('PINNED_SOURCE',()=>{assert.equal(classify(path.join(root,'src'),root),'V0_9_1');assert.equal(VERSIONS[0].ref,'5a8a3acfed1eb37aff492911fba7aa494609acea')});
+  test('PINNED_SOURCE',()=>{assert.equal(classify(path.join(root,'src'),root),'V0_9_1');assert.equal(VERSIONS[0].ref,'81b9056038013b0b48431e25873a2f664b1bb707')});
   for(const v of VERSIONS){
     test(v.label,()=>{populate(v);assert.equal(classify(tmp,root),v.label)});
     test(v.label+'_CODE_JS',()=>{populate(v,true);assert.equal(classify(tmp,root),v.label)});
