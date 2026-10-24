@@ -10,9 +10,9 @@ const idx=fs.readFileSync(root+'/src/Index.html','utf8');
 const css=fs.readFileSync(root+'/src/Styles.html','utf8');
 
 const modelSource=cli.match(/\n  function homeModel\(data\) \{[\s\S]*?(?=\n  \/\/ V0\.8:)/);
-const homeSource=cli.match(/\n  function home\(\) \{[\s\S]*?(?=\n  function program\(\))/);
+const homeSource=cli.match(/\n  function home\(\) \{[\s\S]*?(?=\n  \/\/ V0\.9\.1)/);
 const iconSource=cli.match(/\n  function v3Icon\(type\)\s*\{[\s\S]*?(?=\n  function homeModel\(data\))/);
-const adaptiveSource=cli.match(/\n  function so8WeeklyPlan\(type\)\{[\s\S]*?(?=\n  function home\(\))/);
+const adaptiveSource=cli.match(/\n  function so8WeeklyPlan\(type(?:,\s*weekStart)?\)\{[\s\S]*?(?=\n  function home\(\))/);
 assert.ok(adaptiveSource,'Fonctions V0.8 absentes');
 for(const [name,s] of [['homeModel',modelSource],['home',homeSource],['v3Icon',iconSource]])
   assert.ok(s,'Fonction '+name+' introuvable');

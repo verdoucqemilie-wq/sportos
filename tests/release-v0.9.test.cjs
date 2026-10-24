@@ -15,7 +15,7 @@ const populate=(version,alias=false)=>{clean();for(const file of FILES){
 }};
 try{
   check('SOURCE_PINNED',()=>{
-    assert.equal(classify(path.join(root,'src'),root),'V0_9');
+    assert.notEqual(classify(path.join(root,'src'),root),'V0_9','Newer sources must not masquerade as V0.9');
     assert.equal(VERSIONS[0].ref,'a2ef04920403afe1531143f900dbca88986b3995');
     assert.deepEqual(VERSIONS.map(v=>v.label),['V0_9','V0_8','V0_7']);
   });
