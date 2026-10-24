@@ -1990,6 +1990,8 @@ window.__SPORTOS_FIXTURE__={"version":"0.1.0","today":"2026-10-23","profile":[{"
   const last=dated[0]||null;
   const currentEntry=isCurrentWeek?dated.find(x=>x.Date>=week.start&&x.Date<week.end&&so9Editable(type,x))||null:null;
   const selectedEntry=dated.find(x=>x.Date>=week.start&&x.Date<week.end)||null;
+  // An imported/chat-declared completed session is already history, not a blank feedback form.
+  const canWriteFeedback=canLog&&(!completed||!!currentEntry);
   const lastLabel=last?niceDate(last.Date):'Aucune activité datée';
   const caution=(S.data.logs||[]).some(x=>x.Douleur==='Oui');
   const item=(t)=>{
@@ -2105,7 +2107,7 @@ window.__SPORTOS_FIXTURE__={"version":"0.1.0","today":"2026-10-23","profile":[{"
         <h2 id="sp7-hero-title">${esc(current.title)}</h2>
         <p>${esc(current.subtitle)}</p>
         <div class="sp7-hero-actions">
-          ${canLog?`<button type="button" class="sp7-primary" data-log="${esc(type)}" ${currentEntry?`data-edit-id="${esc(currentEntry.Seance_ID||currentEntry.Cardio_ID)}"`:''}>${currentEntry?'Modifier mon retour':'Enregistrer mon retour'} ${v3Icon(currentEntry?'pencil':'arrowRight')}</button>`:
+          ${canWriteFeedback?`<button type="button" class="sp7-primary" data-log="${esc(type)}" ${currentEntry?`data-edit-id="${esc(currentEntry.Seance_ID||currentEntry.Cardio_ID)}"`:''}>${currentEntry?'Modifier mon retour':'Enregistrer mon retour'} ${v3Icon(currentEntry?'pencil':'arrowRight')}</button>`:
   `<button type="button" class="sp7-primary" data-nav-go="progress">${selectedEntry?'Voir mon historique':'Consulter mes progrès'} ${v3Icon('arrowRight')}</button>`}
           <button type="button" class="sp7-secondary" data-nav-go="progress">Voir mon évolution ${v3Icon('arrow')}</button>
         </div>
