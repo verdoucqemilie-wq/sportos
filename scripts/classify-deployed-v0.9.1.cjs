@@ -4,7 +4,7 @@
 const fs=require('node:fs'),path=require('node:path'),cp=require('node:child_process');
 const {FILES,same,resolvePulledFiles}=require('./classify-deployed-v0.7.cjs');
 const VERSIONS=[
-  {label:'V0_9_1',ref:'81b9056038013b0b48431e25873a2f664b1bb707'},
+  {label:'V0_9_1',ref:'31a9dde8803171b3de053e8933f8297ff25c3993'},
   {label:'V0_9',ref:'a2ef04920403afe1531143f900dbca88986b3995'},
   {label:'V0_8',ref:'27e655ad4127292a6c55f523c5bbed05ea3b5893'},
   {label:'V0_7',ref:'d59bb2b3921590e9a15ede5effa52f321bb7cfd9'}
