@@ -1,7 +1,7 @@
 # Publication contrôlée — SportOS V0.9 (préparation)
 
 **Cible : WebApp personnelle existante, URL /exec inchangée.**
-**État : script d’audit/publication prêt en branche V0.9 ; aucun déploiement exécuté ici.**
+**État au 24/10/2026 : PR #17 fusionnée dans `main` (commit `3503ae46db91073e9faf102fde29d7a95f8b7fdc`) ; aucun déploiement Apps Script exécuté ici.**
 
 ## Préconditions
 - Code V0.9 validé par CI/Chromium et fusionné dans `main`.
