@@ -5,13 +5,14 @@
   "description": "WebApp sportive personnelle avec Google Sheets et Apps Script",
   "scripts": {
     "test": "node tests/backend.test.cjs",
-    "verify": "node scripts/verify-local.cjs && npm test && npm run test:home && npm run test:deployment && npm run test:deployment-v06 && npm run test:deployed-snapshot && npm run test:release-v07 && npm run test:diagnostic-v07 && npm run test:release-v08",
+    "verify": "node scripts/verify-local.cjs && npm test && npm run test:home && npm run test:deployment && npm run test:deployment-v06 && npm run test:deployed-snapshot && npm run test:release-v07 && npm run test:diagnostic-v07 && npm run test:release-v08 && npm run test:v09",
     "test:home": "node tests/homepage.test.cjs",
     "test:deployment": "node tests/deployment-guard-v0.5.test.cjs",
     "test:deployment-v06": "node tests/deployment-guard-v0.6.test.cjs",
     "test:deployed-snapshot": "node tests/snapshot-classifier-v0.6.test.cjs",
     "test:release-v07": "node tests/release-v0.7.test.cjs",
     "test:diagnostic-v07": "node tests/diagnostic-readonly-v0.7.test.cjs",
-    "test:release-v08": "node tests/release-v0.8.test.cjs"
+    "test:release-v08": "node tests/release-v0.8.test.cjs",
+    "test:v09": "node tests/v0.9.test.cjs"
   }
 }
