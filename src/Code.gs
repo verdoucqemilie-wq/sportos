@@ -228,21 +228,27 @@ function saveCardio(payload) {
   }
   return withLock_(() => {
     const sheet = requireColumns_('06_Cardio', ['Cardio_ID', 'Semaine', 'Date', 'Type', 'Durée min', 'Distance km', 'Effort 1-10', 'Aisance respiratoire', 'Douleur', 'Note', 'Statut', 'Origine', 'ID_externe', 'Statut_import', 'Programme_ID', 'Date_import', 'Course_sec_bloc', 'Marche_sec_bloc', 'Nb_blocs', 'Course_totale_min', 'Marche_totale_min', 'Echauffement_reel_min', 'Retour_calme_reel_min', 'Séance_plan_ID']);
+    // Check edit rights BEFORE any optional header write, even for a failed edit.
+    const existingRow = findRow_(sheet, id);
+    const prior = existingRow ? sheet.getRange(existingRow, 1, 1, 24).getValues()[0] : null;
+    if (prior && (prior[3] !== payload.type || prior[10] !== 'Terminée' || !/^WebApp/.test(String(prior[11]))))
+      throw Error('Modification refusée : ce retour historique ne provient pas de la WebApp');
     const extended = optionalColumns_(sheet, 25,
       ['Dénivelé positif (m)', 'Vitesse moyenne (km/h)'], elevation !== '' || averageSpeed !== '');
-    const existingRow = findRow_(sheet, id);
-    if (existingRow) {
-      const prior = sheet.getRange(existingRow, 1, 1, 12).getDisplayValues()[0];
-      if (prior[3] !== payload.type || prior[10] !== 'Terminée' || !/^WebApp/.test(prior[11]))
-        throw Error('Modification refusée : ce retour historique ne provient pas de la WebApp');
-    }
-    const existing = !!existingRow;
+    const existing = !!prior;
+    // An edit changes only data exposed by the feedback form. Metadata and
+    // earlier recorded warmup/cooldown remain untouched unless explicitly supplied.
+    const warmup = payload.warmup == null || payload.warmup === ''
+      ? (prior ? prior[21] : '') : num_(payload.warmup, 0, 120, true);
+    const cooldown = payload.cooldown == null || payload.cooldown === ''
+      ? (prior ? prior[22] : '') : num_(payload.cooldown, 0, 120, true);
     const values = [id, weekOf_(date), date, payload.type, duration, distance,
-      rpe, str_(payload.breath, 100), yesNo_(payload.pain), str_(payload.note, 500),
-      'Terminée', 'WebApp', '', 'Non concerné', run ? 'P-COURSE-2026' : 'P-VELO-ESPIENS-2027',
-      today_(), secsRun, secsWalk, rounds, runTotal, walkTotal,
-      num_(payload.warmup, 0, 120, true), num_(payload.cooldown, 0, 120, true),
-      str_(payload.planStep, 30)];
+      rpe, prior ? prior[7] : str_(payload.breath, 100), yesNo_(payload.pain), str_(payload.note, 500),
+      'Terminée', prior ? prior[11] : 'WebApp', prior ? prior[12] : '',
+      prior ? prior[13] : 'Non concerné',
+      prior ? prior[14] : (run ? 'P-COURSE-2026' : 'P-VELO-ESPIENS-2027'),
+      prior ? prior[15] : today_(), secsRun, secsWalk, rounds, runTotal, walkTotal,
+      warmup, cooldown, prior ? prior[23] : str_(payload.planStep, 30)];
     if (extended) values.push(elevation, averageSpeed);
     upsert_(sheet, id, values);
     return { ok: true, id, updated: existing };
