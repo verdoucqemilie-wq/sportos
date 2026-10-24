@@ -363,7 +363,9 @@
   function program(){
   const types=['A','B','Course','Vélo'],type=types.includes(S.programTab)?S.programTab:'A';
   const strength=type==='A'||type==='B',running=type==='Course',cycling=type==='Vélo';
-  const all=homeModel(S.data),completed=all.done.includes(type);
+  const all=homeModel(S.data),cycle=so91Cycle(),week=cycle.week,
+    completed=week.done.includes(type),isCurrentWeek=week.start===all.start,
+    canLog=isCurrentWeek;
   const catalog={
     A:{name:'Renforcement A',title:'Des bases solides.',subtitle:'Fessiers, jambes, gainage et technique.',group:'RENFORCEMENT',estimate:'35–45 MIN PROPOSÉES',focus:'FESSIERS + FULL BODY',tone:'lime'},
     B:{name:'Renforcement B',title:'La force en mouvement.',subtitle:'Haut du corps, fessiers et stabilité.',group:'RENFORCEMENT',estimate:'35–45 MIN PROPOSÉES',focus:'HAUT DU CORPS + GAINAGE',tone:'sage'},
@@ -371,7 +373,7 @@
     Vélo:{name:'Vélo',title:'La route se construit.',subtitle:'De premières sorties faciles vers ton défi Espiens.',group:'ENDURANCE',estimate:'DÉPART : SORTIES FACILES',focus:'ESPIENS · MAI 2027',tone:'sage'}
   };
   const current=catalog[type];
-  const weeklyPlan=so8WeeklyPlan(type);
+  const weeklyPlan=so8WeeklyPlan(type,week.start);
    const ex=strength?activeEx(type):[];
   const steps=strength?[]:(S.data.steps||[]).filter(x=>x.Type===type);
   const plan=(S.data.programs||[]).find(x=>x.Séance===type&&(!strength||x.Version==='V1-S2'));
@@ -379,12 +381,13 @@
   const goals=goalsFor(goalIds);
   const dated=[...(S.data.sessions||[]),...(S.data.cardio||[])].filter(x=>x.Type===type&&x.Statut==='Terminée'&&/^\d{4}-\d{2}-\d{2}$/.test(x.Date||'')).sort((a,b)=>b.Date.localeCompare(a.Date));
   const last=dated[0]||null;
-  const currentEntry=dated.find(x=>x.Date>=all.start&&x.Date<all.end&&so9Editable(type,x))||null;
+  const currentEntry=isCurrentWeek?dated.find(x=>x.Date>=week.start&&x.Date<week.end&&so9Editable(type,x))||null:null;
+  const selectedEntry=dated.find(x=>x.Date>=week.start&&x.Date<week.end)||null;
   const lastLabel=last?niceDate(last.Date):'Aucune activité datée';
   const caution=(S.data.logs||[]).some(x=>x.Douleur==='Oui');
   const item=(t)=>{
-    const data=catalog[t],done=all.done.includes(t),active=t===type;
-    return `<button type="button" class="sp7-switch ${active?'is-active':''}" data-program-tab="${esc(t)}" aria-pressed="${active}" aria-label="${esc(data.name)}${done?', réalisée cette semaine':''}">
+    const data=catalog[t],done=week.done.includes(t),active=t===type;
+    return `<button type="button" class="sp7-switch ${active?'is-active':''}" data-program-tab="${esc(t)}" aria-pressed="${active}" aria-label="${esc(data.name)}${done?', réalisée dans la semaine sélectionnée':''}">
       <span class="sp7-switch-icon" aria-hidden="true">${v3Icon(t)}</span>
       <span class="sp7-switch-main"><strong>${esc(data.name)}</strong><small>${t==='A'||t==='B'?'FORCE':t==='Course'?'RUN':'RIDE'}</small></span>
       <span class="sp7-switch-state ${done?'is-done':''}" aria-hidden="true">${done?v3Icon('check'):v3Icon('arrowRight')}</span>
@@ -422,12 +425,53 @@
   const weeklyCard=`<section class="so8-adaptation" aria-labelledby="so8-adapt-title">
      <span class="so8-adapt-icon" aria-hidden="true">${v3Icon('sparkle')}</span>
      <div class="so8-adapt-copy"><span class="sp7-overline">COACH / NOUVELLE SEMAINE</span>
-       <h3 id="so8-adapt-title">Ton programme évolue.</h3>
-       <p>${esc(weeklyPlan.reason)}</p>
+       <h3 id="so8-adapt-title">${week.index>1&&!weeklyPlan.hasPrior?'Évolution à confirmer.':week.index===0?'Tes repères de départ.':'Proposition selon tes retours.'}</h3>
+       <p>${esc(week.index>1&&!weeklyPlan.hasPrior?'La suite dépend des résultats de la semaine précédente. La progression ne sera définie qu’après tes retours.':weeklyPlan.reason)}</p>
        ${weeklyPlan.proposed?`<strong class="so8-adapt-target">${esc(weeklyPlan.proposed)}</strong>`:''}
-       <small>${weeklyPlan.hasPrior?'Basé sur ton retour du '+esc(weeklyPlan.source):'En attente de ta première séance de référence'} · Proposition indicative ; aucune séance passée modifiée.</small>
+       <small>${weeklyPlan.hasPrior?'Basé sur le retour du '+esc(weeklyPlan.source):'Aucune progression automatique sans retour daté de la semaine précédente'} · Aucune séance passée modifiée.</small>
      </div>
    </section>`;
+  // Week selector + explicit evidence-driven rationale, visible before the activity details.
+  const rangeLabel=w=>{
+    const display=d=>new Date(d+'T12:00:00Z').toLocaleDateString('fr-FR',{day:'numeric',month:'short'});
+    return display(w.start)+' – '+display(so91AddDays(w.end,-1));
+  };
+  const weekNav=`<section class="so91-cycle" aria-labelledby="so91-cycle-title">
+    <div class="so91-cycle-head"><div><span class="sp7-overline">TON CYCLE SPORTIF</span><h2 id="so91-cycle-title">Tes semaines, en un coup d’œil.</h2></div><span class="so91-cycle-hint">Sélectionne une semaine pour voir ses séances</span></div>
+    <div class="so91-week-rail" role="group" aria-label="Navigation entre les semaines d'entraînement">
+      ${cycle.weeks.map(w=>`<button type="button" class="so91-week ${w.index===cycle.selected?'is-selected':''} ${w.done.length===4?'is-complete':''}" data-program-week="${w.index}" aria-pressed="${w.index===cycle.selected}" aria-label="Semaine ${w.index+1}, ${esc(rangeLabel(w))}, ${w.done.length} activités sur 4, ${esc(w.status)}">
+        <span class="so91-week-top"><strong>S${w.index+1}</strong>${w.done.length===4?v3Icon('check'):''}</span>
+        <small>${esc(rangeLabel(w))}</small>
+        <span class="so91-week-status">${w.done.length===4?'4/4 · ':w.done.length?w.done.length+'/4 · ':''}${esc(w.status)}</span>
+      </button>`).join('')}
+    </div>
+  </section>`;
+  const previousStart=so91AddDays(week.start,-7);
+  const previous=so91Entries(previousStart,week.start);
+  const previews=types.map(t=>{
+    const item=catalog[t],record=week.rows.find(x=>x.Type===t);
+    const plan=so8WeeklyPlan(t,week.start),older=previous.find(x=>x.Type===t);
+    let statement=record?'Retour enregistré · '+niceDate(record.Date):
+      older?(plan.proposed?plan.proposed+'. '+plan.reason:plan.reason):
+      week.index>0?'À confirmer après ton prochain retour.':'Référence de départ · à adapter.';
+    const state=record?'Réalisée':older?'Adaptée':'Conditionnelle';
+    return `<button type="button" class="so91-preview ${t===type?'is-active':''}" data-program-tab="${esc(t)}" aria-pressed="${t===type}">
+      <span class="so91-preview-icon" aria-hidden="true">${v3Icon(t)}</span>
+      <span class="so91-preview-copy"><strong>${esc(item.name)}</strong><small>${esc(state)} · ${esc(statement)}</small></span>
+      ${v3Icon('arrowRight')}
+    </button>`;
+  }).join('');
+  const prevCount=types.filter(t=>previous.some(x=>x.Type===t)).length;
+  const weekLead=week.index===0?
+    'Ta première semaine datée sert de référence. Tu peux consulter les retours enregistrés sans les modifier depuis cette vue.':
+    prevCount===4?'Les quatre activités de la semaine précédente sont disponibles : chaque proposition ci-dessous tient compte de son retour.':
+    prevCount?'Les retours disponibles servent de repères. Les activités sans données restent conditionnelles.':
+    'Pas encore de retours datés pour la semaine précédente : le programme n’augmente pas automatiquement.';
+  const outlook=`<section class="so91-outlook" aria-labelledby="so91-outlook-title">
+    <div class="so91-outlook-head"><div><span class="sp7-overline">${week.upcoming?'APERÇU CONDITIONNEL':week.done.length===4?'SEMAINE ACCOMPLIE':'PLAN DE LA SEMAINE'}</span><h2 id="so91-outlook-title">Semaine ${week.index+1} · ${esc(week.status.toLowerCase())}</h2><p>${esc(weekLead)}</p></div><div class="so91-outlook-progress"><strong>${week.done.length}<small>/4</small></strong><span>ACTIVITÉS RÉALISÉES</span></div></div>
+    <div class="so91-preview-grid">${previews}</div>
+    ${week.upcoming?'<p class="so91-conditional">'+v3Icon('shield')+' Les semaines à venir sont des prévisions : elles seront recalculées après tes prochains retours. Aucun objectif futur n’est validé à l’avance.</p>':''}
+  </section>`;
   const coach=strength?'Privilégie la maîtrise du geste et une récupération suffisante. Une charge indicative n’est jamais une consigne de performance.':running?'Répéter la séance précédente est un progrès si elle est bien tolérée. Augmente seulement quand tu te sens prête.':'Commence par des sorties faciles. La distance vers Espiens et les deux journées consécutives seront évaluées à partir de tes sorties réelles.';
   const foot=strength?'Chaque exercice est une proposition, pas une performance à atteindre.':running?'Les intervalles sont des propositions : ton compte rendu décrira uniquement ce que tu as réalisé.':'Aucune distance, durée de trajet ou sortie réalisée n’est supposée.';
   return `<div class="sp7-page">
@@ -436,16 +480,19 @@
       <div class="sp7-head-row"><div><h1>Construis <em>ton élan.</em></h1><p>Deux séances de renforcement, une reprise de la course et un défi vélo. Un programme qui s’adapte à tes sensations.</p></div>
       <div class="sp7-head-stat" aria-label="${all.done.length} activités différentes réalisées cette semaine sur quatre"><strong>${all.done.length}<span>/04</span></strong><small>TYPES D’ACTIVITÉS<br>RÉALISÉS CETTE SEMAINE</small></div></div>
     </header>
-    ${so8CompletionBanner()}
+    ${isCurrentWeek?so8CompletionBanner():''}
+    ${weekNav}
+    ${outlook}
      <nav class="sp7-selector" aria-label="Choisir une activité sportive">${types.map(item).join('')}</nav>
     <section class="sp7-hero sp7-hero-${current.tone}" aria-labelledby="sp7-hero-title">
       <div class="sp7-hero-primary">
-        <div class="sp7-hero-brow"><span class="sp7-hero-tag">${esc(current.group)}</span><span>${completed?'✓ RÉALISÉE CETTE SEMAINE':'SÉANCE PROPOSÉE'}</span></div>
+        <div class="sp7-hero-brow"><span class="sp7-hero-tag">${esc(current.group)}</span><span>${completed?'✓ RÉALISÉE SUR CETTE SEMAINE':week.upcoming?'APERÇU À VENIR':'SÉANCE PROPOSÉE'}</span></div>
         <span class="sp7-hero-sport" aria-hidden="true">${v3Icon(type)}</span>
         <h2 id="sp7-hero-title">${esc(current.title)}</h2>
         <p>${esc(current.subtitle)}</p>
         <div class="sp7-hero-actions">
-          <button type="button" class="sp7-primary" data-log="${esc(type)}" ${currentEntry?`data-edit-id="${esc(currentEntry.Seance_ID||currentEntry.Cardio_ID)}"`:''}>${currentEntry?'Modifier mon retour':'Enregistrer mon retour'} ${v3Icon(currentEntry?'pencil':'arrowRight')}</button>
+          ${canLog?`<button type="button" class="sp7-primary" data-log="${esc(type)}" ${currentEntry?`data-edit-id="${esc(currentEntry.Seance_ID||currentEntry.Cardio_ID)}"`:''}>${currentEntry?'Modifier mon retour':'Enregistrer mon retour'} ${v3Icon(currentEntry?'pencil':'arrowRight')}</button>`:
+  `<button type="button" class="sp7-primary" data-nav-go="progress">${selectedEntry?'Voir mon historique':'Consulter mes progrès'} ${v3Icon('arrowRight')}</button>`}
           <button type="button" class="sp7-secondary" data-nav-go="progress">Voir mon évolution ${v3Icon('arrow')}</button>
         </div>
         
@@ -453,8 +500,8 @@
       <div class="sp7-hero-panel" aria-label="Repères de la séance">
         <div class="sp7-hero-symbol" aria-hidden="true">${v3Icon(type)}</div>
         <div><span>LE FOCUS</span><strong>${esc(current.focus)}</strong></div>
-        <div><span>LE FORMAT</span><strong>${esc(weeklyPlan.proposed||current.estimate)}</strong></div>
-        <div><span>DERNIER RETOUR DATÉ</span><strong>${esc(lastLabel)}</strong></div>
+        <div><span>LE FORMAT</span><strong>${esc(week.index>1&&!weeklyPlan.hasPrior?'À confirmer selon tes retours':weeklyPlan.proposed||current.estimate)}</strong></div>
+        <div><span>RETOUR DE CETTE SEMAINE</span><strong>${esc(selectedEntry?niceDate(selectedEntry.Date):'Pas encore réalisé')}</strong></div>
       </div>
     </section>
     <div class="sp7-layout">
@@ -537,7 +584,7 @@
     document.addEventListener('keydown',onKey);
     q('#v3-quick-close').focus();
   }
-  function bind(){qAll('#content [data-quick-log]').forEach(b=>b.onclick=openQuickLog);qAll('[data-nav-go]').forEach(b=>b.onclick=()=>navigate(b.dataset.navGo));qAll('[data-open-program]').forEach(b=>b.onclick=()=>{S.programTab=b.dataset.openProgram;navigate('program')});qAll('[data-log]').forEach(b=>b.onclick=()=>openLog(b.dataset.log,b.dataset.editId||null));qAll('[data-program-tab]').forEach(b=>b.onclick=()=>{const selected=b.dataset.programTab;S.programTab=selected;render();q('[data-program-tab="'+selected+'"]')?.focus()});qAll('[data-review]').forEach(b=>b.onclick=openReview);qAll('[data-weight]').forEach(b=>b.onclick=openWeight);const pick=q('#exercise-picker');if(pick)pick.onchange=()=>{S.exerciseSelected=pick.value;render()};}
+  function bind(){qAll('#content [data-quick-log]').forEach(b=>b.onclick=openQuickLog);qAll('[data-nav-go]').forEach(b=>b.onclick=()=>navigate(b.dataset.navGo));qAll('[data-open-program]').forEach(b=>b.onclick=()=>{S.programTab=b.dataset.openProgram;navigate('program')});qAll('[data-log]').forEach(b=>b.onclick=()=>openLog(b.dataset.log,b.dataset.editId||null));qAll('[data-program-tab]').forEach(b=>b.onclick=()=>{const selected=b.dataset.programTab;S.programTab=selected;render();q('.sp7-selector [data-program-tab="'+selected+'"]')?.focus()});qAll('[data-program-week]').forEach(b=>b.onclick=()=>{S.programWeek=Number(b.dataset.programWeek);render();q('[data-program-week="'+S.programWeek+'"]')?.focus()});qAll('[data-review]').forEach(b=>b.onclick=openReview);qAll('[data-weight]').forEach(b=>b.onclick=openWeight);const pick=q('#exercise-picker');if(pick)pick.onchange=()=>{S.exerciseSelected=pick.value;render()};}
   function showModal(title,inner,onSubmit,opts={}){
   const session=opts.kind==='session';
   const root=q('#modal-root');
