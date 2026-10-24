@@ -32,7 +32,7 @@ check('BRAND_AND_ICON',()=>{
   assert(client.includes('so9-challenge-graphic'));
   assert(client.includes("pencil:'<path"));
   assert(client.includes('so9-challenge-bike'));
-  assert(client.includes("B:'<circle cx=\"12\""));
+  assert(client.includes("B:'<path d=\"M12.409"));
   assert(client.includes("currentEntry?'Modifier mon retour':'Enregistrer mon retour'"));
 });
 check('EXERCISE_INSTRUCTIONS',()=>{
