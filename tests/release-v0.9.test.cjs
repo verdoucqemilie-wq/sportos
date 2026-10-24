@@ -40,7 +40,7 @@ try{
     assert(script.includes('MODE="${1:---audit-only}"'));
     assert(script.includes('--audit-only|--publish'));
     assert(script.includes('if [[ "$MODE" == "--audit-only" ]]'));
-    assert(script.indexOf('if [[ "$MODE" == "--audit-only" ]]')<script.indexOf('clasp push'));
+    assert(script.indexOf('if [[ "$MODE" == "--audit-only" ]]')<script.indexOf('\n  clasp push\n'));
     assert(script.includes('SPORTOS_V0_9_AUDIT=PASS'));
   });
   check('PRIVATE_PERSONAL_ONLY',()=>{
