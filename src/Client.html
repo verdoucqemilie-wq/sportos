@@ -510,7 +510,7 @@
   const heading=session?`
     <div class="so-session-heading-label">SPORTOS <span aria-hidden="true">/</span> JOURNAL D'ENTRAÎNEMENT</div>
     <div class="so-session-header-title"><span class="so-session-mobile-icon" aria-hidden="true">${sessionIcon}</span><h2 id="modal-title">${esc(title)}</h2></div>
-    <p id="so-session-description">Renseigne seulement ce que tu as réellement fait. Rien n’est enregistré avant validation.</p>`:
+    <p id="so-session-description">${opts.edit?'Relis ton retour enregistré, puis ajuste les champs nécessaires.':'Renseigne seulement ce que tu as réellement fait. Rien n’est enregistré avant validation.'}</p>`:
     `<h2 id="modal-title">${esc(title)}</h2>`;
   const rail=session?`<aside class="so-session-rail" aria-label="Résumé de la séance">
     <div class="so-session-rail-brand"><span class="so-session-rail-symbol" aria-hidden="true">${q('.v3-logo .v4-brand-mark')?.outerHTML||v3Icon('sparkle')}</span> SPORTOS <span> / TON JOURNAL</span></div>
@@ -526,7 +526,7 @@
   const footer=`<div class="modal-actions${session?' so-session-actions':''}">
     ${session?'<p id="so-save-error" class="so-save-error" role="alert" hidden></p>':''}
     <button class="btn ghost" type="button" id="modal-cancel">Annuler</button>
-    <button class="btn${session?' so-save-cta':''}" id="modal-submit" type="submit">${session?'Enregistrer mon retour':'Enregistrer'}${session?v3Icon('arrowRight'):''}</button>
+    <button class="btn${session?' so-save-cta':''}" id="modal-submit" type="submit">${session?(opts.edit?'Enregistrer les modifications':'Enregistrer mon retour'):'Enregistrer'}${session?v3Icon(opts.edit?'pencil':'arrowRight'):''}</button>
   </div>`;
   root.innerHTML=`<div class="modal-backdrop${session?' so-session-backdrop':''}" id="modal-backdrop"><div class="modal${session?' so-session-page':''}" role="dialog" aria-modal="true" aria-labelledby="modal-title" ${session?'aria-describedby="so-session-description"':''}>
     ${rail}<div class="${session?'so-session-main':'so-modal-main'}">
@@ -535,6 +535,7 @@
     </div></div></div>`;
   let dirty=false,closed=false;
   const form=q('#form-modal'),dialog=root.querySelector('[role="dialog"]');
+  if(opts.prefill){Object.entries(opts.prefill).forEach(([name,value])=>{const field=form.elements.namedItem(name);if(field&&value!==null&&value!==undefined)field.value=String(value);});}
   const updateProgress=()=>{
     if(!session)return;
     const item=q('#so-feedback-progress');
@@ -600,12 +601,12 @@
       await reload();
       const doneAfter=homeModel(S.data).done.length;
       toast(S.demo?'Retour simulé — aucune écriture dans ton Google Sheet.':session&&doneBefore<4&&doneAfter===4?
-        '🎉 Félicitations ! Tes quatre activités sont enregistrées. Place à la récupération !':'Ton retour de séance a bien été enregistré ✓');
+        '🎉 Félicitations ! Tes quatre activités sont enregistrées. Place à la récupération !':opts.edit?'Ton retour a bien été modifié ✓':'Ton retour de séance a bien été enregistré ✓');
     }catch(err){
       if(error){error.textContent='Impossible d’enregistrer : '+err.message;error.hidden=false;}
       else toast('Erreur : '+err.message);
       b.disabled=false;
-      b.innerHTML=session?'Enregistrer mon retour '+v3Icon('arrowRight'):'Réessayer';
+      b.innerHTML=session?(opts.edit?'Enregistrer les modifications '+v3Icon('pencil'):'Enregistrer mon retour '+v3Icon('arrowRight')):'Réessayer';
     }finally{S.loading=false;}
   };
 }
@@ -613,7 +614,7 @@
   const field=(label,name,opts={})=>`<div class="field"><label for="f-${esc(name)}">${esc(label)}</label><input class="input" id="f-${esc(name)}" name="${esc(name)}" type="${opts.type||'number'}" ${opts.min!==undefined?'min="'+opts.min+'"':''} ${opts.max!==undefined?'max="'+opts.max+'"':''} ${opts.step?'step="'+opts.step+'"':''} ${opts.placeholder?'placeholder="'+esc(opts.placeholder)+'"':''} ${opts.value!==undefined?'value="'+esc(opts.value)+'"':''} ${opts.required?'required':''}></div>`;
   const select=(label,name,options)=>`<div class="field"><label for="f-${esc(name)}">${esc(label)}</label><select class="input" name="${esc(name)}" id="f-${esc(name)}">${options.map(([v,t])=>`<option value="${esc(v)}">${esc(t)}</option>`).join('')}</select></div>`;
   const longtext=(label,name)=>`<div class="field"><label for="f-${esc(name)}">${esc(label)}</label><textarea class="input" name="${esc(name)}" id="f-${esc(name)}" rows="2" maxlength="500" placeholder="Ton ressenti, si tu le souhaites…"></textarea></div>`;
-  function openLog(type){if(type==='A'||type==='B')return strengthForm(type);return cardioForm(type)}
+  function openLog(type,recordId=null){if(type==='A'||type==='B')return strengthForm(type,recordId);return cardioForm(type,recordId)}
   function soEffortScale(){
   return `<div class="so-effort-scale" role="group" aria-label="Raccourcis pour l'effort ressenti">
     ${[[2,'Très facile'],[4,'Facile'],[6,'Modéré'],[8,'Soutenu'],[10,'Très dur']].map(([v,label])=>`<button type="button" data-effort-value="${v}" aria-pressed="false"><strong>${v}</strong><small>${label}</small></button>`).join('')}
