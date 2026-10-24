@@ -650,7 +650,7 @@
       ${field('Commentaire personnel','note'+i,{type:'text',placeholder:'Technique, sensations, adaptation…'})}
     </div><input type="hidden" name="id${i}" value="${esc(x.Exercice_ID)}">
   </details>`).join('');
-  const html=`<section class="so-feedback-section" aria-labelledby="so-basics">
+  const html=`${so9Prep(type,'warm')}<section class="so-feedback-section" aria-labelledby="so-basics">
     <div class="so-feedback-section-title"><span class="so-section-number">01</span><div><p class="so-overline">TON ACTIVITÉ</p><h3 id="so-basics">Les repères</h3></div>${v3Icon('calendar')}</div>
     <div class="form-grid">${field('Date','date',{type:'date',value:S.data.today,required:true})}${field('Durée réelle (min)','duration',{min:0,max:240,step:1,placeholder:'Ex. 40'})}</div>
   </section>
@@ -670,7 +670,7 @@
   <section class="so-feedback-section" aria-labelledby="so-recap">
     <div class="so-feedback-section-title"><span class="so-section-number">04</span><div><p class="so-overline">POUR LA SUITE</p><h3 id="so-recap">Ton mot de la fin</h3></div>${v3Icon('note')}</div>
     ${longtext('Ton bilan de séance (facultatif)','note')}
-  </section>`;
+  </section>${so9Prep(type,'cool')}`;
   showModal((saved?'Modifier mon retour — ':'Retour de séance — ')+'Renforcement '+type,html,async f=>{
     const exercises=ex.map((x,i)=>{const read=k=>f.get(k+i)||'';return {
       id:read('id'),sets:read('sets'),reps:read('reps'),weight:read('weight'),seconds:read('seconds'),
@@ -685,7 +685,7 @@
   if(recordId&&!saved){toast('Ce retour historique n’est pas modifiable ici.');return;}
   const entryId=saved?saved.Cardio_ID:key(),isRun=type==='Course';
   const prefill=saved?{date:saved.Date,duration:saved['Durée min'],distance:saved['Distance km'],effort:saved['Effort 1-10'],pain:saved.Douleur,note:saved.Note,runSeconds:saved.Course_sec_bloc,walkSeconds:saved.Marche_sec_bloc,rounds:saved.Nb_blocs,elevationGain:saved['Dénivelé positif (m)'],averageSpeed:saved['Vitesse moyenne (km/h)']}:{};
-  const html=`<section class="so-feedback-section" aria-labelledby="so-basics">
+  const html=`${so9Prep(type,'warm')}<section class="so-feedback-section" aria-labelledby="so-basics">
     <div class="so-feedback-section-title"><span class="so-section-number">01</span><div><p class="so-overline">TON ACTIVITÉ</p><h3 id="so-basics">Les repères</h3></div>${v3Icon('clock')}</div>
     <div class="form-grid">${field('Date','date',{type:'date',value:S.data.today,required:true})}${field('Durée totale (min)','duration',{min:1,max:1440,step:1,required:true,placeholder:'Ex. 16'})}${field('Distance (km) · facultatif','distance',{min:0,max:600,step:.01,placeholder:'Si connue'})}</div>
      ${isRun?'<p class="so-section-desc">Course et marche comptent dans la durée totale.</p>':`<div class="so8-strava-fields"><div class="so8-strava-heading">${v3Icon('Vélo')} <div><strong>Les données de ta sortie</strong><span>À recopier depuis Strava, si disponibles · saisie manuelle</span></div></div><div class="form-grid">${field('Dénivelé positif (m)','elevationGain',{min:0,max:10000,step:1,placeholder:'Ex. 215'})}${field('Vitesse moyenne (km/h)','averageSpeed',{min:0,max:150,step:.01,placeholder:'Ex. 18,6'})}</div><p class="so-section-desc">Ces données facultatives ne sont pas calculées à partir de la distance et la durée.</p></div>`}
@@ -708,7 +708,7 @@
   <section class="so-feedback-section" aria-labelledby="so-recap">
     <div class="so-feedback-section-title"><span class="so-section-number">${isRun?'04':'03'}</span><div><p class="so-overline">POUR LA SUITE</p><h3 id="so-recap">Tes sensations</h3></div>${v3Icon('note')}</div>
     ${longtext('Un détail à retenir (facultatif)','note')}
-  </section>`;
+  </section>${so9Prep(type,'cool')}`;
   showModal(saved?'Modifier mon retour — '+(isRun?'Course':'Vélo'):(isRun?'Retour de course':'Retour de sortie vélo'),html,async f=>{
     const p={id:entryId,date:f.get('date'),type,duration:f.get('duration'),distance:f.get('distance'),effort:f.get('effort'),runSeconds:isRun?f.get('runSeconds'):'',walkSeconds:isRun?f.get('walkSeconds'):'',rounds:isRun?f.get('rounds'):'',pain:f.get('pain'),note:f.get('note'),elevationGain:isRun?'':f.get('elevationGain'),averageSpeed:isRun?'':f.get('averageSpeed'),planStep:isRun?'RUN-02':'BIKE-01'};
     if(Number(p.duration)<=0)throw Error('Renseigne la durée.');
