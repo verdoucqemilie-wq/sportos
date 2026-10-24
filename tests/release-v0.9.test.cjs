@@ -16,7 +16,7 @@ const populate=(version,alias=false)=>{clean();for(const file of FILES){
 try{
   check('SOURCE_PINNED',()=>{
     assert.equal(classify(path.join(root,'src'),root),'V0_9');
-    assert.equal(VERSIONS[0].ref,'955c3d03c80258b65c396b7c727ca1ee02556c5f');
+    assert.equal(VERSIONS[0].ref,'a2ef04920403afe1531143f900dbca88986b3995');
     assert.deepEqual(VERSIONS.map(v=>v.label),['V0_9','V0_8','V0_7']);
   });
   for(const version of VERSIONS){
@@ -65,7 +65,7 @@ try{
     assert(script.includes('git status --porcelain'));
   });
   check('SIGNED_CODE_NO_SCHEMA_MIGRATION',()=>{
-    assert(script.includes('955c3d03c80258b65c396b7c727ca1ee02556c5f:src/Code.gs'));
+    assert(script.includes('a2ef04920403afe1531143f900dbca88986b3995:src/Code.gs'));
     assert(script.includes('classify-deployed-v0.9.cjs'));
     assert(!/SpreadsheetApp\.|sheets\.(?:update|append|batchUpdate)/.test(script));
     assert(script.includes('npm run verify'));
