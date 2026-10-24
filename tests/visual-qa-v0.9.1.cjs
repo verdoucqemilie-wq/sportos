@@ -20,7 +20,7 @@ const file=path.join(__dirname,'../docs/apercu-sportos-v0.9.html');
     assert.match(await page.locator('.so91-outlook h2').innerText(),/Semaine 2/i);
     assert.equal(await page.locator('.so91-preview').count(),4);
     const weeks=await page.locator('.so91-week').allInnerTexts();
-    assert(weeks[2].includes('À venir')&&weeks[3].includes('À venir'),'S3 and S4 conditional');
+    assert(weeks[2].toLocaleLowerCase('fr-FR').includes('à venir')&&weeks[3].toLocaleLowerCase('fr-FR').includes('à venir'),'S3 and S4 conditional: '+weeks.join(' | '));
     assert.match(await page.locator('.so91-conditional').innerText(),/recalculées après tes prochains retours/);
     await page.locator('.sp7-selector [data-program-tab="Vélo"]').click();
     assert.match(await page.locator('.so8-adaptation').innerText(),/conservée|récupération|confort/);
