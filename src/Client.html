@@ -76,7 +76,8 @@
   // SportOS v0.6 — family of line icons, common stroke and optical size.
   const shapes={
     A:'<path d="m6.5 6.5 11 11M4.5 8.5l4-4m11 15 4-4M2.5 10.5l8-8m3 19 8-8"/>',
-    B:'<circle cx="12" cy="4.5" r="2"/><path d="M8 21v-5.1l2.1-4.1 1.9 1.5 2.1-1.5 2 4.1V21M10.1 11.8l-3.2 1.3-1.6-3.5M14.1 11.8l3 1.3 1.6-3.5"/><path d="M3.4 7.3v5m-1.7-4h3.4m15.5-1v5m-1.7-4h3.4"/>',
+    // Lucide biceps-flexed (ISC) — official icon, not hand-drawn.
+    B:'<path d="M12.409 13.017A5 5 0 0 1 22 15c0 3.866-4 7-9 7-4.077 0-8.153-.82-10.371-2.462-.426-.316-.631-.832-.62-1.362C2.118 12.723 2.627 2 10 2a3 3 0 0 1 3 3 2 2 0 0 1-2 2c-1.105 0-1.64-.444-2-1"/><path d="M15 14a5 5 0 0 0-7.584 2"/><path d="M9.964 6.825C8.019 7.977 9.5 13 8 15"/>',
     Course:'<circle cx="14.7" cy="4.4" r="2"/><path d="m12.4 8.2-2.6 4.5 4.5 2.6 1.4 5.4M12.4 8.2l3.5 3.1 4.2.1m-9-2.3-4 1.2-2 3.3m7.3 1.5-3.2 4.3-4.4 1.2"/>',
     Vélo:'<circle cx="5" cy="17.1" r="3.5"/><circle cx="19" cy="17.1" r="3.5"/><path d="M5 17.1 9.5 9h5L19 17.1H5m4.5-8.1 4.3 8.1M8 6.8h3.3m2.8.1H17l2 3.3m-5.3-3.3-.7 2.1m.8 8.1 2.1 2.2"/>',
     sparkle:'<path d="m12 2 2.6 7.4L22 12l-7.4 2.6L12 22l-2.6-7.4L2 12l7.4-2.6L12 2Z"/>',
@@ -135,10 +136,10 @@
 
   // V0.8: every Monday, calculate suggestions from actual completed sessions last week.
   // Never mutate historical logs or the base programme in Google Sheets.
-  function so8WeeklyPlan(type){
-    const model=homeModel(S.data),date=new Date(model.start+'T12:00:00Z');
+  function so8WeeklyPlan(type, weekStart){
+    const model=homeModel(S.data),date=new Date((weekStart||model.start)+'T12:00:00Z');
     date.setUTCDate(date.getUTCDate()-7);
-    const from=date.toISOString().slice(0,10),to=model.start;
+    const from=date.toISOString().slice(0,10),to=weekStart||model.start;
     const rows=[...(S.data.sessions||[]),...(S.data.cardio||[])]
       .filter(x=>x&&x.Type===type&&x.Statut==='Terminée'&&x.Date>=from&&x.Date<to)
       .sort((a,b)=>b.Date.localeCompare(a.Date));
@@ -233,7 +234,7 @@
     const nextName=first?meta[first].name:'Semaine accomplie';
     const hero=`<section class="v3-feature" aria-labelledby="v3-feature-title">
       <div class="v3-feature-copy">
-        <p class="v3-feature-kicker"><span class="so-home-kicker-icon" aria-hidden="true">${v3Icon(first||'check')}</span>${first?'À LA UNE / PROCHAINE SÉANCE PROPOSÉE':'TA SEMAINE / OBJECTIFS RÉALISÉS'}</p>
+        ${first?'<p class="v3-feature-kicker"><span class="so-home-kicker-icon" aria-hidden="true">'+v3Icon(first)+'</span>À LA UNE / PROCHAINE SÉANCE PROPOSÉE</p>':''}
         <h2 id="v3-feature-title">${first?'BOUGE.<br>À TA FAÇON.':'BRAVO.<br>ET RESPIRE.'}</h2>
         <p class="v3-feature-intro">${first?'Ton prochain mouvement':'Tu as réalisé les quatre activités proposées'}</p>
         <div class="v3-feature-workout"><span class="so-feature-sport-icon" aria-hidden="true">${v3Icon(first||'check')}</span>${esc(nextName)}${first?'<span>'+esc(meta[first].subtitle)+'</span>':''}</div>
@@ -320,6 +321,45 @@
       <div class="v3-fineprint">DEPUIS LE DÉBUT : ${vm.totals.strength} RENFORCEMENT${vm.totals.strength>1?'S':''} · ${vm.totals.cardio} SORTIE${vm.totals.cardio>1?'S':''} CARDIO. <button type="button" data-nav-go="progress">HISTORIQUE COMPLET ${v3Icon('arrow')}</button></div>
     </div>`;
   }
+
+  // V0.9.1 — dated training cycles. Only recorded sessions can confirm a week.
+  // Future weeks are read-only proposals and are recalculated on each refresh.
+  const so91Types=['A','B','Course','Vélo'];
+  function so91Monday(iso){
+    const d=new Date(iso+'T12:00:00Z');d.setUTCDate(d.getUTCDate()-(d.getUTCDay()+6)%7);
+    return d.toISOString().slice(0,10);
+  }
+  function so91AddDays(iso,count){
+    const d=new Date(iso+'T12:00:00Z');d.setUTCDate(d.getUTCDate()+count);
+    return d.toISOString().slice(0,10);
+  }
+  function so91Entries(start,end){
+    return [...(S.data.sessions||[]),...(S.data.cardio||[])].filter(x=>x&&x.Statut==='Terminée'&&
+      so91Types.includes(x.Type)&&/^\d{4}-\d{2}-\d{2}$/.test(x.Date||'')&&
+      x.Date>=start&&x.Date<end);
+  }
+  function so91Cycle(){
+    const today=homeModel(S.data);
+    const dated=[...(S.data.sessions||[]),...(S.data.cardio||[])]
+      .filter(x=>x&&x.Statut==='Terminée'&&so91Types.includes(x.Type)&&/^\d{4}-\d{2}-\d{2}$/.test(x.Date||''))
+      .map(x=>x.Date).sort();
+    const anchor=so91Monday(dated[0]||today.start);
+    const current=Math.max(0,Math.floor((Date.parse(today.start+'T12:00:00Z')-Date.parse(anchor+'T12:00:00Z'))/604800000));
+    const count=Math.min(16,Math.max(4,current+3));
+    const weeks=Array.from({length:count},(_,index)=>{
+      const start=so91AddDays(anchor,index*7),end=so91AddDays(start,7);
+      const rows=so91Entries(start,end);
+      const done=so91Types.filter(type=>rows.some(x=>x.Type===type));
+      const isCurrent=start===today.start,hasEnded=end<=today.today,upcoming=start>today.today;
+      const status=done.length===4?'Accomplie':hasEnded?'Passée':isCurrent?'En cours':'À venir';
+      return {index,start,end,rows,done,isCurrent,upcoming,status};
+    });
+    const todayDone=weeks[current]?.done.length===4;
+    const defaultIndex=Math.min(weeks.length-1,current+(todayDone?1:0));
+    const selected=Number.isInteger(S.programWeek)&&S.programWeek>=0&&S.programWeek<weeks.length?S.programWeek:defaultIndex;
+    return {weeks,selected,week:weeks[selected],current,anchor};
+  }
+
   function program(){
   const types=['A','B','Course','Vélo'],type=types.includes(S.programTab)?S.programTab:'A';
   const strength=type==='A'||type==='B',running=type==='Course',cycling=type==='Vélo';
@@ -408,7 +448,7 @@
           <button type="button" class="sp7-primary" data-log="${esc(type)}" ${currentEntry?`data-edit-id="${esc(currentEntry.Seance_ID||currentEntry.Cardio_ID)}"`:''}>${currentEntry?'Modifier mon retour':'Enregistrer mon retour'} ${v3Icon(currentEntry?'pencil':'arrowRight')}</button>
           <button type="button" class="sp7-secondary" data-nav-go="progress">Voir mon évolution ${v3Icon('arrow')}</button>
         </div>
-        <div class="sp7-hero-disclaimer">Le bouton ouvre ton journal : il ne démarre pas de chronomètre.</div>
+        
       </div>
       <div class="sp7-hero-panel" aria-label="Repères de la séance">
         <div class="sp7-hero-symbol" aria-hidden="true">${v3Icon(type)}</div>
