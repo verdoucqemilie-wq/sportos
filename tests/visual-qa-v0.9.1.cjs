@@ -35,7 +35,7 @@ const file=path.join(__dirname,'../docs/apercu-sportos-v0.9.html');
     assert.equal(await page.locator('.v3-feature-kicker').count(),0,'Redundant completed-week kicker');
     await page.locator('[data-nav="program"]').first().click();
     assert.equal(await page.locator('.sp7-hero-disclaimer').count(),0,'Unhelpful timer microcopy');
-    assert.match(await page.locator('.sp7-switch-icon .so-icon-B').first().getAttribute('outerHTML').catch(()=>''),/./);
+    assert.match(await page.locator('.sp7-switch-icon .so-icon-B').first().evaluate(el=>el.outerHTML),/M12\\.409/);
     for(const width of [320,375,390,768,1024,1280,1920]){
       await page.setViewportSize({width,height:850});
       const [scroll,viewport]=await page.evaluate(()=>[document.documentElement.scrollWidth,innerWidth]);
