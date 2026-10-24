@@ -42,7 +42,7 @@ const html=path.join(__dirname,'../docs/apercu-sportos-v0.9.html');
     assert.equal(await page.locator('#f-seconds4').inputValue(),'40','Existing gainage hold not prefilled');
     assert.equal(await page.locator('#f-note').inputValue(),'Démonstration : séance fictive et modifiable.');
     assert.equal(await page.locator('.so9-journal-guide').count(),5);
-    assert.equal(await page.locator('.so9-routine').count(),2);
+    assert.equal(await page.locator('.so-session-page .so9-routine').count(),2);
     const original=await page.evaluate(()=>window.__SPORTOS_FIXTURE__.sessions.filter(x=>x.Seance_ID==='SODEMO20261023B').length);
     await page.locator('#f-note').fill('Mon retour a été modifié dans l’aperçu.');
     await page.locator('#modal-submit').click();
