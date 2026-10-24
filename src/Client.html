@@ -48,6 +48,28 @@
   }
   function currentWeekActivities(){const week=W();const iso=d=>{if(!/^\d{4}-\d\d-\d\d$/.test(d||''))return false;const x=new Date(d+'T12:00:00'),t=new Date(S.data.today+'T12:00:00');return x.getTime()>=t.getTime()-((t.getDay()+6)%7)*86400000&&x.getTime()<t.getTime()+(7-(t.getDay()+6)%7)*86400000};return [...S.data.sessions.filter(r=>r.Statut==='Terminée'&&iso(r.Date)),...S.data.cardio.filter(r=>r.Statut==='Terminée'&&iso(r.Date))];}
   const activeEx=type=>S.data.exercises.filter(x=>x.Séance===type&&x.Statut==='Proposé — S2'&&x.Version==='V1-S2').sort((a,b)=>toNum(a.Ordre)-toNum(b.Ordre));
+  const so9Movement={
+    'EX-SQUAT':['Pieds écartés à largeur confortable, haltère devant la poitrine.','Plie les genoux en reculant les hanches, puis repousse dans les pieds.','Garde le dos neutre.'],
+    'EX-HIP':['Allongée sur le dos, genoux pliés et pieds au sol.','Monte le bassin en serrant les fessiers, sans cambrer.','Marque une pause puis redescends lentement.'],
+    'EX-FENTE':['Debout, recule un pied et conserve le buste droit.','Fléchis les jambes sans forcer, puis pousse dans la jambe avant.','Utilise un appui si besoin.'],
+    'EX-ROW-APPUI':['Prends appui sur un support stable, dos neutre.','Ramène doucement le coude vers la hanche, puis redescends.','Teste sans charge et arrête si douleur lombaire.'],
+    'EX-DEADBUG':['Sur le dos, genoux à 90 degrés et bras levés.','Allonge un bras et la jambe opposée sans creuser le dos.','Alterne lentement.'],
+    'EX-PONT-1J':['Sur le dos, un pied au sol et une jambe allongée.','Pousse dans le talon pour soulever le bassin sans tourner les hanches.','Reviens à deux jambes si gênée.'],
+    'EX-POMPE':['Mains sur un support solide, corps aligné.','Fléchis les coudes, approche la poitrine puis repousse.','Engage les abdominaux.'],
+    'EX-EPAULE':['Haltères au niveau des épaules, poignets neutres.','Pousse au-dessus de la tête et redescends lentement.','Ne cambre pas le dos.'],
+    'EX-CURL':['Coudes proches du buste, épaules détendues.','Plie les bras sans élan et redescends lentement.','Garde les poignets stables.'],
+    'EX-GAINAGE':['Avant-bras au sol, épaules, bassin et jambes alignés.','Engage abdominaux et fessiers en respirant.','Arrête si la posture se dégrade ou si douleur.']
+  };
+  const so9Routine={
+    A:{warm:['2 min de marche sur place','1 min de mobilité des hanches et chevilles','2 min de squats et ponts fessiers sans charge'],cool:['Respiration calme 30 s','Mobilisation douce des fessiers, 20 s par côté','Étirement léger des mollets, 20 s par côté']},
+    B:{warm:['2 min de marche et mobilisation des épaules','1 min de cercles de bras','2 min de ponts fessiers et poussées contre un mur'],cool:['Respiration calme 30 s','Ouverture douce de la poitrine, 20 s par côté','Étirement léger des bras, 20 s par côté']},
+    Course:{warm:['5 min de marche active','Mobilité des chevilles et hanches avant les intervalles'],cool:['5 min de marche tranquille','Étirement doux des mollets et des cuisses, 20 s par côté']},
+    'Vélo':{warm:['5 min de pédalage facile','Contrôle des freins, pneus, casque et selle'],cool:['5 min de pédalage souple','Étirement léger des mollets, cuisses et hanches, 20 s par côté']}
+  };
+  function so9Prep(type,phase){const r=so9Routine[type];if(!r)return '';const warm=phase==='warm',steps=warm?r.warm:r.cool;
+    return `<section class="so9-routine" aria-label="${warm?'Échauffement':'Étirements'}"><span class="so9-routine-icon">${v3Icon(warm?'clock':'heart')}</span><div><span class="sp7-overline">${warm?'AVANT LA SÉANCE':'APRÈS LA SÉANCE'}</span><h3>${warm?'Échauffement progressif':'Retour au calme et étirements doux'}</h3><ol>${steps.map(x=>`<li>${esc(x)}</li>`).join('')}</ol><p>Adapte à tes sensations et évite tout mouvement douloureux.</p></div></section>`;
+  }
+  function so9Editable(type,record){return !!(record&&record.Type===type&&record.Statut==='Terminée'&&/^WebApp/.test(String(record.Origine||'')));}
   function activityInfo(type){if(type==='A')return {icon:'◈',name:'Fessiers & full body',sub:'5 exercices · 35–45 min',cls:''};if(type==='B')return {icon:'✦',name:'Haut du corps & fessiers',sub:'5 exercices · 35–45 min',cls:''};if(type==='Vélo')return {icon:'♢',name:'Sortie vélo',sub:'Reprise 25–40 min',cls:'bike'};return {icon:'↗',name:'Course / marche',sub:'Prochain objectif : 8 × 1 min / 1 min',cls:'run'};}
   function activityRow(type){const x=activityInfo(type),all=currentWeekActivities(),done=all.some(s=>(type==='A'||type==='B')?s.Type===type:s.Type===type);return `<div class="activity"><div class="activity-icon ${x.cls}">${x.icon}</div><div class="activity-info"><strong>${x.name}</strong><p>${x.sub}</p></div><div class="activity-actions">${done?badge('✓ Réalisée'):badge('À faire','gray')}<button class="tiny-link" data-log="${type}">${done?'Ajouter une séance':'Enregistrer ↗'}</button></div></div>`}
   function v3Icon(type){
@@ -338,6 +360,7 @@
         <summary class="sp7-ex-heading"><span class="sp7-ex-index">${String(i+1).padStart(2,'0')}</span><span class="sp7-ex-titles"><strong>${esc(x.Nom)}</strong><small>${esc(x.Séries||'—')} séries · ${target}</small></span><span class="sp7-ex-chevron" aria-hidden="true">${v3Icon('arrowRight')}</span></summary>
         <div class="sp7-ex-body">
           <div class="sp7-ex-metrics"><div><span>OBJECTIF DE SÉRIES</span><strong>${esc(x.Séries||'—')}</strong></div><div><span>RÉPÉTITIONS / TENUE</span><strong>${target}</strong></div><div><span>CHARGE INDICATIVE</span><strong>${x['Charge_kg indicative']!==''&&x['Charge_kg indicative']!=null?esc(x['Charge_kg indicative'])+' kg':'À adapter'}</strong></div></div>
+          ${so9Movement[x.Exercice_ID]?`<div class="so9-movement"><strong>Comment réaliser ce mouvement</strong><ol>${so9Movement[x.Exercice_ID].map(step=>`<li>${esc(step)}</li>`).join('')}</ol></div>`:''}
           ${adaptive&&adaptive.increase?`<p class="so8-ex-increase">${v3Icon('sparkle')} <span>${esc(adaptive.explanation)}</span></p>`:''}
            ${x.Tempo?`<p class="sp7-ex-coach">${v3Icon('gauge')} <span><b>Repère technique :</b> ${esc(x.Tempo)}</span></p>`:''}
           ${safety?`<p class="sp7-ex-safety ${risky?'is-caution':''}">${v3Icon('shield')} <span>${esc(safety)}${risky?' — ne pas forcer si une douleur apparaît.':''}</span></p>`:''}
@@ -398,7 +421,9 @@
       <section class="sp7-core" aria-labelledby="sp7-plan-title">
         <div class="sp7-section-heading"><div><span class="sp7-overline">01 / TON PLAN</span><h2 id="sp7-plan-title">${esc(sectionTitle)}<span class="sp7-title-dot">.</span></h2><p>${esc(sectionLede)}</p></div><span class="sp7-count">${strength?`${ex.length} MOUVEMENTS`:`${steps.length} JALONS`}</span></div>
         ${weeklyCard}
-         ${details}
+        ${so9Prep(type,'warm')}
+        ${details}
+        ${so9Prep(type,'cool')}
         <div class="sp7-notice">${v3Icon('shield')} <span>${esc(foot)}</span></div>
       </section>
       <aside class="sp7-aside" aria-label="Objectifs et accompagnement">
