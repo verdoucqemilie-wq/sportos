@@ -1471,6 +1471,10 @@ body.sport-v4 .so-session-page .input{max-width:100%;min-width:0}
 
 
 /* SportOS V0.9.1 — week-first coaching timeline */
+.so91-actual{background:#e8f1dc;border-left:3px solid #69894c;border-radius:9px;padding:12px 14px;margin:0 0 14px;color:#284228}
+.so91-actual strong{font-size:.8rem;display:block}
+.so91-actual p{margin:5px 0 0;font-size:.82rem;line-height:1.5}
+
 .so91-cycle,.so91-outlook{min-width:0;margin:20px 0 22px;}
 .so91-cycle-head{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;margin-bottom:16px}
 .so91-cycle-head h2,.so91-outlook h2{font-size:clamp(1.35rem,2.1vw,2rem);letter-spacing:-.045em;line-height:1.12;margin:8px 0 0;font-weight:850}
@@ -1999,12 +2003,19 @@ window.__SPORTOS_FIXTURE__={"version":"0.1.0","today":"2026-10-23","profile":[{"
   const details=strength?`<div class="sp7-ex-list">
     ${ex.length?ex.map((x,i)=>{
       const adaptive=weeklyPlan.exercise[x.Exercice_ID];
+      const previousLog=selectedEntry&&(S.data.logs||[]).find(log=>log.Seance_ID===selectedEntry.Seance_ID&&log.Exercice_ID===x.Exercice_ID);
+      const logValues=previousLog?[previousLog['Séries réelles']!==''&&previousLog['Séries réelles']!=null?previousLog['Séries réelles']+' séries':'',
+        (!x.Temps_s&&previousLog['Rép réelles']!==''&&previousLog['Rép réelles']!=null)?previousLog['Rép réelles']+' répétitions':'',
+        x.Temps_s&&previousLog['Maintien réel s']!==''&&previousLog['Maintien réel s']!=null?previousLog['Maintien réel s']+' s de maintien':'',
+        previousLog.Difficulté?'ressenti '+previousLog.Difficulté.toLowerCase():'',
+        previousLog.Douleur==='Oui'?'douleur signalée':''].filter(Boolean):[];
        const target=x.Rép_min&&x.Rép_max?esc(x.Rép_min)+(x.Rép_min===x.Rép_max&&!(adaptive&&adaptive.increase)?'':'–'+esc(adaptive?adaptive.target:x.Rép_max))+' répétitions':x.Temps_s?esc(adaptive?adaptive.target:x.Temps_s)+' secondes':'selon sensation';
       const safety=String(x.Sécurité||'');
       const risky=/douleur|retirer|lombaire/i.test(safety)&&/retirer|arrêter|éviter|douleur/i.test(safety);
       return `<details class="sp7-ex" ${i===0?'open':''}>
         <summary class="sp7-ex-heading"><span class="sp7-ex-index">${String(i+1).padStart(2,'0')}</span><span class="sp7-ex-titles"><strong>${esc(x.Nom)}</strong><small>${esc(x.Séries||'—')} séries · ${target}</small></span><span class="sp7-ex-chevron" aria-hidden="true">${v3Icon('arrowRight')}</span></summary>
         <div class="sp7-ex-body">
+          ${previousLog?`<div class="so91-actual"><strong>Ton retour enregistré · semaine ${week.index+1}</strong><p>${logValues.length?esc(logValues.join(' · ')):'Retour présent, valeurs détaillées non renseignées.'}</p></div>`:''}
           <div class="sp7-ex-metrics"><div><span>OBJECTIF DE SÉRIES</span><strong>${esc(x.Séries||'—')}</strong></div><div><span>RÉPÉTITIONS / TENUE</span><strong>${target}</strong></div><div><span>CHARGE INDICATIVE</span><strong>${x['Charge_kg indicative']!==''&&x['Charge_kg indicative']!=null?esc(x['Charge_kg indicative'])+' kg':'À adapter'}</strong></div></div>
           ${so9Movement[x.Exercice_ID]?`<div class="so9-movement"><strong>Comment réaliser ce mouvement</strong><ol>${so9Movement[x.Exercice_ID].map(step=>`<li>${esc(step)}</li>`).join('')}</ol></div>`:''}
           ${adaptive&&adaptive.increase?`<p class="so8-ex-increase">${v3Icon('sparkle')} <span>${esc(adaptive.explanation)}</span></p>`:''}
@@ -2024,7 +2035,7 @@ window.__SPORTOS_FIXTURE__={"version":"0.1.0","today":"2026-10-23","profile":[{"
       </div>`;
     }).join(''):`<p class="sp7-empty">Ton calendrier n’est pas encore renseigné. Les sorties sont à construire progressivement.</p>`}</div>`;
   const sectionTitle=strength?'Tes mouvements':running?'Ta progression course':'Les étapes du défi';
-  const sectionLede=strength?`${ex.length} exercices proposés · programme V1-S2. Ouvre un mouvement pour voir les repères.`:running?'Les séances proposées restent adaptables selon tes sensations et ta récupération.':'Les jalons sont indicatifs : l’itinéraire et les durées restent à définir.';
+  const sectionLede=strength?`${ex.length} mouvements du programme actuel. ${selectedEntry?'Tes chiffres réellement enregistrés apparaissent dans chaque mouvement disponible.':'Les objectifs pourront être réajustés selon tes prochains retours.'}`:running?'Les séances proposées restent adaptables selon tes sensations et ta récupération.':'Les jalons sont indicatifs : l’itinéraire et les durées restent à définir.';
   const weeklyCard=`<section class="so8-adaptation" aria-labelledby="so8-adapt-title">
      <span class="so8-adapt-icon" aria-hidden="true">${v3Icon('sparkle')}</span>
      <div class="so8-adapt-copy"><span class="sp7-overline">COACH / NOUVELLE SEMAINE</span>
