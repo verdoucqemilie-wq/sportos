@@ -59,7 +59,7 @@ assert.match(current,/so-icon-Course/,'Icône course absente');
 assert.match(current,/so-icon-route/,'Icône route vers Espiens absente');
 assert.match(current,/so-icon-sparkle/,'Icône coaching absente');
 assert.match(current,/so-icon-arrow/,'Flèches de navigation unifiées absentes');
-assert.match(current,/v3-challenge-title">Espiens/,'Titre du défi non harmonisé');
+assert.match(current,/v3-challenge-title">En route vers <em>Espiens\.<\/em>/,'Titre du défi vélo V0.9 absent');
 assert.ok(!current.includes('ESPIENS<span>'),'Ancien titre massif en capitales');
 assert.match(css,/so-home-reveal/,'Transition d’entrée absente');
 assert.match(css,/prefers-reduced-motion:reduce/,'Mode réduit absent');

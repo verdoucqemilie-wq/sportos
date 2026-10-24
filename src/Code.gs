@@ -176,11 +176,25 @@ function saveStrength(payload) {
     const logs = requireColumns_('05_Exercices_Log', ['Log_ID', 'Seance_ID', 'Exercice_ID', 'Exercice', 'Séries réelles', 'Rép réelles', 'Charge réelle kg', 'Maintien réel s', 'Difficulté', 'RIR', 'Douleur', 'Localisation', 'Note', 'Origine']);
     const sessions = requireColumns_('04_Seances', ['Seance_ID', 'Semaine', 'Date', 'Type', 'Statut', 'Durée prévue min', 'Durée réelle min', 'Effort global 1-10', 'Énergie avant', 'Énergie après', 'Notes', 'Origine']);
     // New optional timed-hold feedback is stored separately: RIR remains repetitions only.
+    const existingSessionRow = findRow_(sessions, id);
+    if (existingSessionRow) {
+      const prior = sessions.getRange(existingSessionRow, 1, 1, 12).getDisplayValues()[0];
+      if (prior[3] !== type || prior[4] !== 'Terminée' || !/^WebApp/.test(prior[11]))
+        throw Error('Modification refusée : ce retour historique ne provient pas de la WebApp');
+    }
     const holdColumn = optionalColumns_(logs, 15, ['Réserve tenue (s)'], items.some(x => x.secondsReserve !== ''));
     // Log IDs are stable. Retries overwrite the same records instead of duplicating them.
     items.forEach(x => {
       const values = [id + '_' + x.id, id, x.id, x.name,
         x.sets, x.reps, x.weight, x.seconds, x.difficulty, x.rir, x.pain, x.painWhere, x.note, 'WebApp'];
+      // Preserve legacy gainage entries formerly entered as repetitions or RIR.
+      // They must not be silently converted into seconds, nor erased by an edit.
+      const oldRow = existingSessionRow ? findRow_(logs, id + '_' + x.id) : 0;
+      if (x.isTimed && oldRow) {
+        const priorLog = logs.getRange(oldRow, 1, 1, 14).getValues()[0];
+        if (x.reps === '' && priorLog[5] !== '') values[5] = priorLog[5];
+        if (x.rir === '' && priorLog[9] !== '') values[9] = priorLog[9];
+      }
       if (holdColumn) values.push(x.secondsReserve);
       upsert_(logs, id + '_' + x.id, values);
     });
@@ -214,15 +228,27 @@ function saveCardio(payload) {
   }
   return withLock_(() => {
     const sheet = requireColumns_('06_Cardio', ['Cardio_ID', 'Semaine', 'Date', 'Type', 'Durée min', 'Distance km', 'Effort 1-10', 'Aisance respiratoire', 'Douleur', 'Note', 'Statut', 'Origine', 'ID_externe', 'Statut_import', 'Programme_ID', 'Date_import', 'Course_sec_bloc', 'Marche_sec_bloc', 'Nb_blocs', 'Course_totale_min', 'Marche_totale_min', 'Echauffement_reel_min', 'Retour_calme_reel_min', 'Séance_plan_ID']);
+    // Check edit rights BEFORE any optional header write, even for a failed edit.
+    const existingRow = findRow_(sheet, id);
+    const prior = existingRow ? sheet.getRange(existingRow, 1, 1, 24).getValues()[0] : null;
+    if (prior && (prior[3] !== payload.type || prior[10] !== 'Terminée' || !/^WebApp/.test(String(prior[11]))))
+      throw Error('Modification refusée : ce retour historique ne provient pas de la WebApp');
     const extended = optionalColumns_(sheet, 25,
       ['Dénivelé positif (m)', 'Vitesse moyenne (km/h)'], elevation !== '' || averageSpeed !== '');
-    const existing = !!findRow_(sheet, id);
+    const existing = !!prior;
+    // An edit changes only data exposed by the feedback form. Metadata and
+    // earlier recorded warmup/cooldown remain untouched unless explicitly supplied.
+    const warmup = payload.warmup == null || payload.warmup === ''
+      ? (prior ? prior[21] : '') : num_(payload.warmup, 0, 120, true);
+    const cooldown = payload.cooldown == null || payload.cooldown === ''
+      ? (prior ? prior[22] : '') : num_(payload.cooldown, 0, 120, true);
     const values = [id, weekOf_(date), date, payload.type, duration, distance,
-      rpe, str_(payload.breath, 100), yesNo_(payload.pain), str_(payload.note, 500),
-      'Terminée', 'WebApp', '', 'Non concerné', run ? 'P-COURSE-2026' : 'P-VELO-ESPIENS-2027',
-      today_(), secsRun, secsWalk, rounds, runTotal, walkTotal,
-      num_(payload.warmup, 0, 120, true), num_(payload.cooldown, 0, 120, true),
-      str_(payload.planStep, 30)];
+      rpe, prior ? prior[7] : str_(payload.breath, 100), yesNo_(payload.pain), str_(payload.note, 500),
+      'Terminée', prior ? prior[11] : 'WebApp', prior ? prior[12] : '',
+      prior ? prior[13] : 'Non concerné',
+      prior ? prior[14] : (run ? 'P-COURSE-2026' : 'P-VELO-ESPIENS-2027'),
+      prior ? prior[15] : today_(), secsRun, secsWalk, rounds, runTotal, walkTotal,
+      warmup, cooldown, prior ? prior[23] : str_(payload.planStep, 30)];
     if (extended) values.push(elevation, averageSpeed);
     upsert_(sheet, id, values);
     return { ok: true, id, updated: existing };

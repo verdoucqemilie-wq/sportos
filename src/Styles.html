@@ -1360,4 +1360,106 @@ body.sport-v4 .so8-strava-fields .so-section-desc{margin:8px 0 0}
 }
 @media(prefers-reduced-motion:reduce){body.sport-v4 .so8-celebration *,body.sport-v4 .so8-adaptation *{animation:none!important;transition:none!important}}
 
+
+/* SportOS v0.9 — guided sessions and fluid layouts, desktop/tablet/mobile */
+body.sport-v4 .v3-dashboard,
+body.sport-v4 .sp7-page,
+body.sport-v4 .sp7-core,
+body.sport-v4 .sp7-aside,
+body.sport-v4 .v3-leading>*,body.sport-v4 .v3-insights>*{min-width:0}
+body.sport-v4 .v3-challenge{
+  isolation:isolate;background:linear-gradient(145deg,#e5f0e0 0%,#d5e7d9 100%);
+  min-height:315px;border:1px solid #c9dbc8;
+}
+body.sport-v4 .v3-challenge::after{width:245px;height:245px;right:-115px;top:12px;opacity:.45}
+body.sport-v4 .v3-challenge-top{position:relative;z-index:1}
+body.sport-v4 .v3-challenge-label{display:inline-flex;gap:9px;align-items:center}
+body.sport-v4 .v3-challenge-label .so-icon{height:23px;width:23px;stroke-width:2;color:#356e48}
+body.sport-v4 .so9-challenge-graphic{
+  display:flex;align-items:center;gap:9px;margin-top:22px;
+  font-size:10px;letter-spacing:.1em;font-weight:850;color:#356747;min-width:0;
+}
+body.sport-v4 .so9-challenge-graphic>span:not(.so9-challenge-line):not(.so9-challenge-bike){white-space:nowrap}
+body.sport-v4 .so9-challenge-line{display:block;flex:1;height:2px;min-width:12px;max-width:130px;
+  background:repeating-linear-gradient(90deg,#86ac84 0 8px,transparent 8px 13px)}
+body.sport-v4 .so9-challenge-bike{height:40px;width:40px;flex:0 0 40px;display:grid;place-items:center;
+  background:#d4f17b;color:#1e4b2e;border-radius:50%;border:1px solid #a7c276}
+body.sport-v4 .so9-challenge-bike .so-icon{width:25px;height:25px}
+body.sport-v4 .v3-challenge h2{font-size:clamp(31px,3.2vw,48px);line-height:1.04;
+  letter-spacing:-.04em;margin:14px 0 8px;text-wrap:balance;max-width:520px}
+body.sport-v4 .v3-challenge h2 em{font-style:normal;color:#487d50}
+body.sport-v4 .v3-challenge>p{max-width:365px;line-height:1.6;margin:5px 0 20px}
+body.sport-v4 .v3-challenge-foot{flex-wrap:wrap;align-items:center;gap:14px}
+body.sport-v4 .v3-challenge-foot button{min-height:44px;padding:8px 0;white-space:normal;
+  text-align:left;display:inline-flex;gap:8px;align-items:center}
+body.sport-v4 .v3-challenge-foot button .so-icon{width:16px;height:16px}
+body.sport-v4 .v3-challenge button:focus-visible{outline:3px solid #578d52;outline-offset:3px}
+body.sport-v4 .so9-routine{display:grid;grid-template-columns:45px minmax(0,1fr);gap:16px;
+  padding:21px 22px;margin:17px 0;border:1px solid #d8e3d5;background:#f1f5ed;
+  border-radius:15px;min-width:0}
+body.sport-v4 .so9-routine-icon{width:45px;height:45px;border-radius:12px;
+  display:grid;place-items:center;background:#d4f17b;color:#244a32}
+body.sport-v4 .so9-routine-icon .so-icon{width:23px;height:23px}
+body.sport-v4 .so9-routine h3{color:#21422b;font-weight:800;font-size:clamp(17px,1.8vw,22px);
+  letter-spacing:-.025em;line-height:1.2;margin:7px 0 12px}
+body.sport-v4 .so9-routine ol{margin:0;padding-left:20px;display:grid;gap:8px;
+  color:#34513e;font-size:13px;line-height:1.55}
+body.sport-v4 .so9-routine p{margin:12px 0 0;color:#647568;font-size:11px;line-height:1.5}
+body.sport-v4 .so9-movement{background:#f0f5ec;padding:16px 18px;border-radius:11px;
+  border-left:3px solid #8dbd64;margin-bottom:15px}
+body.sport-v4 .so9-movement strong,body.sport-v4 .so9-journal-guide strong{font-size:13px;color:#234730}
+body.sport-v4 .so9-movement ol{padding-left:20px;margin:10px 0 0;display:grid;gap:8px;
+  line-height:1.55;color:#425a46;font-size:12px}
+body.sport-v4 .so9-journal-guide{padding:14px;border-radius:10px;background:#eff5eb;margin-bottom:13px}
+body.sport-v4 .so9-journal-guide p{color:#4c624d;font-size:12px;line-height:1.65;margin:7px 0 0}
+body.sport-v4 .sp7-primary .so-icon-pencil{stroke-width:2}
+body.sport-v4 .so-session-fields>*{min-width:0}
+body.sport-v4 .so-session-page .field{min-width:0}
+body.sport-v4 .so-session-page .input{max-width:100%;min-width:0}
+@container sportmain (max-width:1150px){
+  body.sport-v4 .v3-leading{grid-template-columns:minmax(0,1fr)}
+  body.sport-v4 .v3-insights{grid-template-columns:repeat(2,minmax(0,1fr))}
+  body.sport-v4 .sp7-page .sp7-layout{grid-template-columns:minmax(0,1fr)}
+}
+@container sportmain (max-width:720px){
+  body.sport-v4 .v3-insights{grid-template-columns:minmax(0,1fr)}
+  body.sport-v4 .v3-challenge{min-height:285px}
+  body.sport-v4 .sp7-page .sp7-hero-panel{gap:8px}
+  body.sport-v4 .sp7-page .sp7-hero-panel>div>strong{overflow-wrap:anywhere}
+}
+@media(min-width:768px) and (max-width:1180px){
+  body.sport-v4 #content{padding-inline:clamp(16px,3vw,30px)}
+  body.sport-v4 .sp7-selector{gap:7px}
+  body.sport-v4 .sp7-switch{gap:8px;padding-inline:10px}
+  body.sport-v4 .sp7-switch-icon{width:38px;height:38px}
+  body.sport-v4 .sp7-switch-main strong{font-size:12px}
+}
+@media(max-width:767px){
+  body.sport-v4 #content{width:100%;padding-inline:clamp(12px,3.8vw,22px)}
+  body.sport-v4 .v3-dashboard,body.sport-v4 .sp7-page{width:100%;max-width:100%;overflow-wrap:break-word}
+  body.sport-v4 .sp7-page .sp7-hero h2{overflow-wrap:anywhere}
+  body.sport-v4 .so-session-actions .so-save-cta{min-width:0;white-space:normal}
+  body.sport-v4 .so9-routine{padding:17px;grid-template-columns:36px minmax(0,1fr);gap:11px}
+  body.sport-v4 .so9-routine-icon{width:36px;height:36px;border-radius:10px}
+  body.sport-v4 .so9-routine-icon .so-icon{width:20px;height:20px}
+  body.sport-v4 .so9-routine ol{font-size:12px}
+}
+@media(max-width:420px){
+  body.sport-v4 .sp7-page .sp7-switch-state{display:none}
+  body.sport-v4 .v3-challenge{padding:19px 16px}
+  body.sport-v4 .v3-challenge h2{font-size:clamp(29px,8.6vw,37px)}
+  body.sport-v4 .so9-challenge-graphic{font-size:9px;gap:7px}
+  body.sport-v4 .so9-challenge-bike{width:36px;height:36px;flex-basis:36px}
+  body.sport-v4 .so9-challenge-bike .so-icon{width:21px;height:21px}
+  body.sport-v4 .so-session-actions .ghost{flex:0 0 auto}
+  body.sport-v4 .so-session-actions .so-save-cta{flex:1 1 150px}
+}
+@media(max-height:680px) and (min-width:768px){
+  body.sport-v4 .so-session-page{max-height:calc(100dvh - 18px)}
+  body.sport-v4 .v3-sidebar-inner{overflow-y:auto}
+}
+@media(prefers-reduced-motion:reduce){
+  body.sport-v4 .so9-routine *,body.sport-v4 .so9-movement *,body.sport-v4 .so9-challenge-graphic *{transition:none!important;animation:none!important}
+}
+
 </style>

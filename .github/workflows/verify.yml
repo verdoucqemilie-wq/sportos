@@ -27,6 +27,7 @@ jobs:
           bash -n scripts/publier-v0.6-cloud-shell.sh
           bash -n scripts/publier-v0.7-cloud-shell.sh
           bash -n scripts/publier-v0.8-cloud-shell.sh
+          bash -n scripts/publier-v0.9-cloud-shell.sh
           bash -n scripts/diagnostiquer-deploiement-v0.7.sh
           bash -n scripts/auditer-deploiement-8-sportos.sh
 
@@ -53,6 +54,7 @@ jobs:
           node tests/feedback-qa.cjs
           node tests/program-qa-v0.7.cjs
           node tests/feedback-qa-v0.8.cjs
+          node tests/visual-qa-v0.9.cjs
       - name: Joindre les captures d'écran
         if: always()
         uses: actions/upload-artifact@v4
@@ -65,4 +67,5 @@ jobs:
             artifacts/v0.6/*.png
             artifacts/v0.7/*.png
             artifacts/v0.8/*.png
+            artifacts/v0.9/*.png
           if-no-files-found: ignore
