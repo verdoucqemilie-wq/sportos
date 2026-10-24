@@ -31,7 +31,7 @@ git fetch origin main
 [[ "$(git rev-parse HEAD)" == "$(git rev-parse origin/main)" ]] || {
   echo "STOP : le code local doit être égal à GitHub main." >&2; exit 1;
 }
-[[ "$(git show 5a8a3acfed1eb37aff492911fba7aa494609acea:src/Code.gs | sha256sum | cut -d' ' -f1)" == "$(sha256sum src/Code.gs | cut -d' ' -f1)" ]] || {
+[[ "$(git show 81b9056038013b0b48431e25873a2f664b1bb707:src/Code.gs | sha256sum | cut -d' ' -f1)" == "$(sha256sum src/Code.gs | cut -d' ' -f1)" ]] || {
   echo "STOP : le moteur SportOS ne correspond pas à la version V0.9.1 approuvée." >&2; exit 1;
 }
 if [[ ! -f .clasp.json && -f "$HOME/.config/sportos/.clasp.json" ]]; then
