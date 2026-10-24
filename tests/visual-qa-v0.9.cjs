@@ -22,7 +22,7 @@ const html=path.join(__dirname,'../docs/apercu-sportos-v0.9.html');
   };
   try{
     await page.goto(pathToFileURL(html).href,{waitUntil:'load'});
-    await page.locator('.sp7-page').waitFor();
+    await page.locator('.sp7-page').waitFor({timeout:8000}).catch(async e=>{throw Error('SportOS page did not render: '+errors.join(' | ')+' / '+(await page.locator('#content').innerText().catch(()=>'<no content>')).slice(0,300)+' / '+e.message)});
     for(const type of ['A','B','Course','Vélo']){
       await choose(type);
       assert.equal(await page.locator('.so9-routine').count(),2,type+': missing warmup or cooldown');
