@@ -23,11 +23,11 @@
   });}
   function demoWrite(method,p){if(method==='saveStrength'){
       const existing=S.data.sessions.find(x=>x.Seance_ID===p.id);
-      const session={Seance_ID:p.id,Semaine:W(),Date:p.date,Type:p.type,Statut:'Terminée','Durée réelle min':p.duration,'Effort global 1-10':p.effort,Notes:p.note,Origine:'Aperçu'};
+      const session={Seance_ID:p.id,Semaine:W(),Date:p.date,Type:p.type,Statut:'Terminée','Durée réelle min':p.duration,'Effort global 1-10':p.effort,Notes:p.note,Origine:'WebApp (aperçu fictif)'};
       if(existing)Object.assign(existing,session);else S.data.sessions.push(session);
       p.exercises.forEach(x=>{const id=p.id+'_'+x.id;let r=S.data.logs.find(v=>v.Log_ID===id);const row={Log_ID:id,Seance_ID:p.id,Exercice_ID:x.id,Exercice:S.data.exercises.find(y=>y.Exercice_ID===x.id)?.Nom||x.id,'Séries réelles':x.sets,'Rép réelles':x.reps,'Charge réelle kg':x.weight,'Maintien réel s':x.seconds,Difficulté:x.difficulty,RIR:x.rir,'Réserve tenue (s)':x.secondsReserve||'',Douleur:x.pain,Localisation:x.painWhere,Note:x.note};if(r)Object.assign(r,row);else S.data.logs.push(row);});
     }else if(method==='saveCardio'){
-      let existing=S.data.cardio.find(x=>x.Cardio_ID===p.id);const row={Cardio_ID:p.id,Semaine:W(),Date:p.date,Type:p.type,'Durée min':p.duration,'Distance km':p.distance,'Effort 1-10':p.effort,'Douleur':p.pain,Note:p.note,Statut:'Terminée',Programme_ID:p.type==='Course'?'P-COURSE-2026':'P-VELO-ESPIENS-2027','Course_sec_bloc':p.runSeconds,'Marche_sec_bloc':p.walkSeconds,'Nb_blocs':p.rounds,'Dénivelé positif (m)':p.elevationGain||'','Vitesse moyenne (km/h)':p.averageSpeed||''};if(existing)Object.assign(existing,row);else S.data.cardio.push(row);
+      let existing=S.data.cardio.find(x=>x.Cardio_ID===p.id);const row={Cardio_ID:p.id,Semaine:W(),Date:p.date,Type:p.type,'Durée min':p.duration,'Distance km':p.distance,'Effort 1-10':p.effort,'Douleur':p.pain,Note:p.note,Statut:'Terminée',Programme_ID:p.type==='Course'?'P-COURSE-2026':'P-VELO-ESPIENS-2027','Course_sec_bloc':p.runSeconds,'Marche_sec_bloc':p.walkSeconds,'Nb_blocs':p.rounds,'Dénivelé positif (m)':p.elevationGain||'','Vitesse moyenne (km/h)':p.averageSpeed||'',Origine:'WebApp (aperçu fictif)'};if(existing)Object.assign(existing,row);else S.data.cardio.push(row);
     }else if(method==='saveReview')S.data.reviews.push({Bilan_ID:'BIL-APP-'+p.week,Semaine:p.week,'Fatigue 1-10':p.fatigue,'Sommeil 1-10':p.sleep,'Satisfaction 1-10':p.satisfaction,'Retour libre':p.note,'Semaine suivante':p.next});
     else if(method==='saveMeasurement')S.data.measurements.push({Mesure_ID:p.id,Date_mesure:p.date,Poids_kg:p.weight});
     return {ok:true};
