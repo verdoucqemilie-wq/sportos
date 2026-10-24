@@ -59,5 +59,38 @@ test('Refuser métriques vélo hors limites sans aucune écriture',()=>{
  assert.throws(()=>ctx.saveCardio({id:'TEST-BIKE-HIGH-02',type:'Vélo',date:'2026-10-19',duration:40,effort:3,averageSpeed:200}),/Valeur/);
  assert.equal(tables['06_Cardio'].length,before);
 });
+test('V0.9 cardio edit preserves recorded metadata and warmup',()=>{
+ const p={id:'TEST-BIKE-META-001',type:'Vélo',date:'2026-10-19',duration:40,effort:4,
+   distance:10.5,pain:'Non',note:'Avant correction',planStep:'BIKE-03'};
+ ctx.saveCardio(p);
+ const row=tables['06_Cardio'].find(x=>x[0]===p.id);
+ row[7]='Respiration facile'; row[12]=''; row[13]='Non concerné';
+ row[15]='2026-10-19'; row[21]=7; row[22]=5; row[23]='BIKE-03';
+ ctx.saveCardio({...p,note:'Après correction',effort:3,duration:41,planStep:'BIKE-01'});
+ const fresh=tables['06_Cardio'].filter(x=>x[0]===p.id);
+ assert.equal(fresh.length,1,'Une modification ne doit pas créer un doublon');
+ assert.equal(fresh[0][9],'Après correction');
+ assert.equal(fresh[0][6],3);
+ assert.equal(fresh[0][7],'Respiration facile','Aisance respiratoire conservée');
+ assert.equal(fresh[0][15],'2026-10-19','Date d’import initiale conservée');
+ assert.equal(fresh[0][21],7,'Ancien échauffement conservé');
+ assert.equal(fresh[0][22],5,'Ancien retour au calme conservé');
+ assert.equal(fresh[0][23],'BIKE-03','Étape initiale conservée');
+});
+test('V0.9 unauthorized edit cannot create optional headers',()=>{
+ const sheet=tables['06_Cardio'],headers=sheet[0];
+ const row=sheet.find(x=>x[0]==='TEST-BIKE-META-001');
+ const origin=row[11],h24=headers[24],h25=headers[25];
+ try{
+  row[11]='Déclaré'; headers[24]='';headers[25]='';
+  const before=JSON.stringify(row);
+  assert.throws(()=>ctx.saveCardio({
+    id:'TEST-BIKE-META-001',type:'Vélo',date:'2026-10-19',duration:45,
+    effort:3,elevationGain:175,averageSpeed:15
+  }),/Modification refusée/);
+  assert.equal(headers[24],'');assert.equal(headers[25],'');
+  assert.equal(JSON.stringify(row),before,'Pas de mutation d’une séance non modifiable');
+ }finally{row[11]=origin;headers[24]=h24;headers[25]=h25}
+});
 test('Save measurement',()=>{ctx.saveMeasurement({id:'TEST-MEASURE-001',date:'2026-10-19',weight:53.1});assert.equal(tables['12_Mesures'].length,3)});
 console.log(report.join('\n'));
