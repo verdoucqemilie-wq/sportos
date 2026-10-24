@@ -680,8 +680,11 @@
     await server('saveStrength',{id:entryId,date:f.get('date'),type,duration:f.get('duration'),effort:f.get('effort'),energyAfter:f.get('energyAfter'),note:f.get('note'),exercises});
   },{kind:'session',type,edit:!!saved,prefill,activity:'Renforcement '+type,caption:type==='A'?'Fessiers & full body':'Haut du corps & fessiers',steps:['Les repères','Tes sensations','Tes exercices','Ton retour']});
 }
-  function cardioForm(type){
-  const entryId=key(),isRun=type==='Course';
+  function cardioForm(type,recordId){
+  const saved=recordId?(S.data.cardio||[]).find(row=>row.Cardio_ID===recordId&&so9Editable(type,row)):null;
+  if(recordId&&!saved){toast('Ce retour historique n’est pas modifiable ici.');return;}
+  const entryId=saved?saved.Cardio_ID:key(),isRun=type==='Course';
+  const prefill=saved?{date:saved.Date,duration:saved['Durée min'],distance:saved['Distance km'],effort:saved['Effort 1-10'],pain:saved.Douleur,note:saved.Note,runSeconds:saved.Course_sec_bloc,walkSeconds:saved.Marche_sec_bloc,rounds:saved.Nb_blocs,elevationGain:saved['Dénivelé positif (m)'],averageSpeed:saved['Vitesse moyenne (km/h)']}:{};
   const html=`<section class="so-feedback-section" aria-labelledby="so-basics">
     <div class="so-feedback-section-title"><span class="so-section-number">01</span><div><p class="so-overline">TON ACTIVITÉ</p><h3 id="so-basics">Les repères</h3></div>${v3Icon('clock')}</div>
     <div class="form-grid">${field('Date','date',{type:'date',value:S.data.today,required:true})}${field('Durée totale (min)','duration',{min:1,max:1440,step:1,required:true,placeholder:'Ex. 16'})}${field('Distance (km) · facultatif','distance',{min:0,max:600,step:.01,placeholder:'Si connue'})}</div>
@@ -706,11 +709,11 @@
     <div class="so-feedback-section-title"><span class="so-section-number">${isRun?'04':'03'}</span><div><p class="so-overline">POUR LA SUITE</p><h3 id="so-recap">Tes sensations</h3></div>${v3Icon('note')}</div>
     ${longtext('Un détail à retenir (facultatif)','note')}
   </section>`;
-  showModal(isRun?'Retour de course':'Retour de sortie vélo',html,async f=>{
+  showModal(saved?'Modifier mon retour — '+(isRun?'Course':'Vélo'):(isRun?'Retour de course':'Retour de sortie vélo'),html,async f=>{
     const p={id:entryId,date:f.get('date'),type,duration:f.get('duration'),distance:f.get('distance'),effort:f.get('effort'),runSeconds:isRun?f.get('runSeconds'):'',walkSeconds:isRun?f.get('walkSeconds'):'',rounds:isRun?f.get('rounds'):'',pain:f.get('pain'),note:f.get('note'),elevationGain:isRun?'':f.get('elevationGain'),averageSpeed:isRun?'':f.get('averageSpeed'),planStep:isRun?'RUN-02':'BIKE-01'};
     if(Number(p.duration)<=0)throw Error('Renseigne la durée.');
     await server('saveCardio',p);
-  },{kind:'session',type,activity:isRun?'Course & marche':'Sortie vélo',caption:isRun?'Avancer progressivement, sans chercher la vitesse.':'Construire ton endurance pour Espiens.',steps:isRun?['Les repères','Ton ressenti','Course et marche','Ton retour']:['Les repères','Ton ressenti','Ton retour']});
+  },{kind:'session',type,edit:!!saved,prefill,activity:isRun?'Course & marche':'Sortie vélo',caption:isRun?'Avancer progressivement, sans chercher la vitesse.':'Construire ton endurance pour Espiens.',steps:isRun?['Les repères','Ton ressenti','Course et marche','Ton retour']:['Les repères','Ton ressenti','Ton retour']});
 }
   function openReview(){const html=`<p class="small">Ce bilan sert à comprendre ton ressenti, pas à juger tes résultats.</p><div class="form-grid">${field('Fatigue /10','fatigue',{min:0,max:10,step:1,placeholder:'5'})}${field('Sommeil /10','sleep',{min:0,max:10,step:1,placeholder:'7'})}${field('Satisfaction /10','satisfaction',{min:0,max:10,step:1,placeholder:'8'})}</div>${longtext('Ce qui a bien fonctionné','note')}${longtext('Pour la semaine prochaine','next')}`;showModal('Mon bilan hebdomadaire',html,async f=>server('saveReview',{week:W(),fatigue:f.get('fatigue'),sleep:f.get('sleep'),satisfaction:f.get('satisfaction'),note:f.get('note'),next:f.get('next')}));}
   function openWeight(){const entryId=key();const html=`<p class="small">Mesure complètement facultative. Aucune obligation de te peser.</p>${field('Date de mesure','date',{type:'date',value:S.data.today,required:true})}${field('Poids en kg','weight',{min:20,max:250,step:.1,required:true,placeholder:'53'})}${longtext('Note facultative','note')}`;showModal('Ajouter une mesure',html,async f=>server('saveMeasurement',{id:entryId,date:f.get('date'),weight:f.get('weight'),note:f.get('note')}));}
