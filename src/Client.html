@@ -579,7 +579,17 @@
     document.addEventListener('keydown',onKey);
     q('#v3-quick-close').focus();
   }
-  function bind(){qAll('#content [data-quick-log]').forEach(b=>b.onclick=openQuickLog);qAll('[data-nav-go]').forEach(b=>b.onclick=()=>navigate(b.dataset.navGo));qAll('[data-open-program]').forEach(b=>b.onclick=()=>{S.programTab=b.dataset.openProgram;navigate('program')});qAll('[data-log]').forEach(b=>b.onclick=()=>openLog(b.dataset.log,b.dataset.editId||null));qAll('[data-program-tab]').forEach(b=>b.onclick=()=>{const selected=b.dataset.programTab;S.programTab=selected;render();q('.sp7-selector [data-program-tab="'+selected+'"]')?.focus()});qAll('[data-program-week]').forEach(b=>b.onclick=()=>{S.programWeek=Number(b.dataset.programWeek);render();q('[data-program-week="'+S.programWeek+'"]')?.focus()});qAll('[data-review]').forEach(b=>b.onclick=openReview);qAll('[data-weight]').forEach(b=>b.onclick=openWeight);const pick=q('#exercise-picker');if(pick)pick.onchange=()=>{S.exerciseSelected=pick.value;render()};}
+  function bind(){qAll('#content [data-quick-log]').forEach(b=>b.onclick=openQuickLog);qAll('[data-nav-go]').forEach(b=>b.onclick=()=>navigate(b.dataset.navGo));qAll('[data-open-program]').forEach(b=>b.onclick=()=>{S.programTab=b.dataset.openProgram;navigate('program')});qAll('[data-log]').forEach(b=>b.onclick=()=>openLog(b.dataset.log,b.dataset.editId||null));qAll('[data-program-tab]').forEach(b=>b.onclick=()=>{const selected=b.dataset.programTab;S.programTab=selected;render();q('.sp7-selector [data-program-tab="'+selected+'"]')?.focus()});qAll('[data-program-week]').forEach(b=>b.onclick=()=>{
+    const next=Number(b.dataset.programWeek);
+    if(S.programWeek===next)return;
+    const rail=q('.so91-week-rail'),left=rail?rail.scrollLeft:0,scrollTop=window.scrollY;
+    S.programWeek=next;
+    render();
+    const replacement=q('.so91-week-rail');if(replacement)replacement.scrollLeft=left;
+    q('[data-program-week="'+next+'"]')?.focus({preventScroll:true});
+    // Never jump to the top when only the selected week changes.
+    if(window.scrollY!==scrollTop)window.scrollTo({top:scrollTop,behavior:'instant'});
+  });qAll('[data-review]').forEach(b=>b.onclick=openReview);qAll('[data-weight]').forEach(b=>b.onclick=openWeight);const pick=q('#exercise-picker');if(pick)pick.onchange=()=>{S.exerciseSelected=pick.value;render()};}
   function showModal(title,inner,onSubmit,opts={}){
   const session=opts.kind==='session';
   const root=q('#modal-root');
