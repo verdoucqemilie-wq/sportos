@@ -29,6 +29,7 @@ jobs:
           bash -n scripts/publier-v0.8-cloud-shell.sh
           bash -n scripts/publier-v0.9-cloud-shell.sh
           bash -n scripts/publier-v0.9.1-cloud-shell.sh
+          bash -n scripts/publier-v0.9.2-cloud-shell.sh
           bash -n scripts/diagnostiquer-deploiement-v0.7.sh
           bash -n scripts/auditer-deploiement-8-sportos.sh
 
@@ -71,4 +72,5 @@ jobs:
             artifacts/v0.8/*.png
             artifacts/v0.9/*.png
             artifacts/v0.9.1/*.png
+            artifacts/v0.9.2/*.png
           if-no-files-found: ignore
