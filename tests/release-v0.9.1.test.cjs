@@ -9,7 +9,7 @@ const populate=(v,alias=false)=>{for(const f of fs.readdirSync(tmp))fs.rmSync(pa
   fs.writeFileSync(path.join(tmp,alias&&name==='Code.gs'?'Code.js':name),cp.execFileSync('git',['show',v.ref+':src/'+name],{cwd:root,maxBuffer:6e6}));
 };
 try{
-  test('PINNED_SOURCE',()=>{assert.equal(classify(path.join(root,'src'),root),'V0_9_1');assert.equal(VERSIONS[0].ref,'31a9dde8803171b3de053e8933f8297ff25c3993')});
+  test('PINNED_SOURCE',()=>{assert.notEqual(classify(path.join(root,'src'),root),'V0_9_1','New version must not masquerade as old immutable V0.9.1');assert.equal(VERSIONS[0].ref,'31a9dde8803171b3de053e8933f8297ff25c3993')});
   for(const v of VERSIONS){
     test(v.label,()=>{populate(v);assert.equal(classify(tmp,root),v.label)});
     test(v.label+'_CODE_JS',()=>{populate(v,true);assert.equal(classify(tmp,root),v.label)});
