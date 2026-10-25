@@ -457,52 +457,38 @@
   </section>`;
   const previousStart=so91AddDays(week.start,-7);
   const previous=so91Entries(previousStart,week.start);
-  const previews=types.map(t=>{
-    const item=catalog[t],record=week.rows.find(x=>x.Type===t);
-    const plan=so8WeeklyPlan(t,week.start),older=previous.find(x=>x.Type===t);
-    let statement=record?'Retour enregistré · '+niceDate(record.Date):
-      older?(plan.proposed?plan.proposed+'. '+plan.reason:plan.reason):
-      week.index>0?'À confirmer après ton prochain retour.':'Référence de départ · à adapter.';
-    const state=record?'Réalisée':older?'Adaptée':'Conditionnelle';
-    return `<button type="button" class="so91-preview ${t===type?'is-active':''}" data-program-tab="${esc(t)}" aria-pressed="${t===type}">
-      <span class="so91-preview-icon" aria-hidden="true">${v3Icon(t)}</span>
-      <span class="so91-preview-copy"><strong>${esc(item.name)}</strong><small>${esc(state)} · ${esc(statement)}</small></span>
-      ${v3Icon('arrowRight')}
-    </button>`;
-  }).join('');
-  const prevCount=types.filter(t=>previous.some(x=>x.Type===t)).length;
-  const weekLead=week.index===0?
-    'Ta première semaine datée sert de référence. Tu peux consulter les retours enregistrés sans les modifier depuis cette vue.':
-    prevCount===4?'Les quatre activités de la semaine précédente sont disponibles : chaque proposition ci-dessous tient compte de son retour.':
-    prevCount?'Les retours disponibles servent de repères. Les activités sans données restent conditionnelles.':
-    'Pas encore de retours datés pour la semaine précédente : le programme n’augmente pas automatiquement.';
-  const outlook=`<section class="so91-outlook" aria-labelledby="so91-outlook-title">
-    <div class="so91-outlook-head"><div><span class="sp7-overline">${week.upcoming?'APERÇU CONDITIONNEL':week.done.length===4?'SEMAINE ACCOMPLIE':'PLAN DE LA SEMAINE'}</span><h2 id="so91-outlook-title">Semaine ${week.index+1} · ${esc(week.status.toLowerCase())}</h2><p>${esc(weekLead)}</p></div><div class="so91-outlook-progress"><strong>${week.done.length}<small>/4</small></strong><span>ACTIVITÉS RÉALISÉES</span></div></div>
-    <div class="so91-preview-grid">${previews}</div>
-    ${week.upcoming?'<p class="so91-conditional">'+v3Icon('shield')+' Les semaines à venir sont des prévisions : elles seront recalculées après tes prochains retours. Aucun objectif futur n’est validé à l’avance.</p>':''}
-  </section>`;
+  // Stable, low-emphasis achievement — independent from the week being viewed.
+  const latestCompleted=cycle.weeks.filter(w=>w.done.length===4).slice(-1)[0]||null;
+  const completionNotice=latestCompleted?`<div class="so92-milestone" role="status">
+    <span class="so92-milestone-icon" aria-hidden="true">${v3Icon('check')}</span>
+    <span>Bien joué : <strong>semaine ${latestCompleted.index+1}</strong> terminée, <strong>4 activités réalisées</strong>.</span>
+  </div>`:'';
+  const weekContext=`<p class="so92-week-context" aria-label="Semaine sélectionnée">
+    SEMAINE ${week.index+1} <span aria-hidden="true">·</span> ${esc(rangeLabel(week))}
+    <span aria-hidden="true">·</span> ${week.upcoming?'APERÇU CONDITIONNEL':week.done.length===4?'4 ACTIVITÉS RÉALISÉES':week.isCurrent?'EN COURS':'HISTORIQUE'}
+  </p>`;
   const coach=strength?'Privilégie la maîtrise du geste et une récupération suffisante. Une charge indicative n’est jamais une consigne de performance.':running?'Répéter la séance précédente est un progrès si elle est bien tolérée. Augmente seulement quand tu te sens prête.':'Commence par des sorties faciles. La distance vers Espiens et les deux journées consécutives seront évaluées à partir de tes sorties réelles.';
   const foot=strength?'Chaque exercice est une proposition, pas une performance à atteindre.':running?'Les intervalles sont des propositions : ton compte rendu décrira uniquement ce que tu as réalisé.':'Aucune distance, durée de trajet ou sortie réalisée n’est supposée.';
   return `<div class="sp7-page">
     <header class="sp7-head">
       <div class="sp7-eyebrow"><span class="sp7-dot"></span> TRAINING SYSTEM / PROGRAMME</div>
-      <div class="sp7-head-row"><div><h1>Construis <em>ton élan.</em></h1><p>Deux séances de renforcement, une reprise de la course et un défi vélo. Un programme qui s’adapte à tes sensations.</p></div>
+      <div class="sp7-head-row"><div><h1>Ton <em>programme.</em></h1><p>Quatre activités, des objectifs ajustés à tes retours.</p></div>
       <div class="sp7-head-stat" aria-label="${all.done.length} activités différentes réalisées cette semaine sur quatre"><strong>${all.done.length}<span>/04</span></strong><small>TYPES D’ACTIVITÉS<br>RÉALISÉS CETTE SEMAINE</small></div></div>
     </header>
-    ${isCurrentWeek?so8CompletionBanner():''}
+    ${completionNotice}
     ${weekNav}
-    ${outlook}
-     <nav class="sp7-selector" aria-label="Choisir une activité sportive">${types.map(item).join('')}</nav>
+    <nav class="sp7-selector" aria-label="Choisir une activité sportive">${types.map(item).join('')}</nav>
     <section class="sp7-hero sp7-hero-${current.tone}" aria-labelledby="sp7-hero-title">
       <div class="sp7-hero-primary">
+        ${weekContext}
         <div class="sp7-hero-brow"><span class="sp7-hero-tag">${esc(current.group)}</span><span>${completed?'✓ RÉALISÉE SUR CETTE SEMAINE':week.upcoming?'APERÇU À VENIR':'SÉANCE PROPOSÉE'}</span></div>
         <span class="sp7-hero-sport" aria-hidden="true">${v3Icon(type)}</span>
         <h2 id="sp7-hero-title">${esc(current.title)}</h2>
-        <p>${esc(current.subtitle)}</p>
+        <p class="so92-hero-lede">${esc(current.subtitle)}</p>
         <div class="sp7-hero-actions">
           ${canWriteFeedback?`<button type="button" class="sp7-primary" data-log="${esc(type)}" ${currentEntry?`data-edit-id="${esc(currentEntry.Seance_ID||currentEntry.Cardio_ID)}"`:''}>${currentEntry?'Modifier mon retour':'Enregistrer mon retour'} ${v3Icon(currentEntry?'pencil':'arrowRight')}</button>`:
   `<button type="button" class="sp7-primary" data-nav-go="progress">${selectedEntry?'Voir mon historique':'Consulter mes progrès'} ${v3Icon('arrowRight')}</button>`}
-          <button type="button" class="sp7-secondary" data-nav-go="progress">Voir mon évolution ${v3Icon('arrow')}</button>
+          ${canWriteFeedback?'<button type="button" class="sp7-secondary" data-nav-go="progress">Voir mon évolution '+v3Icon('arrow')+'</button>':''}
         </div>
         
       </div>
