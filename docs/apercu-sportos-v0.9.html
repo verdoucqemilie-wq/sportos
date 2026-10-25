@@ -1527,6 +1527,99 @@ body.sport-v4 .so-session-page .input{max-width:100%;min-width:0}
   .so91-outlook-progress>span{max-width:85px;margin:0}
 }
 @media(prefers-reduced-motion:reduce){.so91-week{transition:none}.so91-week:hover{transform:none}}
+
+
+/* SportOS V0.9.2 — calmer desktop density, single activity navigation and stable week switch.
+   Scoped to Programme; no global dashboard or journal sizing changes. */
+body.sport-v4 .sp7-page{max-width:1270px;margin-inline:auto;}
+body.sport-v4 .sp7-page .sp7-head{margin-bottom:15px}
+body.sport-v4 .sp7-page .sp7-head-row{margin-top:9px;align-items:center;gap:22px}
+body.sport-v4 .sp7-page .sp7-head h1{font-size:clamp(29px,2.6vw,43px);line-height:1.12;margin:0 0 6px;letter-spacing:-.046em}
+body.sport-v4 .sp7-page .sp7-head-row p{font-size:13px;line-height:1.55;max-width:550px}
+body.sport-v4 .sp7-page .sp7-head-stat{padding:6px 0 6px 19px;gap:10px}
+body.sport-v4 .sp7-page .sp7-head-stat strong{font-size:32px}
+body.sport-v4 .sp7-page .sp7-head-stat small{font-size:9px;line-height:1.4}
+body.sport-v4 .sp7-page .so92-milestone{display:flex;align-items:center;gap:9px;min-height:37px;margin:0 0 14px;padding:8px 12px;color:#35593d;background:#edf4e8;border:1px solid #d7e5d1;border-radius:11px;font-size:12px;line-height:1.4}
+body.sport-v4 .sp7-page .so92-milestone strong{font-weight:800}
+body.sport-v4 .sp7-page .so92-milestone-icon{display:grid;place-items:center;width:21px;height:21px;background:#dceacb;border-radius:50%;flex:0 0 auto}
+body.sport-v4 .sp7-page .so92-milestone-icon .so-icon{width:14px;height:14px}
+body.sport-v4 .sp7-page .so91-cycle{margin:10px 0 13px}
+body.sport-v4 .sp7-page .so91-cycle-head{align-items:center;gap:10px;margin-bottom:9px}
+body.sport-v4 .sp7-page .so91-cycle-head h2{font-size:clamp(17px,1.65vw,22px);margin-top:4px;letter-spacing:-.027em;line-height:1.23}
+body.sport-v4 .sp7-page .so91-cycle-hint{font-size:11px;max-width:none}
+body.sport-v4 .sp7-page .so91-week-rail{gap:8px;padding:2px 2px 7px;min-height:93px;align-items:stretch;scrollbar-width:thin}
+body.sport-v4 .sp7-page .so91-week{min-width:125px;max-width:none;flex:1 0 136px;gap:3px;padding:11px 13px;border-radius:12px;min-height:83px;transition:background-color .13s ease,border-color .13s ease}
+body.sport-v4 .sp7-page .so91-week:hover{transform:none}
+body.sport-v4 .sp7-page .so91-week.is-selected{padding:10px 12px}
+body.sport-v4 .sp7-page .so91-week-top strong{font-size:21px;letter-spacing:-.045em}
+body.sport-v4 .sp7-page .so91-week small{font-size:10px;line-height:1.3}
+body.sport-v4 .sp7-page .so91-week-status{font-size:9px;line-height:1.35}
+body.sport-v4 .sp7-page .sp7-selector{gap:8px;margin:0 0 12px}
+body.sport-v4 .sp7-page .sp7-switch{min-height:61px;padding:10px;gap:10px;border-radius:11px}
+body.sport-v4 .sp7-page .sp7-switch-icon{width:36px;height:36px;border-radius:9px}
+body.sport-v4 .sp7-page .sp7-switch-icon .so-icon{width:21px;height:21px}
+body.sport-v4 .sp7-page .sp7-switch-main{gap:3px}
+body.sport-v4 .sp7-page .sp7-switch-main strong{font-size:12.5px}
+body.sport-v4 .sp7-page .sp7-switch-main small{font-size:9px}
+body.sport-v4 .sp7-page .sp7-hero{border-radius:15px;min-height:0}
+body.sport-v4 .sp7-page .sp7-hero-primary{padding:24px 27px 26px;display:flex;flex-direction:column;justify-content:center;align-items:flex-start}
+body.sport-v4 .sp7-page .so92-week-context{margin:0 0 13px;color:#c9e1bb;font-weight:780;font-size:10px;letter-spacing:.075em;line-height:1.6;overflow-wrap:anywhere}
+body.sport-v4 .sp7-page .sp7-hero-brow{gap:10px;line-height:1.35}
+body.sport-v4 .sp7-page .sp7-hero-tag{padding:6px 9px;border-radius:6px}
+body.sport-v4 .sp7-page .sp7-hero-sport{top:28px;right:24px}
+body.sport-v4 .sp7-page .sp7-hero-sport .so-icon{width:85px;height:85px}
+body.sport-v4 .sp7-page .sp7-hero h2{font-size:clamp(31px,3.25vw,45px);line-height:1.09;margin:15px 0 0;max-width:550px;letter-spacing:-.043em}
+body.sport-v4 .sp7-page .sp7-hero-primary>p.so92-hero-lede{font-size:14px;line-height:1.65;max-width:500px;margin:14px 0 0;color:#d6e4d6}
+body.sport-v4 .sp7-page .sp7-hero-actions{gap:9px;margin-top:19px}
+body.sport-v4 .sp7-page .sp7-hero-actions button{font-size:12px;min-height:40px;border-radius:8px}
+body.sport-v4 .sp7-page .sp7-primary{padding:10px 15px}
+body.sport-v4 .sp7-page .sp7-secondary{padding:10px 13px}
+body.sport-v4 .sp7-page .sp7-hero-symbol{display:none}
+body.sport-v4 .sp7-page .sp7-hero-panel{padding:18px 23px;justify-content:center}
+body.sport-v4 .sp7-page .sp7-hero-panel>div:not(.sp7-hero-symbol){padding:12px 0;gap:5px}
+body.sport-v4 .sp7-page .sp7-hero-panel>div>span{font-size:9px;line-height:1.4}
+body.sport-v4 .sp7-page .sp7-hero-panel>div>strong{font-size:13px;line-height:1.42}
+body.sport-v4 .sp7-page .sp7-layout{margin-top:24px;gap:20px}
+body.sport-v4 .sp7-page .sp7-section-heading{margin-bottom:14px}
+body.sport-v4 .sp7-page .sp7-section-heading h2{font-size:clamp(25px,2.2vw,32px);margin:5px 0 8px}
+body.sport-v4 .sp7-page .sp7-aside h3{font-size:clamp(20px,1.8vw,27px)}
+body.sport-v4 .sp7-page .sp7-aside{gap:11px}
+body.sport-v4 .sp7-page .sp7-goal-panel,
+body.sport-v4 .sp7-page .sp7-coach-panel{padding:19px 20px}
+body.sport-v4 .sp7-page .so8-adaptation{padding:16px 18px;margin-bottom:17px;gap:13px}
+body.sport-v4 .sp7-page .so8-adapt-icon{width:36px;height:36px;flex-basis:36px}
+body.sport-v4 .sp7-page .sp7-ex-heading{min-height:69px;padding:14px 16px}
+@container sportmain (max-width:1070px){
+ body.sport-v4 .sp7-page .sp7-layout{gap:16px}
+ body.sport-v4 .sp7-page .sp7-hero h2{font-size:clamp(30px,3.75vw,40px)}
+ body.sport-v4 .sp7-page .sp7-hero-primary{padding:22px}
+}
+@container sportmain (max-width:760px){
+ body.sport-v4 .sp7-page .sp7-head h1{font-size:clamp(28px,5vw,36px)}
+ body.sport-v4 .sp7-page .sp7-hero-panel{padding:14px 19px;gap:8px}
+ body.sport-v4 .sp7-page .sp7-hero h2{font-size:clamp(32px,6.2vw,42px);margin-top:14px}
+ body.sport-v4 .sp7-page .so91-week{flex:0 0 145px}
+ body.sport-v4 .sp7-page .so91-week-rail{min-height:90px}
+ body.sport-v4 .sp7-page .sp7-hero-primary>p.so92-hero-lede{margin-top:13px}
+}
+@container sportmain (max-width:470px){
+ body.sport-v4 .sp7-page .sp7-head-stat{padding:8px 0 0}
+ body.sport-v4 .sp7-page .so91-cycle-head{align-items:flex-start;flex-direction:column;gap:4px}
+ body.sport-v4 .sp7-page .so91-week{flex:0 0 138px}
+ body.sport-v4 .sp7-page .sp7-selector{gap:7px}
+ body.sport-v4 .sp7-page .sp7-switch{min-height:57px;padding:8px;gap:7px}
+ body.sport-v4 .sp7-page .sp7-switch-icon{width:32px;height:32px}
+ body.sport-v4 .sp7-page .sp7-switch-main strong{font-size:11px}
+ body.sport-v4 .sp7-page .sp7-hero-primary{padding:21px 19px 23px}
+ body.sport-v4 .sp7-page .sp7-hero-panel{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+ body.sport-v4 .sp7-page .sp7-hero-panel>div:not(.sp7-hero-symbol){padding:8px 0}
+ body.sport-v4 .sp7-page .sp7-hero-panel>div:last-child{grid-column:1/-1;border-top:1px solid #ffffff29}
+ body.sport-v4 .sp7-page .sp7-hero h2{font-size:33px}
+ body.sport-v4 .sp7-page .so92-week-context{font-size:9px}
+ body.sport-v4 .sp7-page .sp7-hero-actions{width:100%}
+ body.sport-v4 .sp7-page .sp7-hero-actions button{width:100%}
+}
+@media(prefers-reduced-motion:reduce){body.sport-v4 .sp7-page .so91-week{transition:none}}
 </style>
 
 
@@ -2064,52 +2157,38 @@ window.__SPORTOS_FIXTURE__={"version":"0.1.0","today":"2026-10-23","profile":[{"
   </section>`;
   const previousStart=so91AddDays(week.start,-7);
   const previous=so91Entries(previousStart,week.start);
-  const previews=types.map(t=>{
-    const item=catalog[t],record=week.rows.find(x=>x.Type===t);
-    const plan=so8WeeklyPlan(t,week.start),older=previous.find(x=>x.Type===t);
-    let statement=record?'Retour enregistré · '+niceDate(record.Date):
-      older?(plan.proposed?plan.proposed+'. '+plan.reason:plan.reason):
-      week.index>0?'À confirmer après ton prochain retour.':'Référence de départ · à adapter.';
-    const state=record?'Réalisée':older?'Adaptée':'Conditionnelle';
-    return `<button type="button" class="so91-preview ${t===type?'is-active':''}" data-program-tab="${esc(t)}" aria-pressed="${t===type}">
-      <span class="so91-preview-icon" aria-hidden="true">${v3Icon(t)}</span>
-      <span class="so91-preview-copy"><strong>${esc(item.name)}</strong><small>${esc(state)} · ${esc(statement)}</small></span>
-      ${v3Icon('arrowRight')}
-    </button>`;
-  }).join('');
-  const prevCount=types.filter(t=>previous.some(x=>x.Type===t)).length;
-  const weekLead=week.index===0?
-    'Ta première semaine datée sert de référence. Tu peux consulter les retours enregistrés sans les modifier depuis cette vue.':
-    prevCount===4?'Les quatre activités de la semaine précédente sont disponibles : chaque proposition ci-dessous tient compte de son retour.':
-    prevCount?'Les retours disponibles servent de repères. Les activités sans données restent conditionnelles.':
-    'Pas encore de retours datés pour la semaine précédente : le programme n’augmente pas automatiquement.';
-  const outlook=`<section class="so91-outlook" aria-labelledby="so91-outlook-title">
-    <div class="so91-outlook-head"><div><span class="sp7-overline">${week.upcoming?'APERÇU CONDITIONNEL':week.done.length===4?'SEMAINE ACCOMPLIE':'PLAN DE LA SEMAINE'}</span><h2 id="so91-outlook-title">Semaine ${week.index+1} · ${esc(week.status.toLowerCase())}</h2><p>${esc(weekLead)}</p></div><div class="so91-outlook-progress"><strong>${week.done.length}<small>/4</small></strong><span>ACTIVITÉS RÉALISÉES</span></div></div>
-    <div class="so91-preview-grid">${previews}</div>
-    ${week.upcoming?'<p class="so91-conditional">'+v3Icon('shield')+' Les semaines à venir sont des prévisions : elles seront recalculées après tes prochains retours. Aucun objectif futur n’est validé à l’avance.</p>':''}
-  </section>`;
+  // Stable, low-emphasis achievement — independent from the week being viewed.
+  const latestCompleted=cycle.weeks.filter(w=>w.done.length===4).slice(-1)[0]||null;
+  const completionNotice=latestCompleted?`<div class="so92-milestone" role="status">
+    <span class="so92-milestone-icon" aria-hidden="true">${v3Icon('check')}</span>
+    <span>Bien joué : <strong>semaine ${latestCompleted.index+1}</strong> terminée, <strong>4 activités réalisées</strong>.</span>
+  </div>`:'';
+  const weekContext=`<p class="so92-week-context" aria-label="Semaine sélectionnée">
+    SEMAINE ${week.index+1} <span aria-hidden="true">·</span> ${esc(rangeLabel(week))}
+    <span aria-hidden="true">·</span> ${week.upcoming?'APERÇU CONDITIONNEL':week.done.length===4?'4 ACTIVITÉS RÉALISÉES':week.isCurrent?'EN COURS':'HISTORIQUE'}
+  </p>`;
   const coach=strength?'Privilégie la maîtrise du geste et une récupération suffisante. Une charge indicative n’est jamais une consigne de performance.':running?'Répéter la séance précédente est un progrès si elle est bien tolérée. Augmente seulement quand tu te sens prête.':'Commence par des sorties faciles. La distance vers Espiens et les deux journées consécutives seront évaluées à partir de tes sorties réelles.';
   const foot=strength?'Chaque exercice est une proposition, pas une performance à atteindre.':running?'Les intervalles sont des propositions : ton compte rendu décrira uniquement ce que tu as réalisé.':'Aucune distance, durée de trajet ou sortie réalisée n’est supposée.';
   return `<div class="sp7-page">
     <header class="sp7-head">
       <div class="sp7-eyebrow"><span class="sp7-dot"></span> TRAINING SYSTEM / PROGRAMME</div>
-      <div class="sp7-head-row"><div><h1>Construis <em>ton élan.</em></h1><p>Deux séances de renforcement, une reprise de la course et un défi vélo. Un programme qui s’adapte à tes sensations.</p></div>
+      <div class="sp7-head-row"><div><h1>Ton <em>programme.</em></h1><p>Quatre activités, des objectifs ajustés à tes retours.</p></div>
       <div class="sp7-head-stat" aria-label="${all.done.length} activités différentes réalisées cette semaine sur quatre"><strong>${all.done.length}<span>/04</span></strong><small>TYPES D’ACTIVITÉS<br>RÉALISÉS CETTE SEMAINE</small></div></div>
     </header>
-    ${isCurrentWeek?so8CompletionBanner():''}
+    ${completionNotice}
     ${weekNav}
-    ${outlook}
-     <nav class="sp7-selector" aria-label="Choisir une activité sportive">${types.map(item).join('')}</nav>
+    <nav class="sp7-selector" aria-label="Choisir une activité sportive">${types.map(item).join('')}</nav>
     <section class="sp7-hero sp7-hero-${current.tone}" aria-labelledby="sp7-hero-title">
       <div class="sp7-hero-primary">
+        ${weekContext}
         <div class="sp7-hero-brow"><span class="sp7-hero-tag">${esc(current.group)}</span><span>${completed?'✓ RÉALISÉE SUR CETTE SEMAINE':week.upcoming?'APERÇU À VENIR':'SÉANCE PROPOSÉE'}</span></div>
         <span class="sp7-hero-sport" aria-hidden="true">${v3Icon(type)}</span>
         <h2 id="sp7-hero-title">${esc(current.title)}</h2>
-        <p>${esc(current.subtitle)}</p>
+        <p class="so92-hero-lede">${esc(current.subtitle)}</p>
         <div class="sp7-hero-actions">
           ${canWriteFeedback?`<button type="button" class="sp7-primary" data-log="${esc(type)}" ${currentEntry?`data-edit-id="${esc(currentEntry.Seance_ID||currentEntry.Cardio_ID)}"`:''}>${currentEntry?'Modifier mon retour':'Enregistrer mon retour'} ${v3Icon(currentEntry?'pencil':'arrowRight')}</button>`:
   `<button type="button" class="sp7-primary" data-nav-go="progress">${selectedEntry?'Voir mon historique':'Consulter mes progrès'} ${v3Icon('arrowRight')}</button>`}
-          <button type="button" class="sp7-secondary" data-nav-go="progress">Voir mon évolution ${v3Icon('arrow')}</button>
+          ${canWriteFeedback?'<button type="button" class="sp7-secondary" data-nav-go="progress">Voir mon évolution '+v3Icon('arrow')+'</button>':''}
         </div>
         
       </div>
@@ -2200,7 +2279,17 @@ window.__SPORTOS_FIXTURE__={"version":"0.1.0","today":"2026-10-23","profile":[{"
     document.addEventListener('keydown',onKey);
     q('#v3-quick-close').focus();
   }
-  function bind(){qAll('#content [data-quick-log]').forEach(b=>b.onclick=openQuickLog);qAll('[data-nav-go]').forEach(b=>b.onclick=()=>navigate(b.dataset.navGo));qAll('[data-open-program]').forEach(b=>b.onclick=()=>{S.programTab=b.dataset.openProgram;navigate('program')});qAll('[data-log]').forEach(b=>b.onclick=()=>openLog(b.dataset.log,b.dataset.editId||null));qAll('[data-program-tab]').forEach(b=>b.onclick=()=>{const selected=b.dataset.programTab;S.programTab=selected;render();q('.sp7-selector [data-program-tab="'+selected+'"]')?.focus()});qAll('[data-program-week]').forEach(b=>b.onclick=()=>{S.programWeek=Number(b.dataset.programWeek);render();q('[data-program-week="'+S.programWeek+'"]')?.focus()});qAll('[data-review]').forEach(b=>b.onclick=openReview);qAll('[data-weight]').forEach(b=>b.onclick=openWeight);const pick=q('#exercise-picker');if(pick)pick.onchange=()=>{S.exerciseSelected=pick.value;render()};}
+  function bind(){qAll('#content [data-quick-log]').forEach(b=>b.onclick=openQuickLog);qAll('[data-nav-go]').forEach(b=>b.onclick=()=>navigate(b.dataset.navGo));qAll('[data-open-program]').forEach(b=>b.onclick=()=>{S.programTab=b.dataset.openProgram;navigate('program')});qAll('[data-log]').forEach(b=>b.onclick=()=>openLog(b.dataset.log,b.dataset.editId||null));qAll('[data-program-tab]').forEach(b=>b.onclick=()=>{const selected=b.dataset.programTab;S.programTab=selected;render();q('.sp7-selector [data-program-tab="'+selected+'"]')?.focus()});qAll('[data-program-week]').forEach(b=>b.onclick=()=>{
+    const next=Number(b.dataset.programWeek);
+    if(S.programWeek===next)return;
+    const rail=q('.so91-week-rail'),left=rail?rail.scrollLeft:0,scrollTop=window.scrollY;
+    S.programWeek=next;
+    render();
+    const replacement=q('.so91-week-rail');if(replacement)replacement.scrollLeft=left;
+    q('[data-program-week="'+next+'"]')?.focus({preventScroll:true});
+    // Never jump to the top when only the selected week changes.
+    if(window.scrollY!==scrollTop)window.scrollTo({top:scrollTop,behavior:'instant'});
+  });qAll('[data-review]').forEach(b=>b.onclick=openReview);qAll('[data-weight]').forEach(b=>b.onclick=openWeight);const pick=q('#exercise-picker');if(pick)pick.onchange=()=>{S.exerciseSelected=pick.value;render()};}
   function showModal(title,inner,onSubmit,opts={}){
   const session=opts.kind==='session';
   const root=q('#modal-root');
