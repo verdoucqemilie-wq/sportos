@@ -1,0 +1,40 @@
+name: SportOS V0.9.2 — QA ciblée temporaire
+on:
+  push:
+    branches: ["feat/v0.9.2-compact-program"]
+permissions:
+  contents: read
+jobs:
+  core:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: {fetch-depth: 0}
+      - uses: actions/setup-node@v4
+        with: {node-version: "22"}
+      - run: node scripts/verify-local.cjs && npm test && npm run test:home
+  past-releases:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: {fetch-depth: 0}
+      - uses: actions/setup-node@v4
+        with: {node-version: "22"}
+      - run: npm run test:deployment && npm run test:deployment-v06 && npm run test:deployed-snapshot && npm run test:release-v07 && npm run test:diagnostic-v07 && npm run test:release-v08 && npm run test:release-v09 && npm run test:release-v091
+  ui-unit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: {fetch-depth: 0}
+      - uses: actions/setup-node@v4
+        with: {node-version: "22"}
+      - run: npm run test:v09 && npm run test:v091
+  current-browser:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: {fetch-depth: 0}
+      - uses: actions/setup-node@v4
+        with: {node-version: "22"}
+      - run: npm install --no-save --no-package-lock playwright && npx playwright install --with-deps chromium
+      - run: node tests/visual-qa-v0.9.1.cjs
