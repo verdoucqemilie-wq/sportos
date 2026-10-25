@@ -18,7 +18,8 @@ check('HOME_BANNER_REMOVED',()=>{
   const home=client.split('function home()')[1].split('function program()')[0];
   assert(!home.includes('so8CompletionBanner()'));
   assert(home.includes('v3-week-panel'));
-  assert(client.split('function program()')[1].includes('so8CompletionBanner()'));
+  assert(!client.split('function program()')[1].includes('so8CompletionBanner()'));
+  assert(client.includes('completionNotice'), 'Subtle persistent achievement missing');
 });
 check('MOBILE_DESKTOP_TABLET',()=>{
   assert(styles.includes('@container sportmain (max-width:1150px)'));
