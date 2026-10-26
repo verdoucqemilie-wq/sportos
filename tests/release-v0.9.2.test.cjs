@@ -36,5 +36,15 @@ try{
     assert(script.includes('[[ "$(target_version "$NOW")" == "$PREVIOUS_VERSION" ]]'));
   });
   test('ZERO_REAL_SHEET_MUTATION',()=>{assert(!/SpreadsheetApp\.|sheets\.(?:update|append|batchUpdate)/.test(script));assert(script.includes('npm run verify'))});
+  test('POST_DEPLOY_CONSISTENCY',()=>{
+    assert(script.includes('RECEIPT="$(clasp create-deployment --deploymentId "$DEPLOYMENT"'));
+    assert(script.includes('for ATTEMPT in 1 2 3 4 5; do'));
+    assert(script.includes('SPORTOS_V0_9_2_VERIFICATION=DIFFEREE'));
+    assert.equal((script.match(/clasp create-deployment --deploymentId/g)||[]).length,1,'One deployment operation maximum');
+    const verifier=fs.readFileSync(path.join(root,'scripts/verifier-publication-v0.9.2-cloud-shell.sh'),'utf8');
+    assert(verifier.includes('SPORTOS_V0_9_2_POSTDEPLOY=PASS'));
+    assert(verifier.includes('clasp pull --versionNumber "$ACTUAL"'));
+    assert(!/^\\s*clasp\\s+(?:push|create-deployment|create-version|update-deployment|delete-deployment)\\b/m.test(verifier));
+  });
   console.log('SPORTOS_V092_RELEASE=PASS; CASES='+checked+'; REAL_WRITES=0');
 }finally{fs.rmSync(tmp,{recursive:true,force:true})}
