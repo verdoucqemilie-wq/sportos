@@ -158,12 +158,36 @@ NOW="$(clasp list-deployments)"
   echo "STOP : le déploiement a changé ; ne pas écraser l'autre version." >&2; exit 1;
 }
 echo "==== Nouvelle version de l'ID existant : l'URL /exec est conservée ===="
-clasp create-deployment --deploymentId "$DEPLOYMENT" --description "SportOS v0.9.2 — Programme compact et navigation stable"
-AFTER="$(clasp list-deployments)"
-NEW_VERSION="$(target_version "$AFTER")"
+# An update receipt may precede the deployment-listing API refresh.
+# NEVER call create-deployment twice just because the listing is stale.
+RECEIPT="$(clasp create-deployment --deploymentId "$DEPLOYMENT" --description "SportOS v0.9.2 — Programme compact et navigation stable")"
+printf '%s\n' "$RECEIPT"
+NEW_VERSION="$(node - "$RECEIPT" "$DEPLOYMENT" <<'JS'
+const [,,message,id]=process.argv;
+const match=String(message).match(/^Deployed\s+(\S+)\s+@(\d+)\s*$/m);
+if(!match||match[1]!==id)throw Error('STOP : reçu de publication non reconnu pour le bon déploiement');
+console.log(Number(match[2]));
+JS
+)"
 [[ "$NEW_VERSION" -gt "$PREVIOUS_VERSION" ]] || {
-  echo "STOP : impossible de confirmer l'incrément de la version cible." >&2; exit 1;
+  echo "STOP : le reçu ne confirme pas une nouvelle version. Vérifier en lecture seule, ne pas republier." >&2; exit 1;
 }
+# Read-only retry for eventual consistency, without any second deployment.
+CONFIRMED=""
+for ATTEMPT in 1 2 3 4 5; do
+  AFTER="$(clasp list-deployments)"
+  LISTED_VERSION="$(target_version "$AFTER")"
+  if [[ "$LISTED_VERSION" == "$NEW_VERSION" ]]; then CONFIRMED="Oui"; break; fi
+  if [[ "$LISTED_VERSION" != "$PREVIOUS_VERSION" ]]; then
+    echo "STOP : la cible pointe vers @$LISTED_VERSION au lieu de @$NEW_VERSION. Ne pas republier." >&2; exit 1;
+  fi
+  if [[ "$ATTEMPT" -lt 5 ]]; then sleep 2; fi
+done
+if [[ -z "$CONFIRMED" ]]; then
+  echo "SPORTOS_V0_9_2_VERIFICATION=DIFFEREE; RECU=@$NEW_VERSION; LISTE=@$LISTED_VERSION" >&2
+  echo "La commande a annoncé une publication, mais la liste ne la confirme pas encore. Lancer le vérificateur en lecture seule, jamais --publish." >&2
+  exit 3
+fi
 echo "==== Contrôle de l'instantané effectivement publié ===="
 (cd "$TMP/deployed" && clasp pull --versionNumber "$NEW_VERSION" >/dev/null)
 [[ "$(snapshot_label "$TMP/deployed")" == "V0_9_2" ]] || {
