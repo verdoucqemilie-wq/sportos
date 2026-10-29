@@ -22,7 +22,7 @@
 - Contrôles pure JS des dates et semaines ISO, doublons type, dernière séance, 4/4 et bilan existant (GitHub Actions à valider sur la PR).
 - Manifeste \`MYSELF\` / \`USER_DEPLOYING\` inchangé.
 - **Reste avant fusion :** ouvrir l'aperçu local sur un navigateur réel (mobile 320,375,390 ; tablette 768 ; desktop 1280/1920), vérifier absence de débordement, qualité et contraste, interactions souris/clavier, focus modal, CTA et continuité des autres pages.
-- **Reste avant production :** merge approuvé, \`clasp push\` ciblé sur le projet existant et mise à jour du déploiement \`AKfycbx9CoVk8WioZ2a_IJl4CwBk6Mk23lLEf_9yJY_g-NBJ8Zxzog7TyXaoPAxS02PeOxZYCw\` ; jamais création d'un nouveau projet ou déploiement.
+- **Reste avant production :** merge approuvé, \`clasp push\` ciblé sur le projet existant et mise à jour du déploiement \`[identifiant de déploiement privé]\` ; jamais création d'un nouveau projet ou déploiement.
 
 ## Améliorations délibérément différées
 - Les pages Programme, Progrès et Profil ont le nouveau shell mais conservent leur contenu V0.2 ; leur refonte détaillée est séquencée en lots suivants.
