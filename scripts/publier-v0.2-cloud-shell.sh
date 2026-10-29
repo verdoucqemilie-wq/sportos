@@ -4,8 +4,8 @@
 set -Eeuo pipefail
 
 REPO="verdoucqemilie-wq/sportos"
-SHEET="1_GX-1Fnsfq0XSAPoJy9UyHtA9Cca140_TEixjCSNmhQ"
-DEPLOYMENT="AKfycbx9CoVk8WioZ2a_IJl4CwBk6Mk23lLEf_9yJY_g-NBJ8Zxzog7TyXaoPAxS02PeOxZYCw"
+SHEET="${SPORTOS_SPREADSHEET_ID:?Configurer SPORTOS_SPREADSHEET_ID dans le shell local}"
+DEPLOYMENT="${SPORTOS_DEPLOYMENT_ID:?Configurer SPORTOS_DEPLOYMENT_ID dans le shell local}"
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
 
@@ -43,7 +43,7 @@ assert(clasp.scriptId.length>15,'Script Apps Script non associé');
 assert.equal(clasp.rootDir,'src');
 assert.equal(manifest.webapp.access,'MYSELF');
 assert.equal(manifest.webapp.executeAs,'USER_DEPLOYING');
-assert(backend.includes('1_GX-1Fnsfq0XSAPoJy9UyHtA9Cca140_TEixjCSNmhQ'));
+assert(backend.includes("spreadsheetPropertyKey: 'SPORTOS_SPREADSHEET_ID'"));
 assert(client.includes('ath-home-heading') && styles.includes('ath-home-heading'), 'Refonte accueil V0.2 absente');
 console.log('CONTROLE_CIBLE_ET_CONFIDENTIALITE=PASS');
 JS

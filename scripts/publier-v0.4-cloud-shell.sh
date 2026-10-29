@@ -3,8 +3,8 @@
 set -Eeuo pipefail
 
 REPO="verdoucqemilie-wq/sportos"
-SHEET="1_GX-1Fnsfq0XSAPoJy9UyHtA9Cca140_TEixjCSNmhQ"
-DEPLOYMENT="AKfycbx9CoVk8WioZ2a_IJl4CwBk6Mk23lLEf_9yJY_g-NBJ8Zxzog7TyXaoPAxS02PeOxZYCw"
+SHEET="${SPORTOS_SPREADSHEET_ID:?Configurer SPORTOS_SPREADSHEET_ID dans le shell local}"
+DEPLOYMENT="${SPORTOS_DEPLOYMENT_ID:?Configurer SPORTOS_DEPLOYMENT_ID dans le shell local}"
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT"
 
@@ -56,7 +56,7 @@ assert(clasp.scriptId.length>15,'Projet Apps Script non lié');
 assert.equal(clasp.rootDir,'src','Racine clasp inattendue');
 assert.equal(manifest.webapp.access,'MYSELF','WebApp doit rester privée');
 assert.equal(manifest.webapp.executeAs,'USER_DEPLOYING','Exécution propriétaire obligatoire');
-assert(code.includes('1_GX-1Fnsfq0XSAPoJy9UyHtA9Cca140_TEixjCSNmhQ'),'Base SportOS unique incorrecte');
+assert(code.includes("spreadsheetPropertyKey: 'SPORTOS_SPREADSHEET_ID'"),'Base SportOS unique incorrecte');
 assert(index.includes('sport-v3 sport-v4'),'Shell V0.4 absent');
 assert(index.includes('v4-brand-mark'),'Nouveau logo manquant');
 assert(styles.includes('SPORTOS V0.4'),'Nouvelles règles responsive absentes');
