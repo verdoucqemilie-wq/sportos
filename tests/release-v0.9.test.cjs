@@ -45,13 +45,13 @@ try{
   });
   check('PRIVATE_PERSONAL_ONLY',()=>{
     assert(script.includes('clasp show-authorized-user'));
-    assert(script.includes('logged in as verdoucqemilie@gmail.com.'));
+    assert(script.includes('SPORTOS_GOOGLE_ACCOUNT'));
     assert(script.includes("manifest.webapp.access,'MYSELF'"));
     assert(script.includes("manifest.webapp.executeAs,'USER_DEPLOYING'"));
-    assert(script.includes('1_GX-1Fnsfq0XSAPoJy9UyHtA9Cca140_TEixjCSNmhQ'));
+    assert(script.includes('SPORTOS_SPREADSHEET_ID'));
   });
   check('EXISTING_DEPLOYMENT_ONLY',()=>{
-    assert(script.includes('AKfycbx9CoVk8WioZ2a_IJl4CwBk6Mk23lLEf_9yJY_g-NBJ8Zxzog7TyXaoPAxS02PeOxZYCw'));
+    assert(script.includes('SPORTOS_DEPLOYMENT_ID'));
     assert(script.includes('clasp create-deployment --deploymentId "$DEPLOYMENT"'));
     assert(!/^\s*clasp\s+(?:create-script|delete-deployment)\b/m.test(script));
   });

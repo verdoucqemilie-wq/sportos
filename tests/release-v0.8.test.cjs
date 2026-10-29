@@ -39,10 +39,10 @@ try{
     assert.equal(classify(tmp,root),'INCONNU');
   });
   const script=fs.readFileSync(path.join(root,'scripts/publier-v0.8-cloud-shell.sh'),'utf8');
-  check('EXPECTED_DEPLOYMENT_ID',()=>assert(script.includes('AKfycbx9CoVk8WioZ2a_IJl4CwBk6Mk23lLEf_9yJY_g-NBJ8Zxzog7TyXaoPAxS02PeOxZYCw')));
+  check('EXPECTED_DEPLOYMENT_ID',()=>assert(script.includes('SPORTOS_DEPLOYMENT_ID')));
   check('ACCOUNT_PRIVATE_AND_SCOPE',()=>{
     assert(script.includes('clasp show-authorized-user'));
-    assert(script.includes('logged in as verdoucqemilie@gmail.com.'));
+    assert(script.includes('SPORTOS_GOOGLE_ACCOUNT'));
     assert(script.includes('manifest.webapp.access,\'MYSELF\''));
     assert(script.includes('manifest.webapp.executeAs,\'USER_DEPLOYING\''));
   });

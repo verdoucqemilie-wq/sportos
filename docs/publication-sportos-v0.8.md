@@ -10,7 +10,7 @@
 
 ## Publier
 
-Ouvrir **Google Cloud Shell** avec `verdoucqemilie@gmail.com`, puis :
+Ouvrir **Google Cloud Shell** avec le compte Google personnel propriétaire du Sheet, puis :
 
 ```bash
 cd ~/SportOS_deploiement_unique

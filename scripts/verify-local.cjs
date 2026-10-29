@@ -6,10 +6,10 @@ new Function(src);
 const manifest=JSON.parse(fs.readFileSync(root+'/src/appsscript.json','utf8'));
 assert.equal(manifest.webapp.access,'MYSELF','WebApp must be owner-only');
 assert.equal(manifest.webapp.executeAs,'USER_DEPLOYING','WebApp must run as owner');
-assert(src.includes('1_GX-1Fnsfq0XSAPoJy9UyHtA9Cca140_TEixjCSNmhQ'),'Unexpected target Sheet');
+assert(src.includes("spreadsheetPropertyKey: 'SPORTOS_SPREADSHEET_ID'") && src.includes('PropertiesService.getScriptProperties()'),'Backend must use private Script Properties');
 for(const file of ['Index.html','Styles.html','Client.html']) {
  const html=fs.readFileSync(root+'/src/'+file,'utf8');
  assert(html.length>100, 'Missing HTML '+file);
  if(file==='Client.html') new Function(html.replace(/^<script>/,'').replace(/<\/script>\s*$/,'') );
 }
-console.log('PASS Apps Script JS syntax, private manifest and unique target Google Sheet');
+console.log('PASS Apps Script JS syntax, private manifest and private Sheet configuration');
