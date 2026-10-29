@@ -3,8 +3,8 @@
 // Aucune connexion Apps Script; pure lecture de chaînes.
 const assert=require('node:assert/strict');
 const {checkBefore,checkAfter,findTarget,EXPECTED_ID}=require('../scripts/deployment-version-guard-v0.5.cjs');
-const head='AKfycbxhodmUXbKNA-LBAT4TZn21lU4RPjPYNQIk5oI9ZSus';
-const other='AKfycbyvS8Q8XBecRZUJqMXnpYDN02kSVQSjzcDu4yDxEuXBF5ZUsfaQB4MVtt-b1Rw8xLPFvg';
+const head='fixture-head-deployment-id';
+const other='fixture-other-deployment-id';
 const output=(number,description='')=>[
  'Found 3 deployments.',
  '- '+head+' @HEAD ',

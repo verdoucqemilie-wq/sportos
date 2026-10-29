@@ -2,7 +2,7 @@
 // SportOS V0.6: strictly read existing private deployment, never create or modify here.
 // Last confirmed deployment was @6; @7 is also permitted if V0.5 was deployed meanwhile.
 // Refuse other versions and unexpected IDs, even when clasp omits descriptions.
-const EXPECTED_ID='AKfycbx9CoVk8WioZ2a_IJl4CwBk6Mk23lLEf_9yJY_g-NBJ8Zxzog7TyXaoPAxS02PeOxZYCw';
+const EXPECTED_ID=process.env.SPORTOS_DEPLOYMENT_ID || 'fixture-deployment-id';
 const APPROVED_SOURCE_VERSIONS=new Set([6,7,8]);
 function findTarget(output,id=EXPECTED_ID){
   const deployments=String(output).split(/\r?\n/).map(line=>{
