@@ -5,7 +5,7 @@
  * Single existing personal SportOS spreadsheet; no separate test environment.
  */
 const SPORTOS = Object.freeze({
-  spreadsheetId: '1_GX-1Fnsfq0XSAPoJy9UyHtA9Cca140_TEixjCSNmhQ',
+  spreadsheetPropertyKey: 'SPORTOS_SPREADSHEET_ID',
   timezone: 'Europe/Paris',
   version: '0.1.1',
   maxRowsReturned: 350,
@@ -22,7 +22,13 @@ function include(filename) {
   return HtmlService.createHtmlOutputFromFile(filename).getContent();
 }
 
-function db_() { return SpreadsheetApp.openById(SPORTOS.spreadsheetId); }
+function db_() {
+  const id = PropertiesService.getScriptProperties().getProperty(SPORTOS.spreadsheetPropertyKey);
+  if (!id || !/^[A-Za-z0-9_-]{20,}$/.test(id)) {
+    throw Error('Configuration absente : renseigner SPORTOS_SPREADSHEET_ID dans les proprietes du script.');
+  }
+  return SpreadsheetApp.openById(id);
+}
 function tab_(name) {
   const tab = db_().getSheetByName(name);
   if (!tab) throw Error('Onglet manquant : ' + name);

@@ -21,7 +21,7 @@ try{
     assert(!/^\s*clasp\s+(?:create-script|delete-deployment)\b/m.test(script));
     assert(script.includes("manifest.webapp.access,'MYSELF'"));
     assert(script.includes("manifest.webapp.executeAs,'USER_DEPLOYING'"));
-    assert(script.includes('logged in as verdoucqemilie@gmail.com.'));
+    assert(script.includes('SPORTOS_GOOGLE_ACCOUNT'));
   });
   test('AUDIT_NO_WRITES',()=>{
     assert(script.includes('MODE="${1:---audit-only}"'));

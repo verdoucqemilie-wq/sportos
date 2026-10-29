@@ -26,7 +26,7 @@ try{
      const out=format(d,'TEST_'+v.label);
      assert(out.includes('SOURCE_EXPOSEE=NON')&&out.includes('APPS_SCRIPT_WRITE=NON'));
      assert(!out.includes('function '));
-     assert(!out.includes('1_GX-1Fnsfq0XSAPoJy9UyHtA9Cca140_TEixjCSNmhQ'));
+     assert(!out.includes('docs.google.com/spreadsheets/d/'));
    },'KNOWN_'+v.label);
  }
  for(const v of VERSIONS){

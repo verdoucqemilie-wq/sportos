@@ -34,11 +34,11 @@ Design : [Spécifications Mon programme V0.7](docs/design-programme-v0.7.md) · 
 
 
 
-**Statut au 20/10/2026 :** le dépôt GitHub privé est créé et les 5 fichiers ont été poussés dans Apps Script. Le déploiement WebApp `@1` a été créé par Cloud Shell. **L'ouverture effective de la WebApp, les paramètres d'accès du déploiement et la lecture des données en navigateur restent à confirmer.** Aucune saisie sportive de test n'a été effectuée.
+**Statut au 20/10/2026 :** le dépôt GitHub (initialement privé) est créé et les 5 fichiers ont été poussés dans Apps Script. Le déploiement WebApp `@1` a été créé par Cloud Shell. **L'ouverture effective de la WebApp, les paramètres d'accès du déploiement et la lecture des données en navigateur restent à confirmer.** Aucune saisie sportive de test n'a été effectuée.
 
 ## Source de vérité
 
-Google Sheet personnel déjà existant : [SportOS — Base sportive & gouvernance](https://docs.google.com/spreadsheets/d/1_GX-1Fnsfq0XSAPoJy9UyHtA9Cca140_TEixjCSNmhQ/edit). Aucun autre Google Sheet ni environnement de recette. Le projet Apps Script est lié à ce classeur ; code versionné dans **un dépôt GitHub privé** `verdoucqemilie-wq/sportos` (créé, privé).
+La base Google Sheets personnelle reste privée. Son identifiant n'est plus stocké dans le code actuel : il doit être renseigné dans les propriétés du script Apps Script (`SPORTOS_SPREADSHEET_ID`). Le code GitHub est public, pas la WebApp ni la base.
 
 ## Installation initiale (déjà effectuée le 20/10/2026) depuis Google Cloud Shell
 
@@ -61,10 +61,17 @@ bash scripts/installer-cloud-shell.sh
 
 **Important pour les prochaines versions :** ne relance pas `scripts/installer-cloud-shell.sh` pour publier un correctif sans supervision. Si `~/.config/sportos/deployment-id.txt` n'existe pas, cette commande peut créer un **nouveau déploiement**, plutôt que de mettre à jour `@1`. Pour une évolution, contrôler la liaison `.clasp.json` et cibler explicitement le déploiement existant. Ne pas faire de saisies fictives dans le Sheet unique.
 
-## Sécurité
+## Sécurité du dépôt public
+
+- L'identifiant du Google Sheet doit être placé dans Apps Script > Paramètres du projet > Propriétés du script, clé `SPORTOS_SPREADSHEET_ID`. Ne pas le commiter.
+- Les scripts de publication utilisent des variables privées locales `SPORTOS_SPREADSHEET_ID`, `SPORTOS_DEPLOYMENT_ID` et `SPORTOS_GOOGLE_ACCOUNT`.
+- Aucun commit GitHub ne déploie la WebApp. La version existante n'est pas modifiée par ce correctif.
+- **L'historique Git antérieur peut contenir ces informations** : le retrait du HEAD ne le purge pas. Une opération séparée de nettoyage d'historique est indispensable.
+
+## Sécurité historique
 
 - `src/appsscript.json` impose la WebApp réservée au propriétaire (`MYSELF` et `USER_DEPLOYING`). Si le déploiement propose une visibilité publique, **ne pas publier**.
-- `.gitignore` exclut le fichier `.clasp.json`, les identifiants OAuth, et les fichiers locaux sensibles. Le dépôt GitHub doit rester privé ; le script en vérifie la visibilité.
+- `.gitignore` exclut le fichier `.clasp.json`, les identifiants OAuth, et les fichiers locaux sensibles. Le code GitHub peut être public, mais les identifiants, les données et la WebApp doivent rester privés.
 - Le script n'ajoute aucune donnée sportive au Sheet. Les tests fonctionnels automatisés utilisent des tableaux simulés en mémoire.
 - `clasp push` **remplace tout le code** du projet Apps Script ciblé ; ici il ne doit cibler que le projet SportOS fraîchement associé à ce Sheet. Ne pas réutiliser ce fichier `.clasp.json` pour une autre application.
 - `~/.config/sportos/.clasp.json` conserve la liaison au projet Apps Script pour les installations suivantes, afin de ne pas créer un nouveau projet par erreur.

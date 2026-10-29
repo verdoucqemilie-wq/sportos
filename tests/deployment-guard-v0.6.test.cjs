@@ -2,8 +2,8 @@
 // Pure unit tests: never connect to Apps Script or write to Sheets.
 const assert=require('node:assert/strict');
 const {findTarget,before,unchanged,after,EXPECTED_ID}=require('../scripts/deployment-version-guard-v0.6.cjs');
-const head='AKfycbxhodmUXbKNA-LBAT4TZn21lU4RPjPYNQIk5oI9ZSus';
-const other='AKfycbyvS8Q8XBecRZUJqMXnpYDN02kSVQSjzcDu4yDxEuXBF5ZUsfaQB4MVtt-b1Rw8xLPFvg';
+const head='fixture-head-deployment-id';
+const other='fixture-other-deployment-id';
 const list=(version,description='',extra='')=>[
   'Found 3 deployments.',
   '- '+head+' @HEAD',

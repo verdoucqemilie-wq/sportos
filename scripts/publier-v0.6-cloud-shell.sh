@@ -3,8 +3,8 @@
 set -Eeuo pipefail
 
 REPO="verdoucqemilie-wq/sportos"
-SHEET="1_GX-1Fnsfq0XSAPoJy9UyHtA9Cca140_TEixjCSNmhQ"
-DEPLOYMENT="AKfycbx9CoVk8WioZ2a_IJl4CwBk6Mk23lLEf_9yJY_g-NBJ8Zxzog7TyXaoPAxS02PeOxZYCw"
+SHEET="${SPORTOS_SPREADSHEET_ID:?Configurer SPORTOS_SPREADSHEET_ID dans le shell local}"
+DEPLOYMENT="${SPORTOS_DEPLOYMENT_ID:?Configurer SPORTOS_DEPLOYMENT_ID dans le shell local}"
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
 
@@ -45,7 +45,7 @@ assert.equal(typeof clasp.scriptId,'string');
 assert(clasp.scriptId.length>15,'scriptId non valide');
 assert.equal(manifest.webapp.access,'MYSELF','WebApp non privée');
 assert.equal(manifest.webapp.executeAs,'USER_DEPLOYING','WebApp doit être exécutée par sa propriétaire');
-assert(code.includes('1_GX-1Fnsfq0XSAPoJy9UyHtA9Cca140_TEixjCSNmhQ'),'Mauvaise base Google Sheets');
+assert(code.includes("spreadsheetPropertyKey: 'SPORTOS_SPREADSHEET_ID'"),'Mauvaise base Google Sheets');
 assert(index.includes('sport-v3 sport-v4'),'Shell SportOS absent');
 assert(styles.includes('SPORTOS V0.6'),'Styles V0.6 absents');
 assert(client.includes('so-session-page'),'Espace de retour V0.6 absent');

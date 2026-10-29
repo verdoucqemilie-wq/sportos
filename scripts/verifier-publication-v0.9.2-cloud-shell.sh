@@ -4,7 +4,7 @@
 set -Eeuo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT"
-TARGET="AKfycbx9CoVk8WioZ2a_IJl4CwBk6Mk23lLEf_9yJY_g-NBJ8Zxzog7TyXaoPAxS02PeOxZYCw"
+TARGET="${SPORTOS_DEPLOYMENT_ID:?Configurer SPORTOS_DEPLOYMENT_ID dans le shell local}"
 EXPECTED_VERSION="${1:-17}"
 [[ "$EXPECTED_VERSION" =~ ^[1-9][0-9]*$ ]] || { echo "STOP : numéro de version attendu invalide." >&2; exit 2; }
 for cmd in git node clasp; do command -v "$cmd" >/dev/null || { echo "STOP : outil manquant : $cmd" >&2; exit 2; }; done

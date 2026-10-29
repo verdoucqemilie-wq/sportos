@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-# SPORTOS: INSTALLATION UNIQUE — Google Sheet personnel, GitHub privé, Apps Script propriétaire.
+# SPORTOS: INSTALLATION UNIQUE — Google Sheet privé, dépôt GitHub public, Apps Script propriétaire.
 # Ce script ne crée aucun Google Sheet de recette et ne soumet aucune séance fictive.
 set -Eeuo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-SHEET_ID='1_GX-1Fnsfq0XSAPoJy9UyHtA9Cca140_TEixjCSNmhQ'
+SHEET_ID="${SPORTOS_SPREADSHEET_ID:?Configurer SPORTOS_SPREADSHEET_ID dans le shell local}"
 REPO='verdoucqemilie-wq/sportos'
 APP_NAME='SportOS'
 STATE_DIR="$HOME/.config/sportos"
@@ -13,7 +13,7 @@ trap 'echo; echo "Installation interrompue. Aucun historique sportif n’a été
 
 echo 'SPORTOS — Installation sur UN SEUL environnement personnel'
 echo "Base cible : https://docs.google.com/spreadsheets/d/${SHEET_ID}/edit"
-echo "Dépôt GitHub cible : ${REPO} (privé)"
+echo "Dépôt GitHub cible : ${REPO} (WebApp privée)"
 echo 'Rappel : authentifie Google avec ton compte personnel et GitHub avec ton compte privé.'
 echo 'Apps Script API : https://script.google.com/home/usersettings (activer avant clasp)'
 echo
@@ -41,7 +41,7 @@ node scripts/verify-local.cjs
 npm test
 
 echo
-echo '===== ÉTAPE 1 : GITHUB PRIVÉ ====='
+echo '===== ÉTAPE 1 : GITHUB ====='
 if ! gh auth status >/dev/null 2>&1; then
   echo 'Authentification GitHub nécessaire. Une autorisation dans le navigateur va s’ouvrir.'
   gh auth login --hostname github.com --git-protocol https --web
@@ -56,7 +56,7 @@ if [[ ! -d .git ]]; then
   git init -b main
 fi
 if [[ -z "$(git config user.name || true)" ]]; then git config user.name "$GH_LOGIN"; fi
-if [[ -z "$(git config user.email || true)" ]]; then git config user.email '313347559+verdoucqemilie-wq@users.noreply.github.com'; fi
+if [[ -z "$(git config user.email || true)" ]]; then echo 'Configurer git user.email localement avant installation.' >&2; exit 1; fi
 
 git add README.md package.json .gitignore src/ scripts/ tests/ docs/
 if ! git diff --cached --quiet; then
@@ -64,7 +64,7 @@ if ! git diff --cached --quiet; then
 fi
 if gh repo view "$REPO" >/dev/null 2>&1; then
   VISIBILITY="$(gh repo view "$REPO" --json visibility --jq .visibility)"
-  [[ "$VISIBILITY" == 'PRIVATE' ]] || { echo 'Dépôt GitHub existant NON PRIVÉ. Arrêt.' >&2; exit 1; }
+  [[ "$VISIBILITY" == 'PUBLIC' || "$VISIBILITY" == 'PRIVATE' ]] || { echo 'Visibilité du dépôt non reconnue.' >&2; exit 1; }
   ORIGIN="$(git remote get-url origin 2>/dev/null || true)"
   if [[ -z "$ORIGIN" ]]; then
     git remote add origin "https://github.com/${REPO}.git"
@@ -76,7 +76,7 @@ if gh repo view "$REPO" >/dev/null 2>&1; then
 else
   gh repo create "$REPO" --private --description 'SportOS — coaching sportif personnel, WebApp Apps Script + Google Sheets' --source=. --remote=origin --push
 fi
-[[ "$(gh repo view "$REPO" --json visibility --jq .visibility)" == 'PRIVATE' ]] || { echo 'Visibilité GitHub non conforme.' >&2; exit 1; }
+[[ "$(gh repo view "$REPO" --json visibility --jq .visibility)" == 'PUBLIC' || "$(gh repo view "$REPO" --json visibility --jq .visibility)" == 'PRIVATE' ]] || { echo 'Visibilité GitHub non reconnue.' >&2; exit 1; }
 echo "GitHub prêt : https://github.com/${REPO} (privé)"
 
 echo

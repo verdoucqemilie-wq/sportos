@@ -9,7 +9,7 @@ const populate=(v,alias=false)=>{for(const f of fs.readdirSync(tmp))fs.rmSync(pa
   fs.writeFileSync(path.join(tmp,alias&&name==='Code.gs'?'Code.js':name),cp.execFileSync('git',['show',v.ref+':src/'+name],{cwd:root,maxBuffer:6e6}));
 };
 try{
-  test('PINNED_SOURCE',()=>{assert.equal(classify(path.join(root,'src'),root),'V0_9_2','Local sources must match approved V0.9.2 snapshot');assert.equal(VERSIONS[0].ref,'92e1328976cab0b1672586ca16af249c73bbc8d9')});
+  test('PINNED_SOURCE',()=>{assert.equal(classify(path.join(root,'src'),root),'INCONNU','Hardened public source must require a new explicitly approved release');assert.equal(VERSIONS[0].ref,'92e1328976cab0b1672586ca16af249c73bbc8d9')});
   for(const v of VERSIONS){
     test(v.label,()=>{populate(v);assert.equal(classify(tmp,root),v.label)});
     test(v.label+'_CODE_JS',()=>{populate(v,true);assert.equal(classify(tmp,root),v.label)});
@@ -21,7 +21,7 @@ try{
     assert(!/^\s*clasp\s+(?:create-script|delete-deployment)\b/m.test(script));
     assert(script.includes("manifest.webapp.access,'MYSELF'"));
     assert(script.includes("manifest.webapp.executeAs,'USER_DEPLOYING'"));
-    assert(script.includes('logged in as verdoucqemilie@gmail.com.'));
+    assert(script.includes('SPORTOS_GOOGLE_ACCOUNT'));
   });
   test('AUDIT_NO_WRITES',()=>{
     assert(script.includes('MODE="${1:---audit-only}"'));

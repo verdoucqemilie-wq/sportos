@@ -2,7 +2,7 @@
 // Validate exactly one existing SportOS Apps Script deployment by ID and numerical version.
 // clasp may omit descriptions entirely; never rely on labels for write authorization.
 // No API, files, network or mutation: pure parsing + command line.
-const EXPECTED_ID='AKfycbx9CoVk8WioZ2a_IJl4CwBk6Mk23lLEf_9yJY_g-NBJ8Zxzog7TyXaoPAxS02PeOxZYCw';
+const EXPECTED_ID=process.env.SPORTOS_DEPLOYMENT_ID || 'fixture-deployment-id';
 const APPROVED_SOURCE_VERSION=6;
 function findTarget(text,id=EXPECTED_ID){
   const records=String(text).split(/\r?\n/).map(line=>{

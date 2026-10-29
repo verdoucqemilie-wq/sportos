@@ -5,9 +5,9 @@
 set -Eeuo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT"
-DEPLOYMENT="AKfycbx9CoVk8WioZ2a_IJl4CwBk6Mk23lLEf_9yJY_g-NBJ8Zxzog7TyXaoPAxS02PeOxZYCw"
+DEPLOYMENT="${SPORTOS_DEPLOYMENT_ID:?Configurer SPORTOS_DEPLOYMENT_ID dans le shell local}"
 REPO="verdoucqemilie-wq/sportos"
-SHEET="1_GX-1Fnsfq0XSAPoJy9UyHtA9Cca140_TEixjCSNmhQ"
+SHEET="${SPORTOS_SPREADSHEET_ID:?Configurer SPORTOS_SPREADSHEET_ID dans le shell local}"
 MODE="${1:---audit-only}"
 case "$MODE" in --audit-only|--publish) :;; *) echo 'Utilisation : bash scripts/publier-v0.9.2-cloud-shell.sh [--audit-only|--publish]' >&2; exit 2;; esac
 echo "==== SportOS V0.9.2 : mode $MODE ; déploiement existant ===="
@@ -24,7 +24,7 @@ ORIGIN="$(git remote get-url origin)"
 }
 # Only the account owning the private personal Sheet may publish this deployment.
 AUTHORIZED="$(clasp show-authorized-user)"
-[[ "$AUTHORIZED" == *"logged in as verdoucqemilie@gmail.com."* ]] || {
+[[ -n "${SPORTOS_GOOGLE_ACCOUNT:-}" && "$AUTHORIZED" == *"logged in as ${SPORTOS_GOOGLE_ACCOUNT}."* ]] || {
   echo "STOP : le compte clasp n'est pas le compte personnel propriétaire." >&2; exit 1;
 }
 git fetch origin main
@@ -51,7 +51,7 @@ assert.equal(typeof cfg.scriptId,'string');
 assert(cfg.scriptId.length>15,'Identifiant Apps Script manquant');
 assert.equal(manifest.webapp.access,'MYSELF','Application non privée');
 assert.equal(manifest.webapp.executeAs,'USER_DEPLOYING','Exécution propriétaire obligatoire');
-assert(code.includes('1_GX-1Fnsfq0XSAPoJy9UyHtA9Cca140_TEixjCSNmhQ'),'Mauvaise base sportive');
+assert(code.includes("spreadsheetPropertyKey: 'SPORTOS_SPREADSHEET_ID'"),'Mauvaise base sportive');
 assert(client.includes('function program(){')&&client.includes('sp7-page'),'Page Programme V0.7 absente');
 assert(styles.includes('SPORTOS V0.7'),'Styles Programme V0.7 absents');
 assert(client.includes('so-session-page'),'Journal de séance absent');
