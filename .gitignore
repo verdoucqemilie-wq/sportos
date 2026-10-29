@@ -7,3 +7,13 @@ node_modules/
 .DS_Store
 *.zip
 artifacts/
+
+# Secrets et fichiers de configuration locaux
+private.env
+*.credentials.json
+*.secret.json
+*.pem
+*.key
+*.p12
+*.pfx
+*.log
