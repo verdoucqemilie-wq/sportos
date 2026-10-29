@@ -4,7 +4,7 @@
 set -Eeuo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT"
-TARGET="AKfycbx9CoVk8WioZ2a_IJl4CwBk6Mk23lLEf_9yJY_g-NBJ8Zxzog7TyXaoPAxS02PeOxZYCw"
+TARGET="${SPORTOS_DEPLOYMENT_ID:?Configurer SPORTOS_DEPLOYMENT_ID dans le shell local}"
 for command in git node clasp; do
   command -v "$command" >/dev/null || { echo "DIAGNOSTIC_STOP=OUTIL_MANQUANT" >&2; exit 1; }
 done
