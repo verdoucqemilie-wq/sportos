@@ -1,5 +1,9 @@
 # SportOS — WebApp sportive personnelle
 
+> **Gouvernance (29/10/2026)** — Le code GitHub est public ; les données, le classeur Google et la WebApp doivent rester privés. La sécurisation du code actuel est fusionnée, mais le nettoyage de l'historique, la vérification des accès Google et la préparation de la prochaine release restent ouverts. Voir [Gouvernance du projet](docs/GOUVERNANCE.md) et le [suivi SEC-01](https://github.com/verdoucqemilie-wq/sportos/issues/21).
+>
+> Les sections ci-dessous relatives à V0.7.0 / l'installation initiale sont des archives de versions ; elles ne constituent pas la procédure de déploiement validée de la nouvelle version sécurisée.
+
 **Code GitHub : V0.7.0** — Refonte premium de la page « Mon programme », fusionnée dans `main` le 23 octobre 2026 via la [PR #8](https://github.com/verdoucqemilie-wq/sportos/pull/8). Backend sportif, Google Sheet personnel et permissions Apps Script inchangés.
 
 **Publication Apps Script : à exécuter depuis Cloud Shell avec le compte personnel.** Le dernier déploiement connu était `@8`, mais son contenu n'a pas encore été identifié de façon certaine.

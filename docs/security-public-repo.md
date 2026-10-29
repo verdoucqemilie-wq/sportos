@@ -1,5 +1,7 @@
 # SportOS — configuration privée après ouverture du dépôt
 
+**Gouvernance et statut des actions :** [registre SportOS](GOUVERNANCE.md) · [issue SEC-01](https://github.com/verdoucqemilie-wq/sportos/issues/21). Le retrait des identifiants du code actuel a été fusionné le 29/10/2026, mais l'historique Git public et les autorisations Google effectives ne sont pas encore certifiés.
+
 Le dépôt de code est public, **pas** la WebApp Google Apps Script et **pas** le Google Sheet de production.
 
 ## Paramètre Apps Script indispensable avant une future publication
